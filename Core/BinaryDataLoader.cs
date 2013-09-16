@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using DeltaEngine.Content;
+using DeltaEngine.Entities;
 
 namespace DeltaEngine.Core
 {
@@ -76,7 +78,7 @@ namespace DeltaEngine.Core
 		private static object GetDefault(Type type)
 		{
 			if (type.IsArray || type == typeof(Type) || type.Name == "RuntimeType" ||
-				typeof(ContentData).IsAssignableFrom(type))
+				typeof(ContentData).IsAssignableFrom(type) || typeof(Entity).IsAssignableFrom(type))
 				return null;
 			return type == typeof(string) ? "" : Activator.CreateInstance(type, true);
 		}
@@ -91,6 +93,17 @@ namespace DeltaEngine.Core
 				data = ContentLoader.Load(type, contentName);
 				if (!contentName.StartsWith("<Generated"))
 					return;
+			}
+			if (typeof(Entity).IsAssignableFrom(type))
+			{
+				var createFromComponents = LoadArray(null, typeof(List<object>), reader);
+				var tags = LoadArray(null, typeof(List<string>), reader);
+				subTypeToCreate = type;
+				data = Activator.CreateInstance(type, PrivateBindingFlags, Type.DefaultBinder,
+					new[] { createFromComponents }, CultureInfo.CurrentCulture);
+				foreach (var tag in (tags as List<string>))
+					(data as Entity).AddTag(tag);
+				return;
 			}
 			if (type.IsEnum)
 			{
@@ -114,7 +127,9 @@ namespace DeltaEngine.Core
 				LoadClassData(data, type, reader);
 		}
 
-		private class UnableToLoadContentDataWithoutName : Exception {}
+		internal class UnableToLoadContentDataWithoutName : Exception { }
+		private const BindingFlags PrivateBindingFlags =
+			BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
 
 		private static bool LoadPrimitiveData(ref object data, Type type, BinaryReader reader)
 		{

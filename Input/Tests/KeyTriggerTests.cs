@@ -14,7 +14,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void PressEscapeToCloseWindow()
 		{
-			new FontText(FontXml.Default, "Press ESC to close the window", Rectangle.One);
+			new FontText(Font.Default, "Press ESC to close the window", Rectangle.One);
 			new Command(() => Resolve<Window>().CloseAfterFrame()).Add(new KeyTrigger(Key.Escape,
 				State.Pressed));
 		}
@@ -22,7 +22,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void PressEscapeToCloseWindowViaRegisteredCommands()
 		{
-			new FontText(FontXml.Default, "Press ESC to close the window", Rectangle.One);
+			new FontText(Font.Default, "Press ESC to close the window", Rectangle.One);
 			Command.Register("Exit", new KeyTrigger(Key.Escape, State.Pressed));
 			new Command("Exit", () => Resolve<Window>().CloseAfterFrame());
 		}
@@ -41,10 +41,10 @@ namespace DeltaEngine.Input.Tests
 
 		private static void CreateFontTexts(Point[] centers, Size size)
 		{
-			new FontText(FontXml.Default, "Up", Rectangle.FromCenter(centers[0], size));
-			new FontText(FontXml.Default, "Down", Rectangle.FromCenter(centers[1], size));
-			new FontText(FontXml.Default, "Left", Rectangle.FromCenter(centers[2], size));
-			new FontText(FontXml.Default, "Right", Rectangle.FromCenter(centers[3], size));
+			new FontText(Font.Default, "Up", Rectangle.FromCenter(centers[0], size));
+			new FontText(Font.Default, "Down", Rectangle.FromCenter(centers[1], size));
+			new FontText(Font.Default, "Left", Rectangle.FromCenter(centers[2], size));
+			new FontText(Font.Default, "Right", Rectangle.FromCenter(centers[3], size));
 		}
 
 		private static void AddCirclesAndInputCommands(Point[] centers, Size size)

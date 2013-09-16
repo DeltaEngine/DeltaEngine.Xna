@@ -13,7 +13,7 @@ namespace Drench.Tests.Games
 {
 	public class GameTests : TestWithMocksOrVisually
 	{
-		[SetUp]
+		[SetUp, CloseAfterFirstFrame]
 		public void SetUp()
 		{
 			Randomizer.Use(new FixedRandom(new[] { 0.1f, 0.6f, 0.7f, 0.2f }));

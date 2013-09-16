@@ -10,7 +10,9 @@ using DeltaEngine.Entities;
 using DeltaEngine.Extensions;
 using DeltaEngine.Graphics;
 using DeltaEngine.Logging;
+using DeltaEngine.Networking;
 using DeltaEngine.Networking.Tcp;
+using DeltaEngine.Rendering.Cameras;
 using DeltaEngine.ScreenSpaces;
 using Microsoft.Win32;
 
@@ -21,6 +23,7 @@ namespace DeltaEngine.Platforms
 	/// </summary>
 	public abstract class AppRunner : ApproveFirstFrameScreenshot
 	{
+		//ncrunch: no coverage start
 		protected void RegisterCommonEngineSingletons()
 		{
 			CreateDefaultLoggers();
@@ -31,6 +34,8 @@ namespace DeltaEngine.Platforms
 			RegisterSingleton<Drawing>();
 			CreateEntitySystem();
 			RegisterMediaTypes();
+			CreateNetworking();
+			CreateScreenSpacesAndCameraResolvers();
 		}
 
 		private void CreateDefaultLoggers()
@@ -52,30 +57,20 @@ namespace DeltaEngine.Platforms
 
 		private void CreateContentLoader()
 		{
-			if (ContentLoader.current == null)
-				ContentLoader.current = new DeveloperOnlineContentLoader(ConnectToOnlineService());
-			ContentLoader.current.resolver = new AutofacContentDataResolver(this);
-			instancesToDispose.Add(ContentLoader.current);
+			OnlineServiceConnection.RememberCreationDataForAppRunner(GetApiKey(),
+				settings, OnTimeout, OnError, OnReady, OnContentReceived);
+			if (ContentLoader.Type == null)
+				ContentLoader.Use<DeveloperOnlineContentLoader>();
+			ContentLoader.resolver = new AutofacContentLoaderResolver(this);
 		}
 
-		private OnlineServiceConnection ConnectToOnlineService()
-		{
-			var connection = OnlineServiceConnection.CreateForAppRunner(GetApiKey(), settings, OnTimeout,
-				OnError, OnReady);
-			instancesToDispose.Add(connection);
-			instancesToDispose.Add(new NetworkLogger(connection));
-			return connection;
-		}
-
-		private string GetApiKey()
+		private static string GetApiKey()
 		{
 			string apiKey = "";
 			using (var key = Registry.CurrentUser.OpenSubKey(@"Software\DeltaEngine\Editor", false))
 				if (key != null)
 					apiKey = (string)key.GetValue("ApiKey");
-			if (string.IsNullOrEmpty(apiKey))
-				OnConnectionError("ApiKey not set. Please login with Editor to set it up.");
-			return apiKey;
+			return string.IsNullOrEmpty(apiKey) ? Guid.Empty.ToString() : apiKey;
 		}
 
 		internal enum ExitCode
@@ -111,6 +106,15 @@ namespace DeltaEngine.Platforms
 
 		private bool onlineServiceReadyReceived;
 
+		public void OnContentReceived()
+		{
+			if (timeout < TimeoutTillNextMessage)
+				timeout = TimeoutTillNextMessage;
+		}
+
+		private int timeout;
+		private const int TimeoutTillNextMessage = 3000;
+
 		private void LoadSettingsAndCommands()
 		{
 			instancesToDispose.Add(settings = new FileSettings());
@@ -142,16 +146,15 @@ namespace DeltaEngine.Platforms
 			if (alreadyCheckedContentManagerReady)
 				return;
 			alreadyCheckedContentManagerReady = true;
-			if (ContentLoader.current is DeveloperOnlineContentLoader && !IsEditorContentLoader())
-			{
+			if (ContentLoader.Type == typeof(DeveloperOnlineContentLoader) && !IsEditorContentLoader())
 				WaitUntilContentFromOnlineServiceIsReady();
-				if (!onlineServiceReadyReceived && ContentLoader.HasValidContentForStartup())
-					(ContentLoader.current as DeveloperOnlineContentLoader).OnLoadContentMetaData();
-			}
 			if (!ContentLoader.HasValidContentForStartup())
 			{
-				Window.ShowMessageBox("Unable to connect to OnlineService",
-					"Unable to continue: " + connectionError, new[] { "OK" });
+				if (StackTraceExtensions.IsStartedFromNunitConsole())
+					throw new Exception("No local content available - Unable to continue: " + connectionError);
+				Window.ShowMessageBox("No local content available", "Unable to continue: " +
+					(connectionError ?? "No content found, please put content in the Content folder"),
+					new[] { "OK" });
 				Environment.Exit((int)ExitCode.ContentMissingAndApiKeyNotSet);
 			}
 			if (ContentIsReady != null)
@@ -162,20 +165,40 @@ namespace DeltaEngine.Platforms
 
 		private static bool IsEditorContentLoader()
 		{
-			return ContentLoader.current.GetType().FullName == "DeltaEngine.Editor.EditorContentLoader";
+			return ContentLoader.Type.FullName == "DeltaEngine.Editor.EditorContentLoader";
 		}
 
 		private void WaitUntilContentFromOnlineServiceIsReady()
 		{
 			if (!ContentLoader.HasValidContentForStartup())
 				Logger.Info("No content available. Waiting until OnlineService sends it to us ...");
-			int timeout = ContentLoader.HasValidContentForStartup() ? 10000 : 30000;
+			timeout = TimeoutTillNextMessage;
 			while (String.IsNullOrEmpty(connectionError) && !onlineServiceReadyReceived &&
-				(ContentLoader.current is DeveloperOnlineContentLoader) && timeout > 0)
+				ContentLoader.Type == typeof(DeveloperOnlineContentLoader) && timeout > 0)
 			{
 				Thread.Sleep(10);
 				timeout -= 10;
 			}
+			if (timeout <= 0)
+				Logger.Warning(
+					"Content download timeout reached, continuing app (content might be incomplete)");
+		}
+
+		private void CreateNetworking()
+		{
+			Register<TcpServer>();
+			Register<TcpSocket>();
+			instancesToDispose.Add(new Messaging(new AutofacNetworkResolver(this)));
+		}
+
+		protected void CreateScreenSpacesAndCameraResolvers()
+		{
+			Register<QuadraticScreenSpace>();
+			Register<RelativeScreenSpace>();
+			Register<PixelScreenSpace>();
+			Register<Camera2DScreenSpace>();
+			ScreenSpace.resolver = new AutofacScreenSpaceResolver(this);
+			Camera.resolver = new AutofacCameraResolver(this);
 		}
 
 		public virtual void Run()
@@ -238,19 +261,26 @@ namespace DeltaEngine.Platforms
 				Logger.Error(exception);
 				if (exception.IsWeak())
 					return;
-				DisplayMessageBoxAndCloseApp(exception, "Fatal Runtime Error");
+				if (StackTraceExtensions.IsStartedFromNunitConsole())
+					throw;
+				DisplayMessageBoxAndCloseApp("Fatal Runtime Error", exception);
 			}
 		}
 
-		private void DisplayMessageBoxAndCloseApp(Exception exception, string title)
+		private void DisplayMessageBoxAndCloseApp(string title, Exception exception)
 		{
 			Window.CopyTextToClipboard(exception.ToString());
-			if (Window.ShowMessageBox(title, "Unable to continue: " + exception,
-					new[] { "Abort", "Ignore" }) == "Ignore")
+			if (IsShowingMessageBoxClosedWithIgnore(title, exception))
 				return;
 			Dispose();
 			if (!StackTraceExtensions.StartedFromNCrunch)
 				Environment.Exit((int)ExitCode.UpdateAndDrawTickFailed);
+		}
+
+		private bool IsShowingMessageBoxClosedWithIgnore(string title, Exception ex)
+		{
+			var closeOptions = new[] { "Abort", "Ignore" };
+			return Window.ShowMessageBox(title, "Unable to continue: " + ex, closeOptions) == "Ignore";
 		}
 
 		public override void Dispose()
@@ -259,8 +289,11 @@ namespace DeltaEngine.Platforms
 			foreach (var instance in instancesToDispose)
 				instance.Dispose();
 			instancesToDispose.Clear();
-			if (ScreenSpace.Current != null)
+			ContentLoader.DisposeIfInitialized();
+			if (ScreenSpace.IsInitialized)
 				ScreenSpace.Current.Dispose();
+			if (Camera.IsInitialized)
+				Camera.Current.Dispose();
 		}
 	}
 }

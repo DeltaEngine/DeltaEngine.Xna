@@ -75,7 +75,7 @@ namespace ShadowShot
 		public void RestartGame()
 		{
 			Controller.Dispose();
-			var gameOverMsg = new FontText(FontXml.Default,
+			var gameOverMsg = new FontText(Font.Default,
 				"Game Over!\nPress Space or tap/click for restart!", Rectangle.One);
 			restartCommand = new Command(() =>
 			{

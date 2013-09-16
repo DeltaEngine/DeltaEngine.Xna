@@ -22,10 +22,10 @@ namespace DeltaEngine.Physics2D
 		public abstract PhysicsJoint CreateLineJoint(PhysicsBody bodyA, PhysicsBody bodyB, Point axis);
 		public abstract Point Gravity { get; set; }
 
-		public void RapidUpdate(float timeStep)
+		public void RapidUpdate()
 		{
 			if (!IsPaused)
-				Simulate(timeStep);
+				Simulate(Time.Delta);
 		}
 
 		public bool IsPaused { get; set; }

@@ -1,11 +1,10 @@
-﻿using System;
-using DeltaEngine.Datatypes;
+﻿using DeltaEngine.Datatypes;
 using DeltaEngine.Platforms;
 using NUnit.Framework;
 
 namespace DeltaEngine.Physics2D.Tests
 {
-	internal class BulletTests : TestWithMocksOrVisually
+	public class BulletTests : TestWithMocksOrVisually
 	{
 		[Test, CloseAfterFirstFrame]
 		public void CreateBullet()

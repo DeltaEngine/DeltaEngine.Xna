@@ -25,8 +25,7 @@ namespace DeltaEngine.Content.Disk.Tests
 		public void Setup()
 		{
 			CreateContentMetaDataAndRealFiles();
-			var contentLoader = new DiskContentLoader();
-			contentLoader.resolver = new ContentDataResolver();
+			ContentLoader.Use<DiskContentLoader>();
 			image = ContentLoader.Load<MockImage>("DeltaEngineLogo");
 		}
 
@@ -160,7 +159,7 @@ namespace DeltaEngine.Content.Disk.Tests
 			string metaDataFilePath)
 		{
 			var xml = new ContentMetaDataFileCreator(lastXml).CreateAndLoad(metaDataFilePath);
-			Assert.AreEqual(4, xml.Root.Elements().Count());
+			Assert.AreEqual(5, xml.Root.Elements().Count());
 			foreach (var element in xml.Root.Elements())
 				CheckElementPixelSize(element);
 			return xml;
@@ -173,12 +172,13 @@ namespace DeltaEngine.Content.Disk.Tests
 				expectedPixelSize = SetElementTo128Pixels(element);
 			else if (element.Attribute("Name").Value == "SmallImage")
 				expectedPixelSize = SetElementTo32Pixels(element);
-			Assert.AreEqual(expectedPixelSize, element.Attribute("PixelSize").Value);
+			if (element.Attribute("Type").Value == "Image")
+				Assert.AreEqual(expectedPixelSize, element.Attribute("PixelSize").Value);
 		}
 
 		private static string SetElementTo128Pixels(XElement element)
 		{
-			Assert.AreEqual("Normal", element.Attribute("BlendMode").Value);
+			Assert.IsNull(element.Attribute("BlendMode"));
 			return "(128, 128)";
 		}
 

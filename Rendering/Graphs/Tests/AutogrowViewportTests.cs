@@ -16,7 +16,7 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			new FilledRect(Rectangle.One, Color.Grey) { RenderLayer = int.MinValue };
+			new FilledRect(Rectangle.One, Color.Gray) { RenderLayer = int.MinValue };
 			graph = new Graph(Center) { AxesVisibility = Visibility.Show, IsAutogrowing = true };
 			line = graph.CreateLine("One", LineColor);
 		}
@@ -56,7 +56,7 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 		public void RenderFps()
 		{
 			graph.Add(line);
-			graph.Add(new FontText(FontXml.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
+			graph.Add(new FontText(Font.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
 			graph.Start<AddFpsEverySecond>();
 		}
 
@@ -79,7 +79,7 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 		{
 			graph.Viewport = new Rectangle(-1, -1, 1, 1);
 			graph.Add(line);
-			graph.Add(new FontText(FontXml.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
+			graph.Add(new FontText(Font.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
 			graph.Start<AddNumberOfEntitiesEverySecond>();
 		}
 

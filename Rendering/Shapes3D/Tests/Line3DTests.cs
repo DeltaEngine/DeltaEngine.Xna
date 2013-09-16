@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
-using DeltaEngine.Graphics;
 using DeltaEngine.Entities;
 using DeltaEngine.Platforms;
 using DeltaEngine.Rendering.Cameras;
@@ -20,9 +18,11 @@ namespace DeltaEngine.Rendering.Shapes3D.Tests
 			new Line3D(-Vector.UnitZ, Vector.UnitZ * 3, Color.Blue);
 		}
 		
-		private void CreateLookAtCamera(Vector position, Vector target)
+		private static void CreateLookAtCamera(Vector position, Vector target)
 		{
-			new LookAtCamera(Resolve<Device>(), Resolve<Window>(), position, target);
+			var camera = Camera.Use<LookAtCamera>();
+			camera.Position = position;
+			camera.Target = target;
 		}
 
 		[Test]
@@ -86,7 +86,8 @@ namespace DeltaEngine.Rendering.Shapes3D.Tests
 		[Test, CloseAfterFirstFrame]
 		public void RenderingHiddenLineDoesNotThrowException()
 		{
-			new LookAtCamera(Resolve<Device>(), Resolve<Window>(), Vector.UnitZ, Vector.Zero);
+			var camera = Camera.Use<LookAtCamera>();
+			camera.Position = Vector.UnitZ;
 			new Line3D(-Vector.UnitX, Vector.UnitX, Color.Red) { Visibility = Visibility.Hide };
 			Assert.DoesNotThrow(() => AdvanceTimeAndUpdateEntities());
 		}

@@ -29,7 +29,7 @@ namespace $safeprojectname$
 		}
 
 		private readonly Material brickMaterial;
-		private ParticleEmitterData explosionData;
+		private readonly ParticleEmitterData explosionData;
 		private readonly Sound explosionSound;
 		private readonly Sound lostBallSound;
 		private readonly Score score;
@@ -168,7 +168,7 @@ namespace $safeprojectname$
 
 		private void CreateExplosion(Point collision)
 		{
-			var explosion = new ParticleEmitter(explosionData, collision);
+			var explosion = new Particle2DEmitter(explosionData, collision);
 			explosion.RenderLayer = 16;
 			explosion.SpawnBurst(1, true);
 		}

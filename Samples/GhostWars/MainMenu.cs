@@ -196,9 +196,9 @@ namespace GhostWars
 
 		public static GameState State { get; set; }
 		public static Team PlayerTeam { get; set; }
-		public static FontXml Font
+		public static Font Font
 		{
-			get { return ContentLoader.Load<FontXml>("Tahoma30"); }
+			get { return ContentLoader.Load<Font>("Tahoma30"); }
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace DeltaEngine.Input.Tests
 			new FilledRect(drawArea, Color.Blue);
 			var trigger = new TouchHoldTrigger(drawArea);
 			var counter = 0;
-			var text = new FontText(FontXml.Default, "", drawArea.Move(new Point(0.0f, 0.25f)));
+			var text = new FontText(Font.Default, "", drawArea.Move(new Point(0.0f, 0.25f)));
 			new Command(() => text.Text = "TouchHold Triggered " + ++counter + " times.").Add(trigger);
 		}
 

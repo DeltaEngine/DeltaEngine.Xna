@@ -47,7 +47,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		{
 			button.IsEnabled = false;
 			AdvanceTimeAndUpdateEntities();
-			Assert.AreEqual(Color.Grey, button.Color);
+			Assert.AreEqual(Color.Gray, button.Color);
 		}
 
 		[Test, CloseAfterFirstFrame]

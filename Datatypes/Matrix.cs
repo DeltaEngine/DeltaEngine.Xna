@@ -110,6 +110,11 @@ namespace DeltaEngine.Datatypes
 			return new Matrix(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1);
 		}
 
+		public static Matrix CreateRotationZyx(EulerAngles eulerAngles)
+		{
+			return CreateRotationZyx(eulerAngles.Pitch, eulerAngles.Yaw, eulerAngles.Roll);
+		}
+
 		public static Matrix CreateRotationZyx(float x, float y, float z)
 		{
 			return LinearMapExtensions.CreateRotationAboutZThenYThenX(x, y, z);
@@ -131,6 +136,11 @@ namespace DeltaEngine.Datatypes
 		public static Matrix Invert(Matrix matrix)
 		{
 			return LinearMapExtensions.InvertMatrix(matrix);
+		}
+
+		public static Matrix InverseTranspose(Matrix matrix)
+		{
+			return Transpose(Invert(matrix));
 		}
 
 		public static Matrix CreatePerspective(float fieldOfView, float aspectRatio,

@@ -18,17 +18,13 @@ namespace DeltaEngine.Content.Online.Tests
 			if (Directory.Exists("Content"))
 				Directory.Delete("Content", true);
 			bool ready = false;
-			var connection = OnlineServiceConnection.CreateForAppRunner(GetApiKeyFromRegistry(),
+			OnlineServiceConnection.RememberCreationDataForAppRunner(GetApiKeyFromRegistry(),
 				new MockSettings(), () => { throw new ConnectionTimedOut(); },
-				error => { throw new ServerErrorReceived(error); }, () => ready = true);
-			using (var loader = new DeveloperOnlineContentLoader(connection))
-			{
-				loader.resolver = new ContentDataResolver();
-				for (int timeoutMs = 5000; timeoutMs > 0 && !ready; timeoutMs -= 10)
-					Thread.Sleep(10);
-				Assert.IsTrue(Directory.Exists("Content"));
-				Assert.IsTrue(ContentLoader.Exists("DeltaEngineLogo"));
-			}
+				error => { throw new ServerErrorReceived(error); }, () => ready = true, () => { });
+			ContentLoader.Use<DeveloperOnlineContentLoader>();
+			Assert.IsTrue(ContentLoader.Exists("DeltaEngineLogo"));
+			Assert.IsTrue(Directory.Exists("Content"));
+			Assert.IsTrue(ready);
 		}
 
 		public class ConnectionTimedOut : Exception {}
@@ -51,18 +47,5 @@ namespace DeltaEngine.Content.Online.Tests
 		}
 
 		private class ApiKeyNotSetPleaseStartEditor : Exception {}
-
-		[Test]
-		public void TryUseContentBeforeReadyThrows()
-		{
-			var connection = OnlineServiceConnection.CreateForAppRunner(GetApiKeyFromRegistry(),
-				new MockSettings(), () => { }, s => { }, () => { });
-			using (var loader = new DeveloperOnlineContentLoader(connection))
-			{
-				loader.resolver = new ContentDataResolver();
-				Assert.Throws<DeveloperOnlineContentLoader.ContentNotReady>(
-					() => ContentLoader.Exists("DeltaEngineLogo"));
-			}
-		}
 	}
 }

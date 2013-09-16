@@ -13,7 +13,8 @@ namespace DeltaEngine.Tests.Entities
 		[SetUp]
 		public void InitializeEntitiesRunner()
 		{
-			entities = new MockEntitiesRunner(typeof(MockUpdateBehavior), typeof(ComponentTests.Rotate));
+			entities = new MockEntitiesRunner(typeof(MockUpdateBehavior), typeof(ComponentTests.Rotate),
+				typeof(CreateEntityStartAndStopBehavior));
 			entityWithTags = new MockEntity();
 			entityWithTags.AddTag(Tag1);
 			entityWithTags.AddTag(Tag2);
@@ -135,8 +136,7 @@ namespace DeltaEngine.Tests.Entities
 		{
 			var data = BinaryDataExtensions.SaveToMemoryStream(new MockEntity());
 			byte[] savedBytes = data.ToArray();
-			Assert.AreEqual(GetShortNameLength("MockEntity") + ListLength * 3 + BooleanByte * 2 + 4,
-				savedBytes.Length);
+			Assert.AreEqual(GetShortNameLength("MockEntity") + 1 + 4 + 1, savedBytes.Length);
 			var loadedEntity = data.CreateFromMemoryStream() as Entity;
 			Assert.AreEqual(0, loadedEntity.NumberOfComponents);
 			Assert.IsTrue(loadedEntity.IsActive);
@@ -147,22 +147,19 @@ namespace DeltaEngine.Tests.Entities
 			const int StringLengthByte = 1;
 			return StringLengthByte + text.Length;
 		}
-
-		private const int ListLength = 1 + BooleanByte;
-		private const int BooleanByte = 1;
-
+		
 		[Test]
 		public void SaveAndLoadEntityWithTwoComponentsFromMemoryStream()
 		{
 			entityWithTags.Add(1).Add(0.1f);
 			var data = BinaryDataExtensions.SaveToMemoryStream(entityWithTags);
 			byte[] savedBytes = data.ToArray();
-			Assert.AreEqual(65, savedBytes.Length);
+			Assert.AreEqual(59, savedBytes.Length);
 			var loadedEntity = data.CreateFromMemoryStream() as Entity;
-			Assert.IsTrue(loadedEntity.ContainsTag(Tag1));
 			Assert.AreEqual(2, loadedEntity.NumberOfComponents);
 			Assert.AreEqual(1, entityWithTags.Get<int>());
 			Assert.AreEqual(0.1f, entityWithTags.Get<float>());
+			Assert.IsTrue(loadedEntity.ContainsTag(Tag1));
 			Assert.IsTrue(loadedEntity.IsActive);
 		}
 
@@ -222,6 +219,28 @@ namespace DeltaEngine.Tests.Entities
 			Assert.IsFalse(entityWithTags.ContainsBehavior<MockUpdateBehavior>());
 			Assert.AreEqual(1, entities.GetEntitiesOfType<MockEntity>().Count);
 			entityWithTags.Stop<MockUpdateBehavior>();
+		}
+
+		[Test]
+		public void StartAndStopBehaviorDuringUpdate()
+		{
+			entityWithTags.Start<CreateEntityStartAndStopBehavior>();
+			entities.RunEntities();
+			Assert.IsFalse(entityWithTags.Get<Entity>().ContainsBehavior<MockUpdateBehavior>());
+		}
+
+		public class CreateEntityStartAndStopBehavior: UpdateBehavior
+		{
+			public override void Update(IEnumerable<Entity> entities)
+			{
+				foreach (Entity entity in entities)
+				{
+					var child = new MockEntity();
+					child.Start<MockUpdateBehavior>();
+					child.Stop<MockUpdateBehavior>();
+					entity.Add(child);
+				}
+			}
 		}
 
 		[Test]

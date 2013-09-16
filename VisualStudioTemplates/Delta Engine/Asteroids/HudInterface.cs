@@ -11,7 +11,7 @@ namespace $safeprojectname$
 	{
 		public HudInterface()
 		{
-			hudFont = ContentLoader.Load<FontXml>("Tahoma30");
+			hudFont = ContentLoader.Load<Font>("Tahoma30");
 			ScoreDisplay = new FontText(hudFont, "0", new Rectangle(ScreenSpace.Current.Viewport.Left, 
 				ScreenSpace.Current.Viewport.Top, 0.1f, 0.05f));
 			ScoreDisplay.RenderLayer = (int)AsteroidsRenderLayer.UserInterface;
@@ -19,7 +19,7 @@ namespace $safeprojectname$
 			gameOverText.RenderLayer = (int)AsteroidsRenderLayer.UserInterface;
 		}
 
-		private readonly FontXml hudFont;
+		private readonly Font hudFont;
 
 		public FontText ScoreDisplay
 		{

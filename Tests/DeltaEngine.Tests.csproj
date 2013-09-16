@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Commands\CommandTests.cs" />
+    <Compile Include="Content\FakeContentLoaderTests.cs" />
     <Compile Include="Content\MockContentLoaderTests.cs" />
     <Compile Include="Content\MockImageTests.cs" />
     <Compile Include="Content\MaterialRenderSizeTests.cs" />
@@ -96,7 +97,9 @@
     <Compile Include="Datatypes\BoundingBoxTests.cs" />
     <Compile Include="Datatypes\BoundingSphereTests.cs" />
     <Compile Include="Datatypes\DatatypesLoadSaveTests.cs" />
+    <Compile Include="Datatypes\EulerAnglesTests.cs" />
     <Compile Include="Datatypes\PlaneTests.cs" />
+    <Compile Include="Datatypes\RangeGraphTests.cs" />
     <Compile Include="Datatypes\RangeTests.cs" />
     <Compile Include="Datatypes\RayTests.cs" />
     <Compile Include="Entities\CreatingEntitiesTests.cs" />
@@ -106,7 +109,7 @@
     <Compile Include="Entities\UpdateAndDrawThreadsTests.cs" />
     <Compile Include="Extensions\ChangeableListTests.cs" />
     <Compile Include="Extensions\UniqueListTests.cs" />
-    <Compile Include="FileSettingsTests.cs" />
+    <Compile Include="Core\SettingsTests.cs" />
     <Compile Include="LoggerTests.cs" />
     <Compile Include="Core\GlobalTimeTests.cs" />
     <Compile Include="Datatypes\ColorTests.cs" />

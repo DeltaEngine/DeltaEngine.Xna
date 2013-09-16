@@ -40,6 +40,11 @@ namespace DeltaEngine.Input.Mocks
 				LeftButton = state;
 		}
 
+		public void SetScrollWheelValue(int value)
+		{
+			ScrollWheelValue = value;
+		}
+
 		public override void Update(IEnumerable<Entity> entities)
 		{
 			Position = nextPosition;

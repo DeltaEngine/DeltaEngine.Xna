@@ -40,14 +40,12 @@ namespace DeltaEngine.Content.Disk
 			using (var writer = CreateMetaDataXmlFile())
 			{
 				writer.WriteStartDocument();
-				writer.WriteComment(
-					"Delta Engine Content Meta Data, auto-generated, will be refreshed at each start");
 				writer.WriteStartElement("ContentMetaData");
 				WriteAttribute(writer, "Name", AssemblyExtensions.GetEntryAssemblyForProjectName());
 				WriteAttribute(writer, "Type", "Scene");
 				WriteAttribute(writer, "LastTimeUpdated",
-					Directory.GetLastWriteTime(Directory.GetCurrentDirectory()).ToString("u"));
-				WriteAttribute(writer, "ContentDeviceName", "Delta");
+					Directory.GetLastWriteTime(Directory.GetCurrentDirectory()).GetIsoDateTime());
+				WriteAttribute(writer, "ContentDeviceName", "auto-generated");
 				foreach (var file in Directory.GetFiles(Path.GetDirectoryName(filePath)))
 					if (!IsFilenameIgnored(Path.GetFileName(file)))
 						CreateContentMetaDataEntry(writer, file);
@@ -115,7 +113,7 @@ namespace DeltaEngine.Content.Disk
 			case ".deltamesh":
 				return ContentType.Mesh;
 			case ".deltaparticleemitter":
-				return ContentType.ParticleEmitter;
+				return ContentType.Particle2DEmitter;
 			case ".deltashader":
 				return ContentType.Shader;
 			case ".deltamaterial":
@@ -131,10 +129,13 @@ namespace DeltaEngine.Content.Disk
 		private static ContentType DetermineTypeForXmlFile(string filePath)
 		{
 			var xmlFile = XDocument.Load(filePath);
-			if (xmlFile.Root.Name.ToString().Equals("Font"))
-				return ContentType.FontXml;
-			if (xmlFile.Root.Name.ToString().Equals("DefaultCommands"))
+			var rootName = xmlFile.Root.Name.ToString();
+			if (rootName == "Font")
+				return ContentType.Font;
+			if (rootName == "InputCommand")
 				return ContentType.InputCommand;
+			if (rootName == "Level")
+				return ContentType.Level;
 			return ContentType.Xml;
 		}
 
@@ -147,7 +148,7 @@ namespace DeltaEngine.Content.Disk
 		private void WriteMetaData(XmlWriter writer, string contentFile, ContentType type)
 		{
 			var info = new FileInfo(contentFile);
-			WriteAttribute(writer, "LastTimeUpdated", info.LastWriteTime.ToString("u"));
+			WriteAttribute(writer, "LastTimeUpdated", info.LastWriteTime.GetIsoDateTime());
 			WriteAttribute(writer, "PlatformFileId", ++generatedPlatformFileId + "");
 			WriteAttribute(writer, "FileSize", "" + info.Length);
 			WriteAttribute(writer, "LocalFilePath", Path.GetFileName(contentFile));
@@ -223,7 +224,7 @@ namespace DeltaEngine.Content.Disk
 			return mode;
 		}
 
-		private static unsafe bool HasBitmapAlphaPixels(Bitmap bitmap)
+		internal static unsafe bool HasBitmapAlphaPixels(Bitmap bitmap)
 		{
 			int width = bitmap.Width;
 			int height = bitmap.Height;

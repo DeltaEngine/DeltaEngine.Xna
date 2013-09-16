@@ -26,7 +26,7 @@ namespace DeltaEngine.Rendering.Sprites.Tests
 		public class FpsDisplay : FontText, Updateable
 		{
 			public FpsDisplay()
-				: base(FontXml.Default, "", Rectangle.FromCenter(0.5f, 0.25f, 0.2f, 0.2f)) {}
+				: base(Font.Default, "", Rectangle.FromCenter(0.5f, 0.25f, 0.2f, 0.2f)) {}
 
 			public void Update()
 			{

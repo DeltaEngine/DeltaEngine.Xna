@@ -1,4 +1,5 @@
 ﻿using System;
+using DeltaEngine.Content;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Rendering.Shapes;
 using DeltaEngine.Scenes;
@@ -10,15 +11,28 @@ namespace Snake
 	{
 		public Menu()
 		{
+			CreateMenuTheme();
 			gameColors = new[] { Color.Black, Color.PaleGreen, Color.Green, Color.Gold };
 			AddStartButton();
 			AddColorsButton();
 			AddQuitButton();
 		}
 
+		private void CreateMenuTheme()
+		{
+			SetBackground("SnakeMainMenuBackground");
+			menuTheme = new Theme();
+			menuTheme.Button = new Theme.Appearance(new Material(Shader.Position2DUv, "SnakeButtonDefault"));
+			menuTheme.ButtonDisabled = new Theme.Appearance();
+			menuTheme.ButtonMouseover = new Theme.Appearance(new Material(Shader.Position2DUv, "SnakeButtonHover"));
+			menuTheme.ButtonPressed = new Theme.Appearance(new Material(Shader.Position2DUv, "SnakeButtonPressed"));
+		}
+
+		private Theme menuTheme;
+
 		private void AddStartButton()
 		{
-			var startButton = new InteractiveButton(new Rectangle(0.3f, 0.3f, 0.4f, 0.15f), "Start Game");
+			var startButton = new InteractiveButton(menuTheme,new Rectangle(0.3f, 0.3f, 0.4f, 0.15f), "Start Game");
 			startButton.Clicked += TryInvokeGameStart;
 			Add(startButton);
 		}
@@ -34,7 +48,7 @@ namespace Snake
 
 		private void AddQuitButton()
 		{
-			var quitButton = new InteractiveButton(new Rectangle(0.3f, 0.7f, 0.4f, 0.15f), "Quit");
+			var quitButton = new InteractiveButton(menuTheme, new Rectangle(0.3f, 0.7f, 0.4f, 0.15f), "Quit");
 			quitButton.Clicked += TryInvokeQuit;
 			Add(quitButton);
 		}
@@ -49,7 +63,7 @@ namespace Snake
 
 		private void AddColorsButton()
 		{
-			var colorButton = new InteractiveButton(new Rectangle(0.3f, 0.5f, 0.4f, 0.15f),
+			var colorButton = new InteractiveButton(menuTheme, new Rectangle(0.3f, 0.5f, 0.4f, 0.15f),
 				"ChooseColours");
 			colorButton.Clicked += () =>
 			{
@@ -95,7 +109,7 @@ namespace Snake
 
 			private void AddGameElementSelection()
 			{
-				var backgroundButton = new InteractiveButton(new Rectangle(0.2f, 0.2f, 0.12f, 0.07f),
+				var backgroundButton = new InteractiveButton(parentMenu.menuTheme, new Rectangle(0.2f, 0.2f, 0.12f, 0.07f),
 					"Background") { RenderLayer = 5 };
 				backgroundButton.Clicked += () =>
 				{
@@ -105,7 +119,7 @@ namespace Snake
 				};
 				Add(backgroundButton);
 
-				var borderButton = new InteractiveButton(new Rectangle(0.35f, 0.2f, 0.12f, 0.07f), "Border")
+				var borderButton = new InteractiveButton(parentMenu.menuTheme, new Rectangle(0.35f, 0.2f, 0.12f, 0.07f), "Border")
 				{
 					RenderLayer = 5
 				};
@@ -117,7 +131,7 @@ namespace Snake
 				};
 				Add(borderButton);
 
-				var snakeButton = new InteractiveButton(new Rectangle(0.5f, 0.2f, 0.12f, 0.07f), "Snake")
+				var snakeButton = new InteractiveButton(parentMenu.menuTheme, new Rectangle(0.5f, 0.2f, 0.12f, 0.07f), "Snake")
 				{
 					RenderLayer = 5
 				};
@@ -129,7 +143,7 @@ namespace Snake
 				};
 				Add(snakeButton);
 
-				var chunkButton = new InteractiveButton(new Rectangle(0.65f, 0.2f, 0.12f, 0.07f), "Chunk")
+				var chunkButton = new InteractiveButton(parentMenu.menuTheme, new Rectangle(0.65f, 0.2f, 0.12f, 0.07f), "Chunk")
 				{
 					RenderLayer = 5
 				};
@@ -144,7 +158,7 @@ namespace Snake
 
 			private void AddColorSliders()
 			{
-				sliderRed = new Slider(new Rectangle(0.4f, 0.3f, 0.4f, 0.1f))
+				sliderRed = new Slider(parentMenu.menuTheme, new Rectangle(0.4f, 0.3f, 0.4f, 0.1f))
 				{
 					RenderLayer = 5,
 					MaxValue = 255,
@@ -157,7 +171,7 @@ namespace Snake
 				};
 				Add(sliderRed);
 
-				sliderGreen = new Slider(new Rectangle(0.4f, 0.45f, 0.4f, 0.1f))
+				sliderGreen = new Slider(parentMenu.menuTheme, new Rectangle(0.4f, 0.45f, 0.4f, 0.1f))
 				{
 					RenderLayer = 5,
 					MaxValue = 255,
@@ -170,7 +184,7 @@ namespace Snake
 				};
 				Add(sliderGreen);
 
-				sliderBlue = new Slider(new Rectangle(0.4f, 0.6f, 0.4f, 0.1f))
+				sliderBlue = new Slider(parentMenu.menuTheme, new Rectangle(0.4f, 0.6f, 0.4f, 0.1f))
 				{
 					RenderLayer = 5,
 					MaxValue = 255,
@@ -192,7 +206,7 @@ namespace Snake
 
 			private void AddDoneButton()
 			{
-				var doneButton = new InteractiveButton(new Rectangle(0.4f, 0.72f, 0.2f, 0.1f), "Done!")
+				var doneButton = new InteractiveButton(parentMenu.menuTheme, new Rectangle(0.4f, 0.72f, 0.2f, 0.1f), "Done!")
 				{
 					RenderLayer = 5
 				};

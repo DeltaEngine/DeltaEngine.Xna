@@ -2,7 +2,7 @@
 
 namespace Drench
 {
-	internal class Board
+	public class Board
 	{
 		public Board(int width, int height)
 		{
@@ -15,7 +15,7 @@ namespace Drench
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 		private readonly FloodFiller floodFiller;
-		private Color[,] colors;
+		internal Color[,] colors;
 
 		public void Randomize()
 		{
@@ -28,6 +28,42 @@ namespace Drench
 		private readonly ColorFactory colorFactory = new ColorFactory();
 		private const float MinimumColorValue = 0.5f;
 		private const float MinimumColorInterval = 0.5f;
+
+		// Used to populate the board in a networked game
+		public Board(Data data)
+		{
+			Width = data.Width;
+			Height = data.Height;
+			SetColors(data.Colors);
+			floodFiller = new FloodFiller(colors);
+		}
+
+		private void SetColors(Color[] boardColors)
+		{
+			colors = new Color[Width,Height];
+			for (int x = 0; x < Width; x++)
+				for (int y = 0; y < Height; y++)
+					colors[x, y] = boardColors[y * Width + x];
+		}
+
+		public class Data
+		{
+			protected Data() {} //ncrunch: no coverage
+
+			public Data(int width, int height, Color[,] colors)
+			{
+				Width = width;
+				Height = height;
+				Colors = new Color[Width * Height];
+				for (int x = 0; x < Width; x++)
+					for (int y = 0; y < Height; y++)
+						Colors[y * Width + x] = colors[x, y];
+			}
+
+			public int Width { get; private set; }
+			public int Height { get; private set; }
+			public Color[] Colors { get; private set; }
+		}
 
 		public Color GetColor(Point square)
 		{

@@ -194,5 +194,10 @@ namespace DeltaEngine.Datatypes
 		{
 			return X.ToInvariantString() + ", " + Y.ToInvariantString() + ", " + Z.ToInvariantString();
 		}
+
+		public Point Get2DPoint()
+		{
+			return new Point(X, Y);
+		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DeltaEngine.Content;
+using DeltaEngine.Datatypes;
 
 namespace DeltaEngine.Entities
 {
@@ -12,6 +13,14 @@ namespace DeltaEngine.Entities
 	/// </summary>
 	public abstract class Entity
 	{
+		protected Entity(List<object> createFromComponents)
+			: this()
+		{
+			foreach (var component in createFromComponents)
+				if (!(component is Rectangle) && !(component is Visibility))
+					components.Add(component);
+		}
+
 		/// <summary>
 		/// Entities start out active and are automatically added to the current EntitiesRunner. Call
 		/// IsActive to activate or deactivate one. To disable UpdateBehaviors use <see cref="Stop{T}"/>
@@ -225,6 +234,11 @@ namespace DeltaEngine.Entities
 		{
 			return GetTypeName(instance.GetType()) +
 				(instance.GetType().IsValueType || instance is ContentData ? "=" + instance : "");
+		}
+
+		protected internal virtual List<object> GetComponentsForSaving()
+		{
+			return components;
 		}
 	}
 }

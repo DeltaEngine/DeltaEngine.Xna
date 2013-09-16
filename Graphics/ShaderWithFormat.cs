@@ -65,7 +65,8 @@ namespace DeltaEngine.Graphics
 			get
 			{
 				return Name == Position2DUv || Name == Position3DUv || Name == Position2DColor ||
-					Name == Position3DColor || Name == Position2DColorUv || Name == Position3DColorUv;
+					Name == Position3DColor || Name == Position2DColorUv || Name == Position3DColorUv ||
+					Name == Position3DNormalUv;
 			}
 		}
 
@@ -96,6 +97,10 @@ namespace DeltaEngine.Graphics
 			case Position3DColorUv:
 				Initialize(new ShaderCreationData(ColorUvVertexCode, ColorUvFragmentCode, ColorUvHlslCode,
 					Dx9Position3DColorTexture, VertexFormat.Position3DColorUv));
+				break;
+			case Position3DNormalUv:
+				Initialize(new ShaderCreationData(UvNormalVertexCode, UvNormalFragmentCode, ColorUvHlslCode,
+					Dx9Position3DColorTexture, VertexFormat.Position3DNormalUv));
 				break;
 			}
 			Create();
@@ -158,6 +163,132 @@ void main()
 	gl_FragColor = texture2D(Texture, diffuseTexCoord) * diffuseColor;
 }";
 
+		internal const string UvLightmapVertexCode = @"uniform mat4 ModelViewProjection;
+attribute vec4 aPosition;
+attribute vec2 aTextureUV;
+attribute vec2 aLightMapUV;
+varying vec2 vDiffuseTexCoord;
+varying vec2 vLightMapTexCoord;
+void main()
+{
+	gl_Position = ModelViewProjection * aPosition;
+	vDiffuseTexCoord = aTextureUV;
+	vLightMapTexCoord = aLightMapUV;
+}";
+
+		internal const string UvLightmapFragmentCode = @"precision mediump float;
+uniform sampler2D Texture;
+uniform sampler2D Lightmap;
+varying vec2 vDiffuseTexCoord;
+varying vec2 vLightMapTexCoord;
+void main()
+{
+	gl_FragColor = texture2D(Texture, vDiffuseTexCoord) * texture2D(Lightmap, vLightMapTexCoord);
+}";
+
+		internal const string UvSkinnedVertexCode = @"uniform mat4 ModelViewProjection;
+uniform vec4 JointTransforms[31 * 4]; 
+attribute vec4 aPosition;
+attribute vec2 aTextureUV;
+attribute vec4 aWeightsIndices;
+varying vec2 vDiffuseTexCoord;
+void main()
+{
+	vec4 skinnedPosition = vec3(0.0, 0.0, 0.0, 0.0);
+	for (int jointIndex  = 0; jointIndex < 2; ++jointIndex)
+	{
+		vec4 position;
+		float weight = aWeightsIndices[jointIndex];
+		int index = int(aWeightsIndices[jointIndex + 2]);		
+		position.x = dot(aPosition, JointTransforms[index + 0]);
+		position.y = dot(aPosition, JointTransforms[index + 1]);
+		position.z = dot(aPosition, JointTransforms[index + 2]);
+		position.w = aPosition.w;
+		skinnedPosition += weight * position;
+	} 
+	gl_Position = ModelViewProjection * skinnedPosition;
+	vDiffuseTexCoord = aTextureUV;
+	vLightMapTexCoord = aLightMapUV;
+}";
+
+		internal const string UvSkinnedFragmentCode = UvFragmentCode;
+
+		internal const string UvLightmapHlslCode = @"
+struct VertexInputType
+{
+	float4 position : SV_POSITION;
+	float2 texCoord : TEXCOORD0;
+	float2 lightMapUv : TEXCOORD1;
+};
+
+struct PixelInputType
+{
+	float4 position : SV_POSITION;
+	float2 texCoord : TEXCOORD0;
+	float2 lightMapUv : TEXCOORD1;
+};
+
+float4x4 WorldViewProjection;
+
+PixelInputType VsMain(VertexInputType input)
+{
+	PixelInputType output;
+	output.position = mul(input.position, WorldViewProjection);
+	output.texCoord = input.texCoord;
+	output.lightMapUv = input.lightMapUv;
+	return output;
+}
+
+Texture2D DiffuseTexture : register(t0);
+Texture2D Lightmap : register(t1);
+SamplerState TextureSamplerState : register(s0);
+
+float4 PsMain(PixelInputType input) : SV_TARGET
+{
+	return DiffuseTexture.Sample(TextureSamplerState, input.texCoord) *
+		Lightmap.Sample(TextureSamplerState, input.lightMapUv);
+}";
+
+		internal const string UvNormalVertexCode = @"uniform mat4 ModelViewProjection;
+uniform vec4 viewPosition;
+uniform vec4 lightPosition;
+attribute vec4 aPosition;
+attribute vec4 aNormal;
+attribute vec2 aTextureUV;
+varying vec2 vTexcoord;
+varying vec3 vNormal;
+varying vec3 vLightVec;
+varying vec3 vCameraVec;
+void main()
+{
+	vNormal = aNormal;
+	vCameraVec = normalize(viewPosition.xyz - aPosition.xyz);
+	vLightVec = lightPosition.xyz - aPosition.xyz;	
+	gl_Position = ModelViewProjection * aPosition;
+	vTexcoord = aTextureUV;	
+}";
+
+		internal const string UvNormalFragmentCode = @"precision mediump float;
+uniform sampler2D Texture;
+varying vec2 vTexcoord;
+varying vec3 vNormal;
+varying vec3 vLightVec;
+varying vec3 vCameraVec;
+const float MAX_DIST = 2.5;
+const float MAX_DIST_SQUARED = MAX_DIST * MAX_DIST;
+void main()
+{
+	vec3 normal = normalize(vNormal);
+	vec3 cameraDir = normalize(vCameraVec);   
+	float dist = min(dot(vLightVec, vLightVec), MAX_DIST_SQUARED) / MAX_DIST_SQUARED;  
+	vec3 lightDir = normalize(vLightVec);
+	vec3 diffuse = max(0.0, dot(normal, lightDir)) * dist; 
+	vec3 halfAngle = normalize(cameraDir + lightDir);
+	float specularDot = dot(normal, halfAngle);
+	vec3 specular = pow(clamp(specularDot, 0.0, 1.0), 2.0) * dist;
+	gl_FragColor = texture2D(baseMap, vTexCoord) * vec4(diffuse,1.0) + vec4(specular, 1.0);
+}";
+
 		internal const string UvHlslCode = @"
 struct VertexInputType
 {
@@ -181,14 +312,8 @@ PixelInputType VsMain(VertexInputType input)
 	return output;
 }
 
-Texture2D DiffuseTexture;
-
-SamplerState TextureSamplerState
-{
-	Filter = MIN_MAG_MIP_LINEAR;
-	AddressU = Wrap;
-	AddressV = Wrap;
-};
+Texture2D DiffuseTexture : register(t0);
+SamplerState TextureSamplerState : register(s0);
 
 float4 PsMain(PixelInputType input) : SV_TARGET
 {
@@ -249,14 +374,8 @@ PixelInputType VsMain(VertexInputType input)
 	return output;
 }
 
-Texture2D DiffuseTexture;
-
-SamplerState TextureSamplerState
-{
-	Filter = MIN_MAG_MIP_LINEAR;
-	AddressU = Wrap;
-	AddressV = Wrap;
-};
+Texture2D DiffuseTexture : register(t0);
+SamplerState TextureSamplerState : register(s0);
 
 float4 PsMain(PixelInputType input) : SV_TARGET
 {
@@ -322,5 +441,28 @@ float4 PsMain(PixelInputType input) : SV_TARGET
 				"output.TextureUV = TextureUV;" + "return output;" + "}" + "sampler DiffuseTexture;" +
 				"float4 PS( VS_OUTPUT input ) : COLOR0" + "{" +
 				"return tex2D(DiffuseTexture, input.TextureUV);" + "}";
+
+		internal const string Dx9Position3DLightMap =
+			"float4x4 WorldViewProjection;" + 
+			"struct VS_OUTPUT" + 
+			"{" + 
+				"float4 Pos       : POSITION;" +
+				"float2 TextureUV : TEXCOORD0;" +
+				"float2 LightMapUV: TEXCOORD1;" +
+			 "};" +
+					"VS_OUTPUT VS( float3 Pos : POSITION, float2 TextureUV : TEXCOORD0, float2 LightMapUV : TEXCOORD1 )" + 
+				"{" +
+					"VS_OUTPUT output = (VS_OUTPUT)0;" +
+					"output.Pos = mul(float4(Pos, 1.0f), WorldViewProjection);" +
+					"output.TextureUV = TextureUV;" +
+					"output.LightMapUV = LightMapUV;" + 
+					"return output;" + 
+				 "}" +
+				 "sampler DiffuseTexture : register(s0);" +
+				 "sampler LightmapTexture : register(s1);" +
+					"float4 PS( VS_OUTPUT input ) : COLOR0" + 
+				"{" +
+					"return tex2D(DiffuseTexture, input.TextureUV) * tex2D(LightmapTexture, input.LightMapUV);" +
+				"}";
 	}
 }

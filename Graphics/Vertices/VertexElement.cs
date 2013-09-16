@@ -30,12 +30,18 @@ namespace DeltaEngine.Graphics.Vertices
 				break;
 			case VertexElementType.Position2D:
 			case VertexElementType.TextureUV:
+			case VertexElementType.LightMapUV:
 				ComponentCount = 2;
 				Size = 8;
 				break;
 			case VertexElementType.Color:
 				ComponentCount = 4;
 				Size = 4;
+				break;
+			case VertexElementType.SkinIndices:
+			case VertexElementType.SkinWeights:
+				Size = 4;
+				ComponentCount = 2;
 				break;
 			default:
 				throw new ElementTypeNotYetSupported(ElementType);

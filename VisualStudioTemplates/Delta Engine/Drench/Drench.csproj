@@ -43,6 +43,9 @@
     <Reference Include="DeltaEngine">
 	  <HintPath>$(DeltaEnginePath)\DeltaEngine.dll</HintPath>
     </Reference>
+    <Reference Include="DeltaEngine.Networking">
+	  <HintPath>$(DeltaEnginePath)\DeltaEngine.Networking.dll</HintPath>
+    </Reference>
     <Reference Include="DeltaEngine.Rendering">
 	  <HintPath>$(DeltaEnginePath)\DeltaEngine.Rendering.dll</HintPath>
     </Reference>
@@ -64,9 +67,10 @@
     <Compile Include="AvailableColorFinder.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="DrenchMenu.cs" />
+    <Compile Include="Games\TwoHumanNetworkGame.cs" />
     <Compile Include="Games\Game.cs" />
     <Compile Include="Games\HumanVsAiGame.cs" />
-    <Compile Include="Games\TwoHumanLocalGame.cs" />
+    <Compile Include="Games\TwoHumanGame.cs" />
     <Compile Include="Logics\HumanVsSmartAiLogic.cs" />
     <Compile Include="FloodFiller.cs" />
     <Compile Include="Logics\Logic.cs" />
@@ -78,7 +82,7 @@
     <Compile Include="Logics\SinglePlayerLogic.cs" />
     <Compile Include="Games\TwoPlayerGame.cs" />
     <Compile Include="Logics\TwoPlayerLogic.cs" />
-    <Compile Include="Logics\TwoHumanLocalLogic.cs" />
+    <Compile Include="Logics\TwoHumanLogic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

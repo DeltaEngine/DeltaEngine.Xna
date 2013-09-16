@@ -62,5 +62,35 @@ namespace Drench.Tests
 			board.SetColor(0, 0, Color.Red);
 			Assert.AreNotEqual(Color.Red, clone.GetColor(0, 0));
 		}
+
+		[Test]
+		public void CreateBoardFromData()
+		{
+			board = new Board(CreateBoardData());
+			Assert.AreEqual(board.Width, 2);
+			Assert.AreEqual(board.Height, 3);
+			Assert.AreEqual(board.GetColor(0, 1), Color.Red);
+			Assert.AreEqual(board.GetColor(1, 2), Color.Orange);
+		}
+
+		public static Board.Data CreateBoardData()
+		{
+			return new Board.Data(BoardDataWidth, BoardDataHeight, CreateColors());
+		}
+
+		public const int BoardDataWidth = 2;
+		public const int BoardDataHeight = 3;
+
+		private static Color[,] CreateColors()
+		{
+			var colors = new Color[BoardDataWidth, BoardDataHeight];
+			colors[0, 0] = Color.Black;
+			colors[1, 0] = Color.White;
+			colors[0, 1] = Color.Red;
+			colors[1, 1] = Color.Blue;
+			colors[0, 2] = Color.Green;
+			colors[1, 2] = Color.Orange;
+			return colors;
+		}
 	}
 }

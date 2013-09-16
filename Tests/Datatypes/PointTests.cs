@@ -63,8 +63,10 @@ namespace DeltaEngine.Tests.Datatypes
 		{
 			var p = new Point(2, 4);
 			const float F = 1.5f;
+			var s = new Size(F);
 			Assert.AreEqual(new Point(3, 6), p * F);
 			Assert.AreEqual(new Point(3, 6), F * p);
+			Assert.AreEqual(new Point(3, 6), p * s);
 		}
 
 		[Test]
@@ -72,7 +74,9 @@ namespace DeltaEngine.Tests.Datatypes
 		{
 			var p = new Point(2, 4);
 			const float F = 2f;
+			var s = new Size(F);
 			Assert.AreEqual(new Point(1, 2), p / F);
+			Assert.AreEqual(new Point(1, 2), p / s);
 		}
 
 		[Test]

@@ -169,7 +169,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 			var colors = new[] { Color.Black, Color.White };
 			bar.PercentileColors = colors;
 			Assert.AreEqual(colors, bar.PercentileColors);
-			AssertColorsNearlyEqual(Color.Grey, bar.Color);
+			AssertColorsNearlyEqual(Color.Gray, bar.Color);
 		}
 
 		[Test, CloseAfterFirstFrame]

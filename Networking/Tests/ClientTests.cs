@@ -38,16 +38,16 @@ namespace DeltaEngine.Networking.Tests
 			client.Send(new TextMessage("Hi"));
 			var serverMessage = server.LastMessage as TextMessage;
 			byte[] byteArray = BinaryDataExtensions.ToByteArrayWithLengthHeader(serverMessage);
-			const int LenghtOfNetworkMessage = 1;
-			const int LenghtOfDataVersion = 4;
-			const int StringLenghtByte = 1;
-			const int StringIsNullBooleanByte = 1;
-			int classNameLength = "TestMessage".Length + StringLenghtByte;
-			int textLength = "Hi".Length + StringLenghtByte + StringIsNullBooleanByte;
-			Assert.AreEqual(
-				LenghtOfNetworkMessage + LenghtOfDataVersion + classNameLength + textLength,
+			int classNameLength = "TestMessage".Length + StringLengthByte;
+			int textLength = "Hi".Length + StringLengthByte + StringIsNullBooleanByte;
+			Assert.AreEqual(LengthOfNetworkMessage + LengthOfDataVersion + classNameLength + textLength,
 				byteArray.Length);
 		}
+
+		private const int LengthOfNetworkMessage = 1;
+		private const int LengthOfDataVersion = 4;
+		private const int StringLengthByte = 1;
+		private const int StringIsNullBooleanByte = 1;
 
 		[Test]
 		public void SendTestMessageToServer()
@@ -74,7 +74,7 @@ namespace DeltaEngine.Networking.Tests
 				Assert.IsTrue(messageReceived);
 			}
 		}
-		
+
 		[Test]
 		public void ClientIsDisconnected()
 		{

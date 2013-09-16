@@ -13,6 +13,15 @@ namespace DeltaEngine.Entities
 	/// </summary>
 	public class DrawableEntity : Entity
 	{
+		protected DrawableEntity(List<object> createFromComponents)
+			: base(createFromComponents)
+		{
+			foreach (var component in components)
+				if (!(component is Rectangle) && component is Visibility)
+					// ReSharper disable DoNotCallOverridableMethodsInConstructor
+					Visibility = (Visibility)component;
+		}
+
 		/// <summary>
 		/// By default all drawable entities are visible, but you can easily turn off drawing with Hide
 		/// </summary>
@@ -27,6 +36,11 @@ namespace DeltaEngine.Entities
 		public void ToggleVisibility()
 		{
 			Visibility = Visibility == Visibility.Show ? Visibility.Hide : Visibility.Show;	
+		}
+
+		public void ToggleVisibility(Visibility value)
+		{
+			Visibility = value;
 		}
 
 		/// <summary>

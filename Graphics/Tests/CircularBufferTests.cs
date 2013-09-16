@@ -13,7 +13,7 @@ namespace DeltaEngine.Graphics.Tests
 		public void CreateBuffer()
 		{
 			buffer = new MockCircularBuffer(Resolve<Device>(),
-				ContentLoader.Load<MockShader>(Shader.Position2DUv), BlendMode.Normal,
+				ContentLoader.Load<ShaderWithFormat>(Shader.Position2DUv), BlendMode.Normal,
 				VerticesMode.Triangles);
 			Assert.IsTrue(buffer.IsCreated);
 		}

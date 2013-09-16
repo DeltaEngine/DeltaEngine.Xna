@@ -14,8 +14,7 @@ namespace DeltaEngine.Content.Disk
 	/// </summary>
 	public sealed class DiskContentLoader : ContentLoader
 	{
-		public DiskContentLoader(string contentPath = "Content")
-			: base(contentPath) {}
+		private DiskContentLoader() {}
 
 		private void LazyInitialize()
 		{
@@ -47,8 +46,7 @@ namespace DeltaEngine.Content.Disk
 					if (fs.Length > 0)
 						xml = XDocument.Load(fs);
 				return xml == null ||
-					xml.Nodes().OfType<XComment>().Any() &&
-						(DateTime.Now - new FileInfo(filePath).LastWriteTime).TotalSeconds > 90;
+					(DateTime.Now - new FileInfo(filePath).LastWriteTime).TotalSeconds > 90;
 			}
 			Logger.Info("ContentMetaData.xml not found, a new one will be created. " +
 				"For proper content meta data please use the Delta Engine Editor.");
@@ -111,6 +109,7 @@ namespace DeltaEngine.Content.Disk
 
 		protected override bool HasValidContentAndMakeSureItIsLoaded()
 		{
+			LazyInitialize();
 			return metaData.Count > 0;
 		}
 	}

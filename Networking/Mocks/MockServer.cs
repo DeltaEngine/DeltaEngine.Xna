@@ -24,17 +24,24 @@ namespace DeltaEngine.Networking.Mocks
 
 		public void ClientConnectedToServer(MockClient client)
 		{
-			connectedClients.Add(new MockConnection(client));
+			var serverToClientConnection = new MockConnection(client);
+			connectedClients.Add(serverToClientConnection);
+			RaiseClientConnected(serverToClientConnection);
 		}
 
-		public void ClientDisconnectedFromServer()
+		public void ClientDisconnectedFromServer(MockClient client)
 		{
-			connectedClients.Clear();
+			var connection =
+				(MockConnection)connectedClients.Find(c => ((MockConnection)c).Client == client);
+			if (connection == null)
+				return;  //ncrunch: no coverage
+			connectedClients.Remove(connection);
+			RaiseClientDisconnected(connection.Client);
 		}
 
 		public void SendToAllClients(object message)
 		{
-			foreach (var client in connectedClients.OfType<MockClient>())
+			foreach (var client in connectedClients)
 				client.Send(message);
 		}
 
@@ -47,6 +54,13 @@ namespace DeltaEngine.Networking.Mocks
 			foreach (var connection in connectedClients.OfType<MockConnection>())
 				if (connection.Client == client)
 					OnClientDataReceived(connection, messageBytes.ToBinaryData());
+		}
+
+		public override void Dispose()
+		{
+			for (int i = connectedClients.Count - 1; i >= 0; i--)
+				((MockConnection)connectedClients[i]).Client.Dispose();
+			base.Dispose();
 		}
 	}
 }

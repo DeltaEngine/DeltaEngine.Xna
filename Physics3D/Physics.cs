@@ -9,10 +9,10 @@ namespace DeltaEngine.Physics3D
 	/// </summary>
 	public abstract class Physics : RapidUpdateable
 	{
-		public void RapidUpdate(float rapidUpdateTimeDelta)
+		public void RapidUpdate()
 		{
 			if (!IsPaused)
-				Simulate(rapidUpdateTimeDelta);
+				Simulate(Time.Delta);
 		}
 
 		public bool IsPaused { get; set; }

@@ -7,8 +7,6 @@ namespace DeltaEngine.Extensions
 	/// </summary>
 	public static class MathExtensions
 	{
-		public const float Pi = 3.14159265359f;
-
 		public static float Abs(this float value)
 		{
 			return Math.Abs(value);
@@ -21,12 +19,12 @@ namespace DeltaEngine.Extensions
 
 		public const float Epsilon = 0.0001f;
 
-		public static int Round(float value)
+		public static int Round(this float value)
 		{
 			return (int)Math.Round(value);
 		}
 
-		public static float Round(float value, int decimals)
+		public static float Round(this float value, int decimals)
 		{
 			return (float)Math.Round(value, decimals);
 		}
@@ -36,6 +34,8 @@ namespace DeltaEngine.Extensions
 			return (float)Math.Sin(degrees * Pi / 180.0f);
 		}
 
+		public const float Pi = 3.14159265359f;
+
 		public static float Cos(float degrees)
 		{
 			return (float)Math.Cos(degrees * Pi / 180.0f);
@@ -44,6 +44,11 @@ namespace DeltaEngine.Extensions
 		public static float Tan(float degrees)
 		{
 			return (float)Math.Tan(degrees * Pi / 180.0f);
+		}
+
+		public static float Asin(float value)
+		{
+			return (float)Math.Asin(value) * 180 / Pi;
 		}
 
 		public static float Atan2(float y, float x)

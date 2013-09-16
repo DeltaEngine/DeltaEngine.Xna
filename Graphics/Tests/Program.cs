@@ -1,22 +1,21 @@
-﻿using DeltaEngine.Platforms;
+﻿using DeltaEngine.Content;
+using DeltaEngine.Content.Disk;
 
 namespace DeltaEngine.Graphics.Tests
 {
-	public class Program : TestWithMocksOrVisually
+	public class Program
 	{
 		public static void Main()
 		{
-			new Program().RunTest();
-		}
-
-		private void RunTest()
-		{
-			InitializeResolver();
-			new DrawingTests().DrawRedLine();
+			var tests = new DeviceTests();
+			tests.InitializeResolver();
+			ContentLoader.Use<DiskContentLoader>();
+			tests.DrawRedBackground();
+			//new DrawingTests().DrawRedLine();
 			//new DrawingTests().DrawVertices();
 			//new ImageTests().DrawImage();
 			//new MeshTests().DrawRotatingIceTower();
-			RunTestAndDisposeResolverWhenDone();
+			tests.RunTestAndDisposeResolverWhenDone();
 		}
 	}
 }

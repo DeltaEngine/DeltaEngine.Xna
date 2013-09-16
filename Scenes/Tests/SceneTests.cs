@@ -6,6 +6,7 @@ using DeltaEngine.Entities;
 using DeltaEngine.Input;
 using DeltaEngine.Input.Mocks;
 using DeltaEngine.Platforms;
+using DeltaEngine.Rendering;
 using DeltaEngine.Rendering.Sprites;
 using DeltaEngine.Scenes.UserInterfaces.Controls;
 using NUnit.Framework;
@@ -25,9 +26,21 @@ namespace DeltaEngine.Scenes.Tests
 		private Material material;
 
 		[Test, CloseAfterFirstFrame]
-		public void CreateSceneFromLoader()
+		public void LoadSceneWithoutAnyControls()
 		{
-			var loadedScene = ContentLoader.Load<Scene>("TestScene");
+			var loadedScene = ContentLoader.Load<Scene>("EmptyScene");
+			Assert.AreEqual("EmptyScene", loadedScene.Name);
+			Assert.AreEqual(0, loadedScene.Controls.Count);
+		}
+
+		[Test, CloseAfterFirstFrame]
+		public void LoadSceneWithAButton()
+		{
+			//TODO: Theme is ContentData and all control saving and loading bugs have been fixed (lots of little tests needed in each class)
+			var loadedScene = ContentLoader.Load<Scene>("SceneWithAButton");
+			Assert.AreEqual("SceneWithAButton", loadedScene.Name);
+			Assert.AreEqual(1, loadedScene.Controls.Count);
+			Assert.AreEqual(typeof(Button), loadedScene.Controls[0].GetType());
 		}
 
 		[Test, CloseAfterFirstFrame]
@@ -40,7 +53,11 @@ namespace DeltaEngine.Scenes.Tests
 			Assert.AreEqual(control, scene.Controls[0]);
 		}
 
-		private class EmptyControl : Entity {}
+		private class EmptyControl : Entity2D
+		{
+			public EmptyControl()
+				: base(Rectangle.Zero) {}
+		}
 
 		[Test, CloseAfterFirstFrame]
 		public void AddingControlTwiceOnlyAddsItOnce()

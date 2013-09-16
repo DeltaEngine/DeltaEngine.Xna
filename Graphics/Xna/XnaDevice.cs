@@ -106,7 +106,7 @@ namespace DeltaEngine.Graphics.Xna
 		public override void SetProjectionMatrix(Matrix matrix)
 		{
 			//convert from matrix to xna projection!
-			effect.Projection = XnaMatrix.CreateOrthographicOffCenter(0,
+			ShaderEffect.Projection = XnaMatrix.CreateOrthographicOffCenter(0,
 				window.ViewportPixelSize.Width, window.ViewportPixelSize.Height, 0, 0, 1);
 		}
 

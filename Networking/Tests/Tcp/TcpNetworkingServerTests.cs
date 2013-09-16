@@ -6,6 +6,7 @@ namespace DeltaEngine.Networking.Tests.Tcp
 	[Ignore]
 	public class TcpNetworkingServerTests
 	{
+		//ncrunch: no coverage start
 		[Test]
 		public void IsRunning()
 		{

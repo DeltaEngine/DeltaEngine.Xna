@@ -68,6 +68,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FileExtensionToTypeTests.cs" />
+    <Compile Include="HasAlphaPixelsTests.cs" />
     <Compile Include="DiskContentLoaderTests.cs" />
     <Compile Include="MetaDataCreatorTests.cs" />
   </ItemGroup>

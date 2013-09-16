@@ -23,7 +23,7 @@ namespace DeltaEngine.Rendering.Triggers.Tests
 			{
 				Color = Color.Red
 			};
-			trigger.Add(new TimeTrigger.Data(Color.Red, Color.Grey, 1));
+			trigger.Add(new TimeTrigger.Data(Color.Red, Color.Gray, 1));
 			trigger.Start<CollisionTrigger>().Add(new CollisionTrigger.Data(Color.White, Color.Red));
 			Assert.AreEqual(Point.Zero, trigger.Get<Rectangle>().TopLeft);
 			Assert.AreEqual(Point.One, trigger.Get<Rectangle>().BottomRight);

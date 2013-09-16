@@ -16,7 +16,7 @@ namespace DeltaEngine.Input.Tests
 		{
 			int pressed = 0;
 			int released = 0;
-			var fontText = new FontText(FontXml.Default,
+			var fontText = new FontText(Font.Default,
 				"MouseLeft pressed: " + pressed + " released: " + released, Rectangle.One);
 			new Command(
 				() => fontText.Text = "MouseLeft pressed: " + ++pressed + " released: " + released).Add(
@@ -29,8 +29,7 @@ namespace DeltaEngine.Input.Tests
 		[Test, CloseAfterFirstFrame]
 		public void GetInputCommands()
 		{
-			using (new MockContentLoader(new ContentDataResolver()))
-				ContentLoader.Load<InputCommands>("DefaultCommands");
+			ContentLoader.Load<InputCommands>("DefaultCommands");
 		}
 	}
 }

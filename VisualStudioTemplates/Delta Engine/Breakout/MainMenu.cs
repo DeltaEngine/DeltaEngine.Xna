@@ -12,7 +12,6 @@ namespace $safeprojectname$
 		{
 			AddStartButton();
 			AddQuitButton();
-			SetBackground(new Material(Shader.Position2DColorUv, "Background"));
 		}
 
 		private void AddStartButton()
@@ -20,7 +19,7 @@ namespace $safeprojectname$
 			if (menuTheme == null)
 				SetUpTheme();
 
-			var startButton = new InteractiveButton(menuTheme, new Rectangle(0.3f, 0.3f, 0.4f, 0.15f), 
+			var startButton = new InteractiveButton(menuTheme, new Rectangle(0.3f, 0.4f, 0.4f, 0.15f), 
 				"Start Game");
 			startButton.Clicked += TryInvokeGameStart;
 			Add(startButton);
@@ -36,7 +35,7 @@ namespace $safeprojectname$
 
 		private void AddQuitButton()
 		{
-			var quitButton = new InteractiveButton(menuTheme, new Rectangle(0.3f, 0.5f, 0.4f, 0.15f), 
+			var quitButton = new InteractiveButton(menuTheme, new Rectangle(0.3f, 0.6f, 0.4f, 0.15f), 
 				"Quit Game");
 			quitButton.Clicked += TryInvokeQuit;
 			Add(quitButton);
@@ -52,14 +51,15 @@ namespace $safeprojectname$
 
 		private void SetUpTheme()
 		{
+			SetBackground("BreakoutMainMenuBackground");
 			menuTheme = new Theme();
-			menuTheme.Button = new Theme.Appearance(new Material(Shader.Position2DColorUv, "Brick"));
+			menuTheme.Button = new Theme.Appearance(new Material(Shader.Position2DColorUv, 
+				"BreakoutButtonDefault"));
 			menuTheme.ButtonMouseover = new Theme.Appearance(new Material(Shader.Position2DColorUv, 
-				"Brick"));
+				"BreakoutButtonHover"));
 			menuTheme.ButtonPressed = new Theme.Appearance(new Material(Shader.Position2DColorUv, 
-				"Brick"));
-			menuTheme.ButtonDisabled = new Theme.Appearance(new Material(Shader.Position2DColorUv, 
-				"Brick"));
+				"BreakoutButtonPressed"));
+			menuTheme.ButtonDisabled = new Theme.Appearance();
 		}
 
 		private Theme menuTheme;

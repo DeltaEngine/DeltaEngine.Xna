@@ -1,4 +1,5 @@
-﻿using DeltaEngine.Datatypes;
+﻿using System.Collections.Generic;
+using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;
 using DeltaEngine.Extensions;
 
@@ -9,8 +10,13 @@ namespace DeltaEngine.Rendering
 	/// </summary>
 	public class Entity2D : DrawableEntity
 	{
-		private Entity2D()
-			: this(Rectangle.Zero) {}
+		protected Entity2D(List<object> createFromComponents)
+			: base(createFromComponents)
+		{
+			foreach (var component in createFromComponents)
+				if (component is Rectangle)
+					LastDrawArea = DrawArea = (Rectangle)component;
+		}
 
 		public Entity2D(Rectangle drawArea)
 		{
@@ -161,6 +167,20 @@ namespace DeltaEngine.Rendering
 		{
 			return DrawArea.Contains(Rotation == DefaultRotation
 				? point : point.RotateAround(RotationCenter, -Rotation));
+		}
+
+		protected internal override List<object> GetComponentsForSaving()
+		{
+			var componentsToSave = new List<object>();
+			componentsToSave.Add(DrawArea);
+			componentsToSave.Add(Visibility);
+			foreach (var component in base.GetComponentsForSaving())
+				if (!component.GetType().Name.Contains("Theme") &&
+					!component.GetType().Name.Contains("Appearance") &&
+					!component.GetType().Name.Contains("InteractiveState") &&
+					!component.GetType().Name.Contains("Font"))
+					componentsToSave.Add(component);
+			return componentsToSave;
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using DeltaEngine.Content;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
+using DeltaEngine.Rendering.Sprites;
 
 namespace DeltaEngine.Rendering.Particles
 {
@@ -16,27 +17,31 @@ namespace DeltaEngine.Rendering.Particles
 		public ParticleEmitterData()
 			: base("<GeneratedParticleEmitterData>")
 		{
-			StartVelocity = new RangeGraph<Point>(Point.Zero, Point.Zero);
-			StartPosition = new RangeGraph<Point>(Point.Zero, Point.Zero);
-			Force = new RangeGraph<Point>(Point.Zero, Point.Zero);
+			StartVelocity = new RangeGraph<Vector>(Vector.Zero, Vector.Zero);
+			Acceleration = new RangeGraph<Vector>(Vector.Zero, Vector.Zero);
 			Size = new RangeGraph<Size>(new Size(0.1f), new Size(0.1f));
 			Color = new RangeGraph<Color>(Datatypes.Color.White, Datatypes.Color.White);
+			StartPosition = new RangeGraph<Vector>(Vector.Zero, Vector.Zero);
+			StartRotation = new RangeGraph<ValueRange>();
+			RotationSpeed = new RangeGraph<ValueRange>();
+			particlesPerSpawn = new RangeGraph<ValueRange>(new ValueRange(1,1), new ValueRange(1,1));
 		}
 
-		protected override void DisposeData(){}
+		protected override void DisposeData() { }
 
 		public float SpawnInterval { get; set; }
 		public float LifeTime { get; set; }
 		public int MaximumNumberOfParticles { get; set; }
-		public RangeGraph<Point> StartPosition { get; set; }
-		public RangeGraph<Point> StartVelocity { get; set; }
-		public RangeGraph<Point> Force { get; set; }
+		public RangeGraph<Vector> StartVelocity { get; set; }
+		public RangeGraph<Vector> Acceleration { get; set; }
 		public RangeGraph<Size> Size { get; set; }
-		public ValueRange StartRotation { get; set; }
-		public ValueRange RotationForce { get; set; }
+		public RangeGraph<ValueRange> StartRotation { get; set; }
+		public RangeGraph<ValueRange> RotationSpeed { get; set; }
 		public RangeGraph<Color> Color { get; set; }
 		public Material ParticleMaterial { get; set; }
 		public BillboardMode BillboardMode { get; set; }
+		public RangeGraph<Vector> StartPosition { get; set; }
+		public RangeGraph<ValueRange> particlesPerSpawn { get; set; }
 
 		protected override void LoadData(Stream fileData)
 		{
@@ -45,7 +50,7 @@ namespace DeltaEngine.Rendering.Particles
 			LifeTime = emitterData.LifeTime;
 			MaximumNumberOfParticles = emitterData.MaximumNumberOfParticles;
 			StartVelocity = emitterData.StartVelocity;
-			Force = emitterData.Force;
+			Acceleration = emitterData.Acceleration;
 			Size = emitterData.Size;
 			StartRotation = emitterData.StartRotation;
 			Color = emitterData.Color;

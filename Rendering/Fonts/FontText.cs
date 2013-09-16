@@ -15,10 +15,10 @@ namespace DeltaEngine.Rendering.Fonts
 	/// </summary>
 	public class FontText : Entity2D
 	{
-		public FontText(FontXml font, string text, Point centerPosition)
+		public FontText(Font font, string text, Point centerPosition)
 			: this(font, text, Rectangle.FromCenter(centerPosition, new Size(0.3f, 0.1f))) {}
 
-		public FontText(FontXml font, string text, Rectangle drawArea)
+		public FontText(Font font, string text, Rectangle drawArea)
 			: base(drawArea)
 		{
 			this.text = text;
@@ -32,7 +32,7 @@ namespace DeltaEngine.Rendering.Fonts
 		private string text;
 		private readonly bool wasFontLoadedOk;
 
-		private void RenderAsFontText(FontXml font)
+		private void RenderAsFontText(Font font)
 		{
 			description = font.Description;
 			description.Generate(text, HorizontalAlignment.Center);
@@ -44,7 +44,7 @@ namespace DeltaEngine.Rendering.Fonts
 
 		private FontDescription description;
 
-		private void RenderAsVectorText()
+	  private void RenderAsVectorText()
 		{
 			Add(new VectorText.Data(text));
 			Start<VectorText.ProcessText>();

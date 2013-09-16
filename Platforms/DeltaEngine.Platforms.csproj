@@ -42,6 +42,10 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Content\Disk\DeltaEngine.Content.Disk.csproj">
+      <Project>{EE9847E1-9C76-4ACE-B531-D3EA84F7D741}</Project>
+      <Name>DeltaEngine.Content.Disk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Content\Online\DeltaEngine.Content.Online.csproj">
       <Project>{68AA6280-09EF-4325-B5F8-B8A967004144}</Project>
       <Name>DeltaEngine.Content.Online</Name>
@@ -66,6 +70,18 @@
       <Project>{5231706E-2955-43BF-9C06-291E12AF5C5C}</Project>
       <Name>DeltaEngine.Networking</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rendering\Cameras\DeltaEngine.Rendering.Cameras.csproj">
+      <Project>{F5992CBF-8E17-4EB0-B483-F1DE7993C416}</Project>
+      <Name>DeltaEngine.Rendering.Cameras</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rendering\Mocks\DeltaEngine.Rendering.Mocks.csproj">
+      <Project>{DE00BA97-4ABF-443A-82B2-2D2947DAA0B4}</Project>
+      <Name>DeltaEngine.Rendering.Mocks</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rendering\Models\DeltaEngine.Rendering.Models.csproj">
+      <Project>{701FDD1A-6B8A-4CA9-B796-AC9546233F47}</Project>
+      <Name>DeltaEngine.Rendering.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -75,11 +91,14 @@
     <Compile Include="ApproveFirstFrameScreenshot.cs" />
     <Compile Include="ApproveFirstFrameScreenshotAttribute.cs" />
     <Compile Include="AppRunner.cs" />
-    <Compile Include="AutofacContentDataResolver.cs" />
+    <Compile Include="AutofacContentLoaderResolver.cs" />
     <Compile Include="AssemblyTypeLoader.cs" />
     <Compile Include="AutofacHandlerResolver.cs" />
+    <Compile Include="AutofacNetworkResolver.cs" />
+    <Compile Include="AutofacScreenSpaceResolver.cs" />
     <Compile Include="ConsoleCommands.cs" />
     <Compile Include="ConsoleCommandResolver.cs" />
+    <Compile Include="AutofacCameraResolver.cs" />
     <Compile Include="FileSettings.cs" />
     <Compile Include="IgnoreForResolverAttribute.cs" />
     <Compile Include="InAppPurchase.cs" />

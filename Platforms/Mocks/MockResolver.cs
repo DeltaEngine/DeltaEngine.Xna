@@ -13,9 +13,11 @@ using DeltaEngine.Graphics.Mocks;
 using DeltaEngine.Input.Mocks;
 using DeltaEngine.Mocks;
 using DeltaEngine.Multimedia.Mocks;
+using DeltaEngine.Networking;
 using DeltaEngine.Networking.Mocks;
 using DeltaEngine.Physics2D.Farseer;
 using DeltaEngine.Rendering.Cameras;
+using DeltaEngine.Rendering.Mocks;
 using DeltaEngine.ScreenSpaces;
 
 namespace DeltaEngine.Platforms.Mocks
@@ -28,19 +30,27 @@ namespace DeltaEngine.Platforms.Mocks
 		public MockResolver()
 		{
 			CreateConsoleCommandResolver();
-			instancesToDispose.Add(new MockContentLoader(new AutofacContentDataResolver(this)));
-			instancesToDispose.Add(settings = RegisterMock(new MockSettings()));
-			instancesToDispose.Add(
-				entities = new EntitiesRunner(new AutofacHandlerResolver(this), settings));
+			CreateInstancesToDispose();
 			RegisterMock(new MockGlobalTime());
 			RegisterMock(new MockLogger());
 			if (ExceptionExtensions.IsDebugMode)
 				RegisterMock(new ConsoleLogger());
-			Register<MockClient>();
 			Window = RegisterMock(new MockWindow());
 			ContentIsReady += () => ContentLoader.Load<InputCommands>("DefaultCommands");
 			RegisterMockSingletons();
 			RegisterMediaTypes();
+			CreateScreenSpacesAndCameraResolvers();
+		}
+
+		private void CreateInstancesToDispose()
+		{
+			ContentLoader.resolver = new AutofacContentLoaderResolver(this);
+			ContentLoader.Use<MockContentLoader>();
+			Register<MockContentLoader>();
+			instancesToDispose.Add(settings = RegisterMock(new MockSettings()));
+			instancesToDispose.Add(
+				entities = new EntitiesRunner(new AutofacHandlerResolver(this), settings));
+			instancesToDispose.Add(new Messaging(new MockNetworkResolver()));
 		}
 
 		private void CreateConsoleCommandResolver()
@@ -72,6 +82,7 @@ namespace DeltaEngine.Platforms.Mocks
 			Register<MockImage>();
 			Register<MockShader>();
 			Register<MockGeometry>();
+			Register<MockMeshAnimation>();
 			Register<MockSound>();
 			Register<MockMusic>();
 			Register<MockVideo>();
@@ -110,16 +121,19 @@ namespace DeltaEngine.Platforms.Mocks
 		public override void Dispose()
 		{
 			base.Dispose();
-			if (ContentLoader.current != null)
-				throw new ContentLoaderWasNotDisposed(); //ncrunch: no coverage
 			if (EntitiesRunner.Current != null)
 				throw new EntitiesRunnerWasNotDisposed(); //ncrunch: no coverage
-			if (ScreenSpace.Current != null)
+			if (ScreenSpace.IsInitialized)
 				throw new ScreenSpaceWasNotDisposed(); //ncrunch: no coverage
+			if (Messaging.Current != null)
+				throw new MessagingWasNotDisposed(); //ncrunch: no coverage
+			if (Camera.IsInitialized)
+				throw new CameraWasNotDisposed(); //ncrunch: no coverage
 		}
 
-		public class ContentLoaderWasNotDisposed : Exception {}
 		public class EntitiesRunnerWasNotDisposed : Exception {}
 		public class ScreenSpaceWasNotDisposed : Exception {}
+		public class MessagingWasNotDisposed : Exception {}
+		public class CameraWasNotDisposed : Exception {}
 	}
 }

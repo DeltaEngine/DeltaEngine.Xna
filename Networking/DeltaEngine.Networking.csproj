@@ -37,7 +37,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DeltaEngine.csproj">
       <Project>{20FA8D33-A964-4000-AD82-67BD6900793B}</Project>
-      <Name>DeltaEngine</Name>
+      <Name>DeltaEngine %28DeltaEngine\DeltaEngine%29</Name>
     </ProjectReference>
     <ProjectReference Include="Messages\DeltaEngine.Networking.Messages.csproj">
       <Project>{74863E62-A568-4C0A-A37F-F04BFA8EB9DB}</Project>
@@ -47,6 +47,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="ClientMessagingSession.cs" />
+    <Compile Include="Messaging.cs" />
+    <Compile Include="NetworkResolver.cs" />
+    <Compile Include="MessagingSession.cs" />
+    <Compile Include="ServerMessagingSession.cs" />
     <Compile Include="Tcp\OnlineServiceConnection.cs" />
     <Compile Include="Tcp\DataCollector.cs" />
     <Compile Include="Tcp\MessageData.cs" />

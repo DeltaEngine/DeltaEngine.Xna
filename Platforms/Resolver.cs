@@ -13,6 +13,8 @@ using DeltaEngine.Core;
 using DeltaEngine.Entities;
 using DeltaEngine.Extensions;
 using DeltaEngine.Graphics;
+using DeltaEngine.Rendering.Mocks;
+using DeltaEngine.Rendering.Models;
 using DeltaEngine.ScreenSpaces;
 
 namespace DeltaEngine.Platforms
@@ -69,9 +71,9 @@ namespace DeltaEngine.Platforms
 		{
 			AddRegisteredType(t);
 			if (typeof(ContentData).IsAssignableFrom(t))
-				return builder.RegisterType(t).AsSelf()
-					.FindConstructorsWith(publicAndNonPublicConstructorFinder)
-					.UsingConstructor(contentConstructorSelector);
+				return
+					builder.RegisterType(t).AsSelf().FindConstructorsWith(publicAndNonPublicConstructorFinder).
+					        UsingConstructor(contentConstructorSelector);
 			return builder.RegisterType(t).AsSelf();
 		}
 
@@ -82,8 +84,9 @@ namespace DeltaEngine.Platforms
 		{
 			public ConstructorInfo[] FindConstructors(Type targetType)
 			{
-				return targetType.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic |
-					BindingFlags.Instance);
+				return
+					targetType.GetConstructors(BindingFlags.Public | BindingFlags.NonPublic |
+						BindingFlags.Instance);
 			}
 		}
 
@@ -120,7 +123,7 @@ namespace DeltaEngine.Platforms
 
 		private ContainerBuilder builder = new ContainerBuilder();
 
-		internal protected void RegisterInstance(object instance)
+		protected internal void RegisterInstance(object instance)
 		{
 			var registration =
 				builder.RegisterInstance(instance).SingleInstance().AsSelf().AsImplementedInterfaces();
@@ -218,8 +221,10 @@ namespace DeltaEngine.Platforms
 				if (Debugger.IsAttached || baseType == typeof(Window) ||
 					StackTraceExtensions.StartedFromNCrunch)
 					throw;
+				//ncrunch: no coverage start
 				ShowInitializationErrorBox(baseType, ex.InnerException ?? ex);
 				return null;
+				//ncrunch: no coverage end
 			}
 		}
 
@@ -227,10 +232,14 @@ namespace DeltaEngine.Platforms
 		{
 			if (parameter == null)
 				return container.Resolve(baseType);
-			MakeSureContentManagerIsReady();
+			if (baseType == typeof(MeshAnimation))
+				if (parameter is ContentCreationData)
+					return new MockMeshAnimation((MeshAnimationCreationData)parameter);
+				else
+					return new MockMeshAnimation((string)parameter);
 			if (parameter is ContentCreationData &&
 				(baseType == typeof(Image) || baseType == typeof(Shader) ||
-				baseType.Assembly.GetName().Name == "DeltaEngine.Graphics"))
+					baseType.Assembly.GetName().Name == "DeltaEngine.Graphics"))
 				return Activator.CreateInstance(FindConcreteType(baseType),
 					BindingFlags.NonPublic | BindingFlags.Instance, default(Binder),
 					new[] { parameter, Resolve<Device>() }, default(CultureInfo));
@@ -246,8 +255,9 @@ namespace DeltaEngine.Platforms
 
 		private Type FindConcreteType(Type baseType)
 		{
-			return alreadyRegisteredTypes.FirstOrDefault(
-				type => !type.IsAbstract && baseType.IsAssignableFrom(type));
+			return
+				alreadyRegisteredTypes.FirstOrDefault(
+					type => !type.IsAbstract && baseType.IsAssignableFrom(type));
 		}
 
 		// ncrunch: no coverage start
@@ -256,16 +266,18 @@ namespace DeltaEngine.Platforms
 			var exceptionText = StackTraceExtensions.FormatExceptionIntoClickableMultilineText(ex);
 			var window = Resolve<Window>();
 			window.CopyTextToClipboard(exceptionText);
-			if (window.ShowMessageBox("Fatal Initialization Error",
-				"Unable to resolve class " + baseType + "\n" +
-					(ExceptionExtensions.IsDebugMode ? exceptionText : ex.GetType().Name + " " + ex.Message) +
-					"\n\nMessage was logged and copied to the clipboard. Click Ignore to try to continue.",
-				new[] { "Ignore", "Abort" }) == "Ignore")
+			if (
+				window.ShowMessageBox("Fatal Initialization Error",
+					"Unable to resolve class " + baseType + "\n" +
+						(ExceptionExtensions.IsDebugMode ? exceptionText : ex.GetType().Name + " " + ex.Message) +
+						"\n\nMessage was logged and copied to the clipboard. Click Ignore to try to continue.",
+					new[] { "Ignore", "Abort" }) == "Ignore")
 				return;
 			Dispose();
 			if (!StackTraceExtensions.StartedFromNCrunch)
 				Environment.Exit((int)AppRunner.ExitCode.InitializationError);
 		}
+
 		// ncrunch: no coverage end
 
 		public virtual void Dispose()

@@ -31,7 +31,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		[Test]
 		public void RenderSelectBoxWithThreeValuesAndThreeLines()
 		{
-			var text = new FontText(FontXml.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
+			var text = new FontText(Font.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
 			selectBox.LineClicked += lineNo => text.Text = selectBox.Values[lineNo] + " clicked";
 		}
 
@@ -51,7 +51,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 				"value 9",
 				"value 10"
 			};
-			var text = new FontText(FontXml.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
+			var text = new FontText(Font.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
 			selectBox.LineClicked += lineNo => text.Text = selectBox.Values[lineNo] + " clicked";
 		}
 
@@ -60,7 +60,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		{
 			selectBox.Values = new List<object> { "value 1", "value 2", "value 3", "value 4" };
 			selectBox.Start<Grow>();
-			var text = new FontText(FontXml.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
+			var text = new FontText(Font.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
 			selectBox.LineClicked += lineNo => text.Text = selectBox.Values[lineNo] + " clicked";
 		}
 

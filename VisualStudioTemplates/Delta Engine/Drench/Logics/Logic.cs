@@ -25,6 +25,14 @@ namespace $safeprojectname$.Logics
 		protected readonly Point[] homeSquares;
 		protected readonly int[] turns;
 
+		protected Logic(Board.Data boardData, Point[] homeSquares)
+		{
+			Board = new Board(boardData);
+			this.homeSquares = homeSquares;
+			availableColorFinder = new AvailableColorFinder(Board, homeSquares);
+			turns = new int[homeSquares.Length];
+		}
+
 		public void Reset()
 		{
 			Board.Randomize();
@@ -63,11 +71,6 @@ namespace $safeprojectname$.Logics
 		public int GetPlayerScore(int player)
 		{
 			return Board.GetConnectedColorsCount(homeSquares [player]);
-		}
-
-		public Color GetHomeSquareColor(int player)
-		{
-			return Board.GetColor(homeSquares [player]);
 		}
 
 		public int ActivePlayer

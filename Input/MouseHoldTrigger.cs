@@ -18,7 +18,6 @@ namespace DeltaEngine.Input
 			HoldArea = holdArea;
 			HoldTime = holdTime;
 			Button = button;
-			Start<Mouse>();
 		}
 
 		public Rectangle HoldArea { get; private set; }
@@ -34,7 +33,6 @@ namespace DeltaEngine.Input
 			HoldArea = BuildStringForParemeter(parameters).Convert<Rectangle>();
 			HoldTime = parameters.Length > 4 ? parameters[4].Convert<float>() : DefaultHoldTime;
 			Button = parameters.Length > 5 ? parameters[5].Convert<MouseButton>() : MouseButton.Left;
-			Start<Mouse>();
 		}
 
 		public class CannotCreateMouseHoldTriggerWithoutHoldArea : Exception {}
@@ -42,6 +40,11 @@ namespace DeltaEngine.Input
 		private static string BuildStringForParemeter(IList<string> parameters)
 		{
 			return parameters[0] + " " + parameters[1] + " " + parameters[2] + " " + parameters[3];
+		}
+
+		protected override void StartInputDevice()
+		{
+			Start<Mouse>();
 		}
 
 		public bool IsHovering()

@@ -46,7 +46,7 @@ namespace DeltaEngine.Content.Xml
 				var triggerNode = command.Children[index];
 				var triggerType = triggerNode.Name.GetTypeFromShortNameOrFullNameIfNotFound();
 				if (triggerType == null)
-					throw new UnableToCreateTriggerTypeIsUnknown(triggerNode.Name);
+					throw new UnableToCreateTriggerTypeIsUnknown(triggerNode.Name); //ncrunch: no coverage
 				try
 				{
 					triggers[index] = Activator.CreateInstance(triggerType, triggerNode.Value) as Trigger;
@@ -60,9 +60,9 @@ namespace DeltaEngine.Content.Xml
 		}
 
 		private class UnableToCreateTriggerTypeIsUnknown : Exception
-		{
+		{  //ncrunch: no coverage start
 			public UnableToCreateTriggerTypeIsUnknown(string name)
 				: base(name) {}
-		}
+		}  //ncrunch: no coverage end
 	}
 }

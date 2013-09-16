@@ -7,6 +7,6 @@
 	/// </summary>
 	public interface RapidUpdateable
 	{
-		void RapidUpdate(float rapidUpdateTimeDelta);
+		void RapidUpdate();
 	}
 }

@@ -53,13 +53,16 @@ namespace DeltaEngine.Networking.Mocks
 
 		public void Dispose()
 		{
-			if (IsConnected)
-				server.ClientDisconnectedFromServer();
+			if (server != null && IsConnected)
+				server.ClientDisconnectedFromServer(this);
 			if (Disconnected != null)
 				Disconnected();
+			IsConnected = false;
 			server = null;
 		}
 
 		public event Action Disconnected;
+
+		public int UniqueID { get; set; }
 	}
 }

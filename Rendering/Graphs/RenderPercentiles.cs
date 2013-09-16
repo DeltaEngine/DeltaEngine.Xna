@@ -52,7 +52,7 @@ namespace DeltaEngine.Rendering.Graphs
 			Percentiles.Add(percentile);
 		}
 
-		public Color PercentileColor = Color.Grey;
+		public Color PercentileColor = Color.Gray;
 		private const int RenderLayerOffset = 1;
 
 		private Line2D CreateBlankPercentile()

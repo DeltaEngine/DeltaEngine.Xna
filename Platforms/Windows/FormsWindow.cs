@@ -5,7 +5,6 @@ using System.Threading;
 using System.Windows.Forms;
 using DeltaEngine.Core;
 using DeltaEngine.Extensions;
-using DeltaEngine.ScreenSpaces;
 using SystemSize = System.Drawing.Size;
 using SystemPoint = System.Drawing.Point;
 using Color = DeltaEngine.Datatypes.Color;
@@ -47,7 +46,6 @@ namespace DeltaEngine.Platforms.Windows
 				form.Icon = appIcon;
 			form.SizeChanged += OnSizeChanged;
 			form.Show();
-			new QuadraticScreenSpace(this);
 		}
 
 		protected FormsWindow(Control panel)
@@ -234,6 +232,8 @@ namespace DeltaEngine.Platforms.Windows
 
 		public string ShowMessageBox(string caption, string message, string[] buttons)
 		{
+			if (StackTraceExtensions.IsStartedFromNunitConsole())
+				throw new Exception(caption + " " + message);
 			var buttonCombination = MessageBoxButtons.OK;
 			if (buttons.Contains("Cancel"))
 				buttonCombination = MessageBoxButtons.OKCancel;

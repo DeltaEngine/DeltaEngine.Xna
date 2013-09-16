@@ -7,10 +7,17 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 {
 	public class JointTests : TestWithMocksOrVisually
 	{
+		[SetUp, CloseAfterFirstFrame]
+		public void SetUp()
+		{
+			physics = new FarseerPhysics();
+		}
+
+		private Physics physics;
+
 		[Test]
 		public void TestFixedAngleJoint()
 		{
-			var physics = new FarseerPhysics();
 			var body = physics.CreateCircle(3.0f);
 			var joint = physics.CreateFixedAngleJoint(body, (float)Math.PI / 3);
 			Assert.IsNotNull(joint);
@@ -19,7 +26,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestFixedAngleJointSameBodies()
 		{
-			var physics = new FarseerPhysics();
 			var body = physics.CreateCircle(3.0f);
 			var joint = physics.CreateFixedAngleJoint(body, (float)Math.PI / 3);
 			Assert.AreEqual(joint.BodyA, body);
@@ -29,7 +35,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestAngleJoint()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateAngleJoint(bodyA, bodyB, (float)Math.PI / 2);
@@ -39,7 +44,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestAngleJointBodiesEqual()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateAngleJoint(bodyA, bodyB, (float)Math.PI / 2);
@@ -50,7 +54,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestRevoluteJoint()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateRevoluteJoint(bodyA, bodyB, Point.Zero);
@@ -60,7 +63,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestRevoluteJointBodiesEqual()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateRevoluteJoint(bodyA, bodyB, Point.Zero);
@@ -71,7 +73,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestLineJointMotorEnabled()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateLineJoint(bodyA, bodyB, Point.Zero);
@@ -83,7 +84,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestLineJointMaxMotorTorque()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateLineJoint(bodyA, bodyB, Point.Zero);
@@ -94,7 +94,6 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestLineJointMotorSpeed()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateLineJoint(bodyA, bodyB, Point.Zero);
@@ -105,21 +104,11 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 		[Test]
 		public void TestLineJointFrequency()
 		{
-			var physics = new FarseerPhysics();
 			var bodyA = physics.CreateCircle(3.0f);
 			var bodyB = physics.CreateCircle(3.0f);
 			var joint = physics.CreateLineJoint(bodyA, bodyB, Point.Zero);
 			joint.Frequency = 1.0f;
 			Assert.AreEqual(joint.Frequency, 1.0f);
-		}
-
-		[Test]
-		public void TestLineJointDampingRatio()
-		{
-			var physics = new FarseerPhysics();
-			var bodyA = physics.CreateCircle(3.0f);
-			var bodyB = physics.CreateCircle(3.0f);
-			var joint = physics.CreateLineJoint(bodyA, bodyB, Point.Zero);
 		}
 	}
 }

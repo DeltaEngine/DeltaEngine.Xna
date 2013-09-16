@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Extensions;
-using DeltaEngine.ScreenSpaces;
 using Microsoft.Xna.Framework;
 using Color = DeltaEngine.Datatypes.Color;
 using Orientation = DeltaEngine.Core.Orientation;
@@ -28,7 +27,6 @@ namespace DeltaEngine.Platforms
 				(sender, args) => OnOrientationChanged(GetOrientation(game.Window.CurrentOrientation));
 			game.Exiting += (sender, args) => { IsClosing = true; };
 			BackgroundColor = Color.Black;
-			new QuadraticScreenSpace(this);
 		}
 
 		private readonly Game game;

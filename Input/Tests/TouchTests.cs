@@ -14,7 +14,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void ShowRedCircleOnTouchAtTouchPosition()
 		{
-			new FontText(FontXml.Default, "Touch screen to show red circle", Rectangle.One);
+			new FontText(Font.Default, "Touch screen to show red circle", Rectangle.One);
 			var ellipse = new Ellipse(new Rectangle(0.1f, 0.1f, 0.1f, 0.1f), Color.Red);
 			new Command(() => TranslateOnTouch(ellipse)).Add(new TouchPressTrigger(State.Pressed));
 		}

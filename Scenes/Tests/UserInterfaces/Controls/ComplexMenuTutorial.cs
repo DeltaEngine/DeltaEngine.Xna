@@ -21,7 +21,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 
 		private void CreateMainMenu()
 		{
-			mainMenu.Add(new FilledRect(new Rectangle(0.2f, 0.3f, 0.4f, 0.35f), Color.Grey));
+			mainMenu.Add(new FilledRect(new Rectangle(0.2f, 0.3f, 0.4f, 0.35f), Color.Gray));
 			AddShowOptionsMenuButton();
 			AddShowEulaButton();
 		}
@@ -94,7 +94,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 
 		private void AddVolumeControlToOptionsMenu()
 		{
-			var volume = new FontText(FontXml.Default, "Volume: 100",
+			var volume = new FontText(Font.Default, "Volume: 100",
 				new Rectangle(0.45f, 0.475f, 0.2f, 0.05f))
 			{
 				HorizontalAlignment = HorizontalAlignment.Left,

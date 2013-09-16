@@ -17,7 +17,7 @@ namespace DeltaEngine.Scenes.Tests
 		{
 			menu = new AutoArrangingMenu(ButtonSize, BaseRenderLayer);
 			menu.SetBackground(new Material(Shader.Position2DColorUv, "SimpleSubMenuBackground"));
-			text = new FontText(FontXml.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
+			text = new FontText(Font.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f));
 		}
 
 		private AutoArrangingMenu menu;

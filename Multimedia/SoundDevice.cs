@@ -8,7 +8,7 @@ namespace DeltaEngine.Multimedia
 	/// </summary>
 	public abstract class SoundDevice : Entity, RapidUpdateable, IDisposable
 	{
-		public virtual void RapidUpdate(float rapidUpdateTimeDelta)
+		public virtual void RapidUpdate()
 		{
 			if (currentPlayingMusic != null)
 				currentPlayingMusic.Run();

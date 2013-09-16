@@ -34,7 +34,7 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 		[Test]
 		public void RenderTenPointRandomScrollingGraphOfDollars()
 		{
-			new FilledRect(Rectangle.One, Color.Grey) { RenderLayer = int.MinValue };
+			new FilledRect(Rectangle.One, Color.Gray) { RenderLayer = int.MinValue };
 			graph.PercentilePrefix = "$";
 			Assert.AreEqual(10, graph.MaximumNumberOfPoints);
 			graph.Start<AddValueEverySecond>();

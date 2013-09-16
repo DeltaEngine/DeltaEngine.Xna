@@ -28,9 +28,9 @@ namespace DeltaEngine.Tests.Extensions
 		[Test]
 		public static void Round()
 		{
-			Assert.AreEqual(1, MathExtensions.Round(1.25f));
-			Assert.AreEqual(10, MathExtensions.Round(9.68f));
-			Assert.AreEqual(1.23f, MathExtensions.Round(1.2345f, 2));
+			Assert.AreEqual(1, 1.25f.Round());
+			Assert.AreEqual(10, 9.68f.Round());
+			Assert.AreEqual(1.23f, 1.2345f.Round(2));
 		}
 
 		[Test]
@@ -59,6 +59,14 @@ namespace DeltaEngine.Tests.Extensions
 			Assert.AreEqual(0.0f, MathExtensions.Tan(0.0f), Precision);
 			Assert.AreEqual(0.0f, MathExtensions.Tan(180.0f), Precision);
 			Assert.AreEqual(1.0f, MathExtensions.Tan(45.0f), Precision);
+		}
+
+		[Test]
+		public void Asin()
+		{
+			Assert.AreEqual(0.0f, MathExtensions.Asin(0));
+			Assert.AreEqual(90.0f, MathExtensions.Asin(1));
+			Assert.AreEqual(-90.0f, MathExtensions.Asin(-1));
 		}
 
 		[Test]

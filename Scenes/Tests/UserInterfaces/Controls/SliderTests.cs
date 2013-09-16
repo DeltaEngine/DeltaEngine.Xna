@@ -19,7 +19,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		public void SetUp()
 		{
 			slider = new Slider(Center);
-			slider.Add(new FontText(FontXml.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
+			slider.Add(new FontText(Font.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
 			slider.Start<DisplaySliderValue>();
 			InitializeMouse();
 		}
@@ -75,8 +75,8 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		{
 			slider.IsEnabled = false;
 			AdvanceTimeAndUpdateEntities();
-			Assert.AreEqual(Color.Grey, slider.Color);
-			Assert.AreEqual(Color.Grey, slider.Pointer.Color);
+			Assert.AreEqual(Color.Gray, slider.Color);
+			Assert.AreEqual(Color.Gray, slider.Pointer.Color);
 		}
 
 		[Test, ApproveFirstFrameScreenshot]

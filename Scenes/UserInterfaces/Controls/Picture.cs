@@ -1,4 +1,5 @@
-﻿using DeltaEngine.Datatypes;
+﻿using System.Collections.Generic;
+using DeltaEngine.Datatypes;
 
 namespace DeltaEngine.Scenes.UserInterfaces.Controls
 {
@@ -8,6 +9,13 @@ namespace DeltaEngine.Scenes.UserInterfaces.Controls
 	/// </summary>
 	public class Picture : Control
 	{
+		protected Picture(List<object> createFromComponents)
+			: base(createFromComponents)
+		{
+			Add(theme = Theme.Default);
+			// theme needs to be extracted
+		}
+
 		public Picture(Theme theme, Theme.Appearance appearance, Rectangle drawArea)
 			: base(drawArea)
 		{

@@ -24,10 +24,23 @@ namespace DeltaEngine.Graphics
 
 		protected readonly Window window;
 
-		public Matrix CameraViewMatrix { get; set; }
+		public Matrix CameraViewMatrix
+		{
+			get { return cameraViewMatrix; }
+			set
+			{
+				cameraViewMatrix = value;
+				CameraInvertedViewMatrix = Matrix.Invert(cameraViewMatrix);
+			}
+		}
+
+		private Matrix cameraViewMatrix;
+
 		public Matrix CameraProjectionMatrix { get; set; }
 
 		public abstract void SetViewport(Size viewportSize);
+
+		public Matrix CameraInvertedViewMatrix { get; private set; }
 
 		protected virtual void OnFullscreenChanged(Size displaySize, bool wantFullscreen)
 		{
@@ -65,11 +78,14 @@ namespace DeltaEngine.Graphics
 		public class Set3DModeHasNoDelegatesRegistered : Exception {}
 
 		public event Action OnSet3DMode;
+
 		public abstract void EnableDepthTest();
 		public abstract void Dispose();
 		public abstract void Clear();
 		public abstract void Present();
 		public abstract void SetBlendMode(BlendMode blendMode);
+
+		public ShaderWithFormat Shader { get; set; }
 
 		public abstract CircularBuffer CreateCircularBuffer(ShaderWithFormat shader,
 			BlendMode blendMode, VerticesMode drawMode = VerticesMode.Triangles);

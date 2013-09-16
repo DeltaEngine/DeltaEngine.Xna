@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DeltaEngine.Commands;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;
+using DeltaEngine.ScreenSpaces;
 
 namespace DeltaEngine.Input
 {
@@ -38,16 +39,20 @@ namespace DeltaEngine.Input
 		{
 			if (IsAvailable)
 				foreach (Entity entity in entities)
-				{
-					TryInvokeTriggerOfType<MouseButtonTrigger>(entity, IsMouseButtonTriggered);
-					TryInvokeTriggerOfType<MouseDragTrigger>(entity, IsMouseDragTriggered);
-					TryInvokeTriggerOfType<MouseDragDropTrigger>(entity, IsMouseDragDropTriggered);
-					TryInvokeTriggerOfType<MouseHoldTrigger>(entity, IsMouseHoldTriggered);
-					TryInvokeTriggerOfType<MouseHoverTrigger>(entity, IsMouseHoverTriggered);
-					TryInvokeTriggerOfType<MouseMovementTrigger>(entity, IsMouseMovementTriggered);
-					TryInvokeTriggerOfType<MousePositionTrigger>(entity, IsMousePositionTriggered);
-					TryInvokeTriggerOfType<MouseTapTrigger>(entity, IsMouseTapTriggered);
-				}
+					InvokeTriggersForEntity(entity);
+		}
+
+		private void InvokeTriggersForEntity(Entity entity)
+		{
+			TryInvokeTriggerOfType<MouseButtonTrigger>(entity, IsMouseButtonTriggered);
+			TryInvokeTriggerOfType<MouseDragTrigger>(entity, IsMouseDragTriggered);
+			TryInvokeTriggerOfType<MouseDragDropTrigger>(entity, IsMouseDragDropTriggered);
+			TryInvokeTriggerOfType<MouseHoldTrigger>(entity, IsMouseHoldTriggered);
+			TryInvokeTriggerOfType<MouseHoverTrigger>(entity, IsMouseHoverTriggered);
+			TryInvokeTriggerOfType<MouseMovementTrigger>(entity, IsMouseMovementTriggered);
+			TryInvokeTriggerOfType<MousePositionTrigger>(entity, IsMousePositionTriggered);
+			TryInvokeTriggerOfType<MouseTapTrigger>(entity, IsMouseTapTriggered);
+			TryInvokeTriggerOfType<MouseZoomTrigger>(entity, IsMouseZoomTriggered);
 		}
 
 		private static void TryInvokeTriggerOfType<T>(Entity entity, Func<T, bool> triggeredCode)
@@ -140,7 +145,8 @@ namespace DeltaEngine.Input
 		private bool IsMousePositionTriggered(MousePositionTrigger trigger)
 		{
 			var isButton = GetButtonState(trigger.Button) == trigger.State;
-			bool hasPositionChanged = trigger.Position != Position && trigger.Position != Point.Unused;
+			bool hasPositionChanged = trigger.Position != Position && trigger.Position != Point.Unused &&
+				ScreenSpace.Current.Viewport.Contains(trigger.Position);
 			trigger.Position = Position;
 			return isButton && hasPositionChanged;
 		}
@@ -152,6 +158,19 @@ namespace DeltaEngine.Input
 			var isNowReleased = currentState == State.Releasing;
 			trigger.LastState = currentState;
 			return isNowReleased && wasJustStartedPressing;
+		}
+
+		private bool IsMouseZoomTriggered(MouseZoomTrigger trigger)
+		{
+			int currentScrollValueDifference = ScrollWheelValue - trigger.LastScrollWheelValue;
+			trigger.LastScrollWheelValue = ScrollWheelValue;
+			if (currentScrollValueDifference > 0)
+				trigger.ZoomAmount = 1;
+			else if (currentScrollValueDifference < 0)
+				trigger.ZoomAmount = -1;
+			else
+				trigger.ZoomAmount = 0;
+			return trigger.ZoomAmount != 0;
 		}
 	}
 }

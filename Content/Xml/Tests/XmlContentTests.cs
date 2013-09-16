@@ -8,10 +8,21 @@ namespace DeltaEngine.Content.Xml.Tests
 	/// </summary>
 	public class XmlContentTests
 	{
+		[SetUp]
+		public void CreateMockContentLoader()
+		{
+			ContentLoader.Use<MockContentLoader>();
+		}
+
+		[TearDown]
+		public void DisposeMockContentLoader()
+		{
+			ContentLoader.DisposeIfInitialized();
+		}
+
 		[Test]
 		public void LoadXmlContentFromMock()
 		{
-			new MockContentLoader(new ContentDataResolver());
 			var xmlContent = ContentLoader.Load<XmlContent>("Test");
 			Assert.False(xmlContent.IsDisposed);
 			Assert.AreEqual("Root", xmlContent.Data.Name);
@@ -23,7 +34,6 @@ namespace DeltaEngine.Content.Xml.Tests
 		[Test]
 		public void LoadXmlContentFromNonExistingFile()
 		{
-			new MockContentLoader(new ContentDataResolver());
 			var xmlContent = ContentLoader.Load<XmlContent>("NonExisting");
 			Assert.AreEqual("NonExisting", xmlContent.Data.Name);
 		}

@@ -13,13 +13,13 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			verdana = FontXml.Default;
-			tahoma = ContentLoader.Load<FontXml>("Tahoma30");
+			verdana = Font.Default;
+			tahoma = ContentLoader.Load<Font>("Tahoma30");
 			CreateBackground();
 		}
 
-		private FontXml verdana;
-		private FontXml tahoma;
+		private Font verdana;
+		private Font tahoma;
 
 		private static void CreateBackground()
 		{
@@ -45,7 +45,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, ApproveFirstFrameScreenshot]
 		public void FontDefaultsToVerdana12()
 		{
-			new FontText(FontXml.Default, "Verdana12 font", Center);
+			new FontText(Font.Default, "Verdana12 font", Center);
 		}
 
 		[Test, ApproveFirstFrameScreenshot]
@@ -58,7 +58,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		public void MultiLineTextLeftAligned()
 		{
 			CreateBackground();
-			new FontText(FontXml.Default, "Text\nleft\naligned", Center)
+			new FontText(Font.Default, "Text\nleft\naligned", Center)
 			{
 				HorizontalAlignment = HorizontalAlignment.Left
 			};
@@ -67,7 +67,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, ApproveFirstFrameScreenshot]
 		public void MultiLineTextRightAligned()
 		{
-			new FontText(FontXml.Default, "Text\nright\naligned", Center)
+			new FontText(Font.Default, "Text\nright\naligned", Center)
 			{
 				HorizontalAlignment = HorizontalAlignment.Right
 			};
@@ -76,7 +76,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, ApproveFirstFrameScreenshot]
 		public void MultiLineTextTopLeftAligned()
 		{
-			new FontText(FontXml.Default, "Text\ntop\nleft\naligned", Center)
+			new FontText(Font.Default, "Text\ntop\nleft\naligned", Center)
 			{
 				VerticalAlignment = VerticalAlignment.Top,
 				HorizontalAlignment = HorizontalAlignment.Left
@@ -86,7 +86,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, ApproveFirstFrameScreenshot]
 		public void MultiLineTextBottomRightAligned()
 		{
-			new FontText(FontXml.Default, "Text\nbottom\nright\naligned", Center)
+			new FontText(Font.Default, "Text\nbottom\nright\naligned", Center)
 			{
 				VerticalAlignment = VerticalAlignment.Bottom,
 				HorizontalAlignment = HorizontalAlignment.Right
@@ -96,17 +96,17 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, ApproveFirstFrameScreenshot]
 		public void AlignToCenterAndEdges()
 		{
-			new FontText(FontXml.Default, "Center", Rectangle.One);
-			new FontText(FontXml.Default, "Top", Top) { VerticalAlignment = VerticalAlignment.Top };
-			new FontText(FontXml.Default, "Bottom", Bottom)
+			new FontText(Font.Default, "Center", Rectangle.One);
+			new FontText(Font.Default, "Top", Top) { VerticalAlignment = VerticalAlignment.Top };
+			new FontText(Font.Default, "Bottom", Bottom)
 			{
 				VerticalAlignment = VerticalAlignment.Bottom
 			};
-			new FontText(FontXml.Default, "Left", Left)
+			new FontText(Font.Default, "Left", Left)
 			{
 				HorizontalAlignment = HorizontalAlignment.Left
 			};
-			new FontText(FontXml.Default, "Right", Right)
+			new FontText(Font.Default, "Right", Right)
 			{
 				HorizontalAlignment = HorizontalAlignment.Right
 			};
@@ -120,22 +120,22 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, ApproveFirstFrameScreenshot]
 		public void AlignToCorners()
 		{
-			new FontText(FontXml.Default, "TL", TopLeft)
+			new FontText(Font.Default, "TL", TopLeft)
 			{
 				VerticalAlignment = VerticalAlignment.Top,
 				HorizontalAlignment = HorizontalAlignment.Left
 			};
-			new FontText(FontXml.Default, "BL", BottomLeft)
+			new FontText(Font.Default, "BL", BottomLeft)
 			{
 				VerticalAlignment = VerticalAlignment.Bottom,
 				HorizontalAlignment = HorizontalAlignment.Left
 			};
-			new FontText(FontXml.Default, "TR", TopRight)
+			new FontText(Font.Default, "TR", TopRight)
 			{
 				VerticalAlignment = VerticalAlignment.Top,
 				HorizontalAlignment = HorizontalAlignment.Right
 			};
-			new FontText(FontXml.Default, "BR", BottomRight)
+			new FontText(Font.Default, "BR", BottomRight)
 			{
 				VerticalAlignment = VerticalAlignment.Bottom,
 				HorizontalAlignment = HorizontalAlignment.Right
@@ -150,20 +150,20 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, CloseAfterFirstFrame]
 		public void RenderingHiddenFontTextDoesNotThrowException()
 		{
-			new FontText(FontXml.Default, "Hi", Rectangle.One) { Visibility = Visibility.Hide };
+			new FontText(Font.Default, "Hi", Rectangle.One) { Visibility = Visibility.Hide };
 			Assert.DoesNotThrow(() => AdvanceTimeAndUpdateEntities());
 		}
 
 		[Test, Ignore]
 		public void UsingNonExistentFontUsesDefault()
 		{
-			new FontText(ContentLoader.Load<FontXml>("Missing"), "DefaultFont", Rectangle.One);
+			new FontText(ContentLoader.Load<Font>("Missing"), "DefaultFont", Rectangle.One);
 		}
 
 		[Test]
 		public void CounterWithSpriteFontText()
 		{
-			var font = ContentLoader.Load<FontXml>("Verdana12");
+			var font = ContentLoader.Load<Font>("Verdana12");
 			var text = new FontText(font, "", Rectangle.FromCenter(0.5f, 0.5f, 0.05f, 0.05f))
 			{
 				HorizontalAlignment = HorizontalAlignment.Center,
@@ -175,7 +175,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test]
 		public void FontTextShouldFallBackToUsingVectorText()
 		{
-			var font = ContentLoader.Load<FontXml>("Verdana12");
+			var font = ContentLoader.Load<Font>("Verdana12");
 			font.WasLoadedOk = false;
 			var text = new FontText(font, "", Rectangle.FromCenter(0.5f, 0.5f, 0.05f, 0.05f))
 			{

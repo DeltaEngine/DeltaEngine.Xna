@@ -15,6 +15,7 @@ namespace DeltaEngine.Networking.Tcp
 	/// </summary>
 	public class TcpSocket : Client
 	{
+		//ncrunch: no coverage start
 		public TcpSocket()
 			: this(new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)) {}
 
@@ -77,7 +78,7 @@ namespace DeltaEngine.Networking.Tcp
 			connectionTargetAddress = serverAddress + ":" + serverPort;
 			try
 			{
-				TryConnect(serverAddress.ToEndPoint(serverPort));
+				TryConnect(NetworkExtensions.ToEndPoint(serverAddress, serverPort));
 			}
 			catch (SocketException)
 			{
@@ -243,5 +244,7 @@ namespace DeltaEngine.Networking.Tcp
 		}
 
 		public event Action Disconnected;
+
+		public int UniqueID { get; set; }
 	}
 }

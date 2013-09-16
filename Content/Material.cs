@@ -50,6 +50,7 @@ namespace DeltaEngine.Content
 
 		public Shader Shader { get; private set; }
 		public Image DiffuseMap { get; set; }
+		public Image LightMap { get; set; }
 		public Color DefaultColor { get; set; }
 
 		/// <summary>
@@ -141,6 +142,14 @@ namespace DeltaEngine.Content
 				DiffuseMap = ContentLoader.Load<Image>(imageOrAnimationName);
 			if (DiffuseMap != null)
 				DiffuseMap.BlendMode = MetaData.Get("BlendMode", "Normal").TryParse(BlendMode.Normal);
+			LoadLightMap();
+		}
+
+		private void LoadLightMap()
+		{
+			var lightMapName = MetaData.Get("LightMapName", "");
+			if (!string.IsNullOrEmpty(lightMapName))
+				LightMap = ContentLoader.Load<Image>(lightMapName);
 		}
 
 		protected override void DisposeData() {}

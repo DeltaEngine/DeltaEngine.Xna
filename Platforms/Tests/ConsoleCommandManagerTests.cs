@@ -30,6 +30,13 @@ namespace DeltaEngine.Platforms.Tests
 		}
 
 		[Test]
+		public void ExecuteEmptyCommand()
+		{
+			string result = consoleCommands.ExecuteCommand("");
+			Assert.AreEqual("", result);
+		}
+
+		[Test]
 		public void ExecuteCommandWithWrongNumberOfParameters()
 		{
 			string result = consoleCommands.ExecuteCommand("AddFloats 1");

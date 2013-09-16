@@ -7,7 +7,9 @@ namespace DeltaEngine.Input
 	/// </summary>
 	public class TouchDragTrigger : DragTrigger
 	{
-		public TouchDragTrigger(string unused = null)
+		public TouchDragTrigger(string unused = null) {}
+
+		protected override void StartInputDevice()
 		{
 			Start<Touch>();
 		}

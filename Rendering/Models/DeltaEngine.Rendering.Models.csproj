@@ -51,8 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ModelData.cs" />
     <Compile Include="Mesh.cs" />
+    <Compile Include="MeshAnimation.cs" />
+    <Compile Include="MeshAnimationCreationData.cs" />
+    <Compile Include="MeshAnimationFrame.cs" />
+    <Compile Include="ModelData.cs" />
     <Compile Include="Model.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

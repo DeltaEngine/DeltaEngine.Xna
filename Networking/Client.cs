@@ -7,6 +7,7 @@ namespace DeltaEngine.Networking
 	/// </summary>
 	public interface Client : IDisposable
 	{
+		int UniqueID { get; set; }
 		void Connect(string targetAddress, int targetPort);
 		bool IsConnected { get; }
 		string TargetAddress { get; }

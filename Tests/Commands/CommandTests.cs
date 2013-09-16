@@ -1,5 +1,6 @@
 ﻿using System;
 using DeltaEngine.Commands;
+using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;
 using DeltaEngine.Mocks;
 using DeltaEngine.Platforms.Mocks;
@@ -83,7 +84,7 @@ namespace DeltaEngine.Tests.Commands
 			var trigger = new MockTrigger();
 			Command.Register(CommandName, trigger);
 			actionPerformed = false;
-			new Command(CommandName, point => actionPerformed = true);
+			new Command(CommandName, delegate(Point point) { actionPerformed = true; });
 			AssertActionPerformed(trigger);
 		}
 
@@ -98,13 +99,24 @@ namespace DeltaEngine.Tests.Commands
 		}
 
 		[Test]
-		public void CommandWithDrawAreaAction()
+		public void CommandWithDragAction()
 		{
-			const string CommandName = "DrawAreaActionCommand";
+			const string CommandName = "CommandWithDragAction";
 			var trigger = new MockTrigger();
 			Command.Register(CommandName, trigger);
 			actionPerformed = false;
 			new Command(CommandName, (start, end, dragDone) => actionPerformed = true);
+			AssertActionPerformed(trigger);
+		}
+
+		[Test]
+		public void CommandWithZoomAction()
+		{
+			const string CommandName = "CommandWithZoomAction";
+			var trigger = new MockTrigger();
+			Command.Register(CommandName, trigger);
+			actionPerformed = false;
+			new Command(CommandName, delegate(float zoomAmount) { actionPerformed = true; });
 			AssertActionPerformed(trigger);
 		}
 

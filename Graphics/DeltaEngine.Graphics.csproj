@@ -58,6 +58,7 @@
     <Compile Include="Vertices\VertexPosition3DColorUV.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="Vertices\VertexPosition3DNormalUV.cs" />
     <Compile Include="Vertices\VertexPosition3DUV.cs" />
     <Compile Include="Vertices\VerticesMode.cs" />
     <Compile Include="Vertices\VertexPosition3DColor.cs" />

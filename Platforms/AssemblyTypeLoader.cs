@@ -25,7 +25,7 @@ namespace DeltaEngine.Platforms
 				{
 					Type[] assemblyTypes = TryToGetAssemblyTypes(assembly);
 					if (assemblyTypes == null)
-						continue;
+						continue; //ncrunch: no coverage
 					RegisterAllTypesInAssembly<InstanceType>(assemblyTypes, false);
 					RegisterAllTypesInAssembly<UpdateType>(assemblyTypes, true);
 					RegisterAllTypesInAssembly<DrawType>(assemblyTypes, true);

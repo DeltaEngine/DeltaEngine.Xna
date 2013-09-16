@@ -24,7 +24,9 @@ namespace DeltaEngine.Graphics.Mocks
 
 		protected override void DisposeData() { }
 		public override void SetModelViewProjectionMatrix(Matrix matrix) { }
+		public override void SetJointMatrices(Matrix[] jointMatrices) { }
 		public override void SetDiffuseTexture(Image texture) { }
+		public override void SetLightmapTexture(Image texture) { }
 		public override void Bind() { }
 		public override void BindVertexDeclaration() { }
 		protected override void Create() { }

@@ -15,7 +15,7 @@ namespace GhostWars
 		public static Color ToColor(this Team team)
 		{
 			return team == Team.None
-				? Color.Grey
+				? Color.Gray
 				: team == Team.HumanYellow
 					? GameLogic.TeamHumanYellowColor
 					: team == Team.ComputerPurple

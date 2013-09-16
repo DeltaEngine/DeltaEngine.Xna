@@ -38,5 +38,16 @@ namespace DeltaEngine.Tests.Datatypes
 			var random = range.GetRandomValue();
 			Assert.IsTrue(random.X >= 1.0f && random.X <= 2.0f);
 		}
+
+		[Test]
+		public void GetInterpolation()
+		{
+			var rangeLeft = new Range<Vector>(Vector.Zero, Vector.One);
+			var rangeRight = new Range<Vector>(Vector.One, Vector.One * 3);
+			var interpolation = rangeLeft.Lerp(rangeRight, 0.5f);
+			var expectedInterpolation = new Range<Vector>(Vector.One * 0.5f, Vector.One * 2);
+			Assert.AreEqual(expectedInterpolation.Start, interpolation.Start);
+			Assert.AreEqual(expectedInterpolation.End, interpolation.End);
+		}
 	}
 }

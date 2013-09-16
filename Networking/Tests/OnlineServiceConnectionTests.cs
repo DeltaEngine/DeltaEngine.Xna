@@ -16,8 +16,10 @@ namespace DeltaEngine.Networking.Tests
 		{
 			string errorReceived = "";
 			bool readyReceived = false;
-			var connection = OnlineServiceConnection.CreateForAppRunner(GetApiKeyFromRegistry(),
-				new MockSettings(), () => { }, text => errorReceived = text, () => readyReceived = true);
+			OnlineServiceConnection.RememberCreationDataForAppRunner(GetApiKeyFromRegistry(),
+				new MockSettings(), () => { }, text => errorReceived = text, () => readyReceived = true,
+				() => { });
+			var connection = new OnlineServiceConnection();
 			Thread.Sleep(1000);
 			Assert.IsTrue(connection.IsLoggedIn);
 			Assert.AreEqual("", errorReceived);
@@ -52,9 +54,10 @@ namespace DeltaEngine.Networking.Tests
 		[Test]
 		public void ReceiveResultFromServer()
 		{
-			var connection = OnlineServiceConnection.CreateForAppRunner(GetApiKeyFromRegistry(),
-				new MockSettings(), () => { }, text => { }, () => { });
+			OnlineServiceConnection.RememberCreationDataForAppRunner(GetApiKeyFromRegistry(),
+				new MockSettings(), () => { }, text => { }, () => { }, () => { });
 			object lastMessageReceived = null;
+			var connection = new OnlineServiceConnection();
 			connection.DataReceived += message => lastMessageReceived = message;
 			Assert.IsNull(lastMessageReceived);
 			Thread.Sleep(1000);

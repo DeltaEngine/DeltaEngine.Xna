@@ -27,6 +27,11 @@ namespace DeltaEngine.Mocks
 
 		protected override void SetSamplerState() {}
 
-		protected override void DisposeData() {}
+		protected override void DisposeData() { }
+
+		public void CheckAlphaIsCorrect(bool hasAlpha)
+		{
+			WarnAboutWrongAlphaFormat(hasAlpha);
+		}
 	}
 }

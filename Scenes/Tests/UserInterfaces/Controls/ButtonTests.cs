@@ -46,7 +46,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		{
 			button.Add(new List<FontText>
 			{
-				new FontText(FontXml.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f))
+				new FontText(Font.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f))
 			});
 			button.Start<UpdateTextWithRelativePosition>();
 		}
@@ -153,7 +153,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 			Assert.IsFalse(clicked);
 			Assert.IsFalse(button.State.IsInside);
 			Assert.AreEqual(Point.Zero, button.State.RelativePointerPosition);
-			Assert.AreEqual(Color.Grey, button.Color);
+			Assert.AreEqual(Color.Gray, button.Color);
 		}
 
 		[Test, CloseAfterFirstFrame]

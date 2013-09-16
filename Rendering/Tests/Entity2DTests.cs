@@ -132,13 +132,17 @@ namespace DeltaEngine.Rendering.Tests
 		[Test]
 		public void SaveAndLoadFromMemoryStream()
 		{
-			var entity = new Entity2D(Rectangle.Zero);
+			var entity = new Entity2D(Rectangle.HalfCentered);
 			var data = BinaryDataExtensions.SaveToMemoryStream(entity);
 			byte[] savedBytes = data.ToArray();
-			Assert.AreEqual(63, savedBytes.Length);
+			int bytesForName = "Entity2D".Length + 1;
+			const int VersionNumberBytes = 4;
+			int componentBytes = 1 + "Rectangle".Length + 1 + 16 + "Visibility".Length + 1 + 4 + 1;
+			Assert.AreEqual(bytesForName + VersionNumberBytes + componentBytes, savedBytes.Length);
 			var loadedEntity = data.CreateFromMemoryStream() as Entity2D;
 			Assert.AreEqual(0, loadedEntity.NumberOfComponents);
 			Assert.IsTrue(loadedEntity.IsActive);
+			Assert.AreEqual(Rectangle.HalfCentered, loadedEntity.DrawArea);
 		}
 
 		[Test]

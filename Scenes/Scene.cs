@@ -5,6 +5,7 @@ using DeltaEngine.Content;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;
+using DeltaEngine.Rendering;
 using DeltaEngine.Rendering.Sprites;
 using DeltaEngine.Scenes.UserInterfaces.Controls;
 
@@ -21,22 +22,22 @@ namespace DeltaEngine.Scenes
 		public Scene()
 			: base("<GeneratedScene>") { }
 
-		public virtual void Add(Entity control)
+		public virtual void Add(Entity2D control)
 		{
 			if (!controls.Contains(control))
 				controls.Add(control);
 			control.IsActive = isShown;
 		}
 
-		private List<Entity> controls = new List<Entity>();
+		private List<Entity2D> controls = new List<Entity2D>();
 		private bool isShown = true;
 
-		public List<Entity> Controls
+		public List<Entity2D> Controls
 		{
 			get { return controls; }
 		}
 
-		public void Remove(Entity control)
+		public void Remove(Entity2D control)
 		{
 			controls.Remove(control);
 			control.IsActive = false;
@@ -44,14 +45,14 @@ namespace DeltaEngine.Scenes
 
 		public void Show()
 		{
-			foreach (Entity control in controls)
+			foreach (var control in controls)
 				control.IsActive = true;
 			isShown = true;
 		}
 
 		public void Hide()
 		{
-			foreach (Entity control in controls)
+			foreach (var control in controls)
 				control.IsActive = false;
 			isShown = false;
 		}

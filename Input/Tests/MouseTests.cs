@@ -1,4 +1,5 @@
 ﻿using DeltaEngine.Commands;
+using DeltaEngine.Datatypes;
 using DeltaEngine.Input.Mocks;
 using DeltaEngine.Platforms;
 using NUnit.Framework;
@@ -38,8 +39,8 @@ namespace DeltaEngine.Input.Tests
 		[Test, CloseAfterFirstFrame]
 		public void TestLeftMouseButtonClickPassingPositionAction()
 		{
-			new Command(point => isClicked = true).Add(new MouseButtonTrigger(MouseButton.Left,
-				State.Pressed));
+			new Command(delegate(Point point) { isClicked = true; }).Add(
+				new MouseButtonTrigger(MouseButton.Left, State.Pressed));
 			TestCommand();
 		}
 

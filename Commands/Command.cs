@@ -40,13 +40,10 @@ namespace DeltaEngine.Commands
 		}
 
 		public Command(string commandName, Action action)
+			: this(action)
 		{
 			triggers.AddRange(LoadTriggersForCommand(commandName));
-			this.action = action;
-			UpdatePriority = Priority.First;
 		}
-
-		private readonly Action action;
 
 		private static IEnumerable<Trigger> LoadTriggersForCommand(string commandName)
 		{
@@ -54,23 +51,27 @@ namespace DeltaEngine.Commands
 			ContentLoader.Exists("DefaultCommands");
 			if (RegisteredCommands.Current.TryGetValue(commandName, out loadedTriggers))
 				return loadedTriggers;
-		throw new CommandNameWasNotRegistered();
+			throw new CommandNameWasNotRegistered();
 		}
 
 		public class CommandNameWasNotRegistered : Exception {}
 
 		public Command(string commandName, Action<Point> positionAction)
+			: this(positionAction)
 		{
 			triggers.AddRange(LoadTriggersForCommand(commandName));
-			this.positionAction = positionAction;
-			UpdatePriority = Priority.First;
 		}
 
 		public Command(string commandName, Action<Point, Point, bool> dragAction)
+			: this(dragAction)
 		{
 			triggers.AddRange(LoadTriggersForCommand(commandName));
-			this.dragAction = dragAction;
-			UpdatePriority = Priority.First;
+		}
+
+		public Command(string commandName, Action<float> zoomAction)
+			: this(zoomAction)
+		{
+			triggers.AddRange(LoadTriggersForCommand(commandName));
 		}
 
 		public Command(Action action)
@@ -78,6 +79,8 @@ namespace DeltaEngine.Commands
 			this.action = action;
 			UpdatePriority = Priority.First;
 		}
+
+		private readonly Action action;
 
 		public Command(Action<Point> positionAction)
 		{
@@ -94,6 +97,14 @@ namespace DeltaEngine.Commands
 		}
 
 		private readonly Action<Point, Point, bool> dragAction;
+
+		public Command(Action<float> zoomAction)
+		{
+			this.zoomAction = zoomAction;
+			UpdatePriority = Priority.First;
+		}
+
+		private readonly Action<float> zoomAction;
 
 		public Command Add(Trigger trigger)
 		{
@@ -117,6 +128,7 @@ namespace DeltaEngine.Commands
 		public const string MoveRight = "MoveRight";
 		public const string MoveUp = "MoveUp";
 		public const string MoveDown = "MoveDown";
+		public const string Zoom = "Zoom";
 		/// <summary>
 		/// Allows to move left, right, up or down using ASDW or the cursor keys or an onscreen stick.
 		/// </summary>
@@ -141,16 +153,21 @@ namespace DeltaEngine.Commands
 				return;
 			var positionTrigger = invokedTrigger as PositionTrigger;
 			var dragTrigger = invokedTrigger as DragTrigger;
+			var zoomTrigger = invokedTrigger as ZoomTrigger;
 			if (positionAction != null && positionTrigger != null)
 				positionAction(positionTrigger.Position);
 			else if (dragAction != null && dragTrigger != null)
 				dragAction(dragTrigger.StartPosition, dragTrigger.Position, dragTrigger.DoneDragging);
+			else if (zoomAction != null && zoomTrigger != null)
+				zoomAction(zoomTrigger.ZoomAmount);
 			else if (action != null)
 				action();
 			else if (positionAction != null)
 				positionAction(Point.Half);
 			else if (dragAction != null)
 				dragAction(Point.Half, Point.Half, false);
+			else if (zoomAction != null)
+				zoomAction(0);
 		}
 
 		public List<Trigger> GetTriggers()

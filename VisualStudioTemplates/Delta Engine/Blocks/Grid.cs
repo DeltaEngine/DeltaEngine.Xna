@@ -20,14 +20,13 @@ namespace $safeprojectname$
 				Color = new RangeGraph<Color>(Color.White, Color.TransparentWhite),
 				MaximumNumberOfParticles = 10,
 				SpawnInterval = -1,
-				StartVelocity = new RangeGraph<Point>(Point.Zero, Point.Zero),
-				StartPosition = new RangeGraph<Point>(Point.Zero, Point.Zero),
-				StartRotation = new ValueRange(0, 0)
+				StartVelocity = new RangeGraph<Vector>(Point.Zero, Point.Zero),
+				StartPosition = new RangeGraph<Vector>(Point.Zero, Point.Zero),
 			};
 		}
 
 		private readonly BlocksContent content;
-		private ParticleEmitterData zoomBrickData;
+		private readonly ParticleEmitterData zoomBrickData;
 
 		public int AffixBlock(Block block)
 		{
@@ -153,7 +152,7 @@ namespace $safeprojectname$
 		{
 			zoomBrickData.ParticleMaterial = brick.Material;
 			zoomBrickData.Size = new RangeGraph<Size>(brick.Size, brick.Size * 2);
-			var zoomBrickEmitter = new ParticleEmitter(zoomBrickData, brick.Center);
+			var zoomBrickEmitter = new Particle2DEmitter(zoomBrickData, brick.Center);
 			zoomBrickEmitter.RenderLayer = 16;
 			zoomBrickEmitter.SpawnBurst(1, true);
 		}

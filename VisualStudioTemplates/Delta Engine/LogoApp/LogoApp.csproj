@@ -38,6 +38,9 @@
     <ApplicationIcon>LogoAppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeltaEngine.Content.Disk">
+	  <HintPath>$(DeltaEnginePath)\DeltaEngine.Content.Disk.dll</HintPath>
+    </Reference>
     <Reference Include="DeltaEngine">
 	  <HintPath>$(DeltaEnginePath)\DeltaEngine.dll</HintPath>
     </Reference>

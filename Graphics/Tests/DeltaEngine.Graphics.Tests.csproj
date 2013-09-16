@@ -38,6 +38,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Content\Disk\DeltaEngine.Content.Disk.csproj">
+      <Project>{EE9847E1-9C76-4ACE-B531-D3EA84F7D741}</Project>
+      <Name>DeltaEngine.Content.Disk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Content\Mocks\DeltaEngine.Content.Mocks.csproj">
       <Project>{BA0A7803-4A15-416E-BC93-69F5B9DFC4A5}</Project>
       <Name>DeltaEngine.Content.Mocks</Name>

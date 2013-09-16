@@ -142,6 +142,15 @@ namespace DeltaEngine.Tests.Datatypes
 		}
 
 		[Test]
+		public void InvertTranspose()
+		{
+			var source = new Matrix(-4, 0, 0, 0, -1, 2, 0, 0, -4, 4, 4, 0, -1, -9, -1, 1);
+			var expected1 = 
+				new Matrix(-0.25f, -0.125f, -0.125f, -1.5f, 0, 0.5f, -0.5f, 4, 0, 0, 0.25f, 0.25f, 0, 0, 0, 1);			
+			Assert.IsTrue(Matrix.InverseTranspose(source).IsNearlyEqual(expected1));
+		}
+
+		[Test]
 		public void InvertingTwiceReturnsTheOriginal()
 		{
 			matrix = Matrix.CreateRotationY(60.0f);

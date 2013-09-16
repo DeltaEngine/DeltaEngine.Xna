@@ -23,7 +23,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void PressingTriggersUpdatesValues()
 		{
-			var font = FontXml.Default;
+			var font = Font.Default;
 			var leftTrigger = new FontText(font, "", new Rectangle(0.2f, 0.5f, 0.2f, 0.2f));
 			var rightTrigger = new FontText(font, "", new Rectangle(0.7f, 0.5f, 0.2f, 0.2f));
 			new Command(pos => leftTrigger.Text = "Left Trigger = " + pos.X).Add(

@@ -62,9 +62,19 @@ namespace DeltaEngine.Datatypes
 			return new Point(p.X * f, p.Y * f);
 		}
 
+		public static Point operator *(Point p, Size scale)
+		{
+			return new Point(p.X * scale.Width, p.Y * scale.Height);
+		}
+
 		public static Point operator /(Point p, float f)
 		{
 			return new Point(p.X / f, p.Y / f);
+		}
+
+		public static Point operator /(Point p, Size scale)
+		{
+			return new Point(p.X / scale.Width, p.Y / scale.Height);
 		}
 
 		public static bool operator !=(Point p1, Point p2)

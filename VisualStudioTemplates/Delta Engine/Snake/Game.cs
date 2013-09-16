@@ -192,8 +192,8 @@ namespace $safeprojectname$
 		private void DisplayGameOverMessage()
 		{
 			Chunk.IsActive = false;
-			var fontGameOverText = ContentLoader.Load<FontXml>("Tahoma30");
-			var fontReplayText = ContentLoader.Load<FontXml>("Verdana12");
+			var fontGameOverText = ContentLoader.Load<Font>("Tahoma30");
+			var fontReplayText = ContentLoader.Load<Font>("Verdana12");
 			gameOverMsg = new FontText(fontGameOverText, "Game Over", Rectangle.FromCenter(Point.Half, 
 				new Size(0.6f, 0.3f))) {
 				Color = menu.gameColors[1],

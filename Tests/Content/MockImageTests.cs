@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using DeltaEngine.Content;
 using DeltaEngine.Content.Mocks;
+using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Mocks;
 using NUnit.Framework;
@@ -13,14 +13,13 @@ namespace DeltaEngine.Tests.Content
 		[SetUp]
 		public void CreateContentLoaderInstance()
 		{
-			new MockContentLoader(new ContentDataResolver());
+			ContentLoader.Use<MockContentLoader>();
 		}
 
 		[TearDown]
 		public void DisposeContentLoader()
 		{
-			if (ContentLoader.current != null)
-				ContentLoader.current.Dispose();
+			ContentLoader.DisposeIfInitialized();
 		}
 
 		[Test]
@@ -35,43 +34,63 @@ namespace DeltaEngine.Tests.Content
 			Assert.AreEqual(imageCreationData.DisableLinearFiltering, image.DisableLinearFiltering);
 		}
 
-	//	[Test]
-	//	public void LoadDefaultDataIfLoadDataHasFailed()
-	//	{
-	//		Assert.DoesNotThrow(() => ContentLoader.Load<ImageWithFailingLoadData>("DefaultImage"));
-	//	}
+		[Test]
+		public void CheckWarningForAlpha()
+		{
+			var imageCreationData = new ImageCreationData(new Size(12, 12));
+			var image = ContentLoader.Create<MockImage>(imageCreationData);
+			image.BlendMode = BlendMode.Normal;
+			var mockLogger = new MockLogger();
+			image.CheckAlphaIsCorrect(false);
+			Assert.IsTrue(mockLogger.LastMessage.Contains(
+				"is supposed to have alpha pixels, but the image pixel format is not using alpha."));
+			image.BlendMode = BlendMode.Opaque;
+			image.CheckAlphaIsCorrect(true);
+			Assert.IsTrue(mockLogger.LastMessage.Contains(
+				"is supposed to have no alpha pixels, but the image pixel format is using alpha."));
+		}
 
-	//	private class ImageWithFailingLoadData : Image
-	//	{
-	//		public ImageWithFailingLoadData(string contentName)
-	//			: base(contentName) { }
+		[Test]
+		public void LoadDefaultDataIfLoadDataHasFailed()
+		{
+			Assert.DoesNotThrow(() => ContentLoader.Load<ImageWithFailingLoadData>("DefaultImage"));
+		}
 
-	//		public ImageWithFailingLoadData(ImageCreationData data)
-	//			: base(data) { }
+		private class ImageWithFailingLoadData : Image
+		{
+			public ImageWithFailingLoadData(string contentName)
+				: base(contentName) {}
 
-	//		protected override void DisposeData() { }
-	//		protected override void LoadImage(Stream fileData)
-	//		{
-	//			CompareActualSizeMetadataSize(Size.Zero);
-	//			try
-	//			{
-	//				Fill(new Color[0]);
-	//			}
-	//			catch (InvalidNumberOfColors)
-	//			{
-	//				Fill(new byte[0]);
-	//			}
-	//		}
-	//		public override void Fill(Color[] colors)
-	//		{
-	//			if (colors.Length == 0)
-	//				throw new InvalidNumberOfColors(PixelSize);
-	//		}
-	//		public override void Fill(byte[] colors)
-	//		{
-	//			throw new InvalidNumberOfBytes(PixelSize);
-	//		}
-	//		protected override void SetSamplerState() { }
-	//	}
+			public ImageWithFailingLoadData(ImageCreationData data)
+				: base(data) {}
+
+			protected override void DisposeData() {}
+
+			protected override void LoadImage(Stream fileData)
+			{
+				CompareActualSizeMetadataSize(Size.Zero);
+				try
+				{
+					Fill(new Color[0]);
+				}
+				catch (InvalidNumberOfColors)
+				{
+					Fill(new byte[0]);
+				}
+			}
+
+			public override void Fill(Color[] colors)
+			{
+				if (colors.Length == 0)
+					throw new InvalidNumberOfColors(PixelSize);
+			}
+
+			public override void Fill(byte[] colors)
+			{
+				throw new InvalidNumberOfBytes(PixelSize);
+			}
+
+			protected override void SetSamplerState() {}
+		}
 	}
 }

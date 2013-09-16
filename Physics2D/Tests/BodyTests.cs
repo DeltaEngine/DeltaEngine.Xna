@@ -4,9 +4,9 @@ using NUnit.Framework;
 
 namespace DeltaEngine.Physics2D.Tests
 {
-	internal class BodyTests : TestWithMocksOrVisually
+	public class BodyTests : TestWithMocksOrVisually
 	{
-		[SetUp]
+		[SetUp, CloseAfterFirstFrame]
 		public void SetUp()
 		{
 			physics = Resolve<Physics>();

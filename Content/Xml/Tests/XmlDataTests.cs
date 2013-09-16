@@ -261,6 +261,32 @@ namespace DeltaEngine.Content.Xml.Tests
 		}
 
 		[Test]
+		public void UpdateExistingAttribute()
+		{
+			var root = new XmlData("root");
+			root.AddAttribute("number", "123");
+			root.UpdateAttribute("number", "312");
+			Assert.AreEqual("312", root.GetAttributeValue("number"));
+		}
+
+		[Test]
+		public void UpdateNonExistingAttribute()
+		{
+			var root = new XmlData("root");
+			root.UpdateAttribute("number", "312");
+			Assert.AreEqual("312", root.GetAttributeValue("number"));
+		}
+
+		[Test]
+		public void UpdateExistingAttributeWithSameValue()
+		{
+			var root = new XmlData("root");
+			root.AddAttribute("number", "123");
+			root.UpdateAttribute("number", "123");
+			Assert.AreEqual("123", root.GetAttributeValue("number"));
+		}
+
+		[Test]
 		public void GetDefaultChildren()
 		{
 			var root = new XmlData("root");

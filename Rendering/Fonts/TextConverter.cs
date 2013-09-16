@@ -50,21 +50,27 @@ namespace DeltaEngine.Rendering.Fonts
 		private Glyph lastGlyph;
 		private GlyphDrawData lastDrawData;
 
-		private void CreateLineAlignmentAndGlyphs(List<char> singleLine, int lineIndex, HorizontalAlignment alignment )
+		private void CreateLineAlignmentAndGlyphs(List<char> singleLine, int lineIndex,
+			HorizontalAlignment alignment)
 		{
 			AlignTextLineHorizontally(singleLine, lineIndex, alignment);
 			float totalGlyphWidth = 0.0f;
 			float lineStartX = lastDrawData.DrawArea.Left;
 			foreach (char lineCharacter in singleLine)
 			{
-				Glyph characterGlyph = GetGlyphFromDictionary(lineCharacter);
-				totalGlyphWidth += GetKerningFromDictionary(lineCharacter, lastGlyph);
-				var newDrawInfo = PlaceGlyphInLine(characterGlyph, lineStartX, totalGlyphWidth);
-				glyphs.Add(newDrawInfo);
-				lastDrawData = newDrawInfo;
-				totalGlyphWidth += (float)Math.Round(characterGlyph.AdvanceWidth);
-				lastGlyph = characterGlyph;
+				CreateCharacterGlyph(lineCharacter, ref totalGlyphWidth, lineStartX);
 			}
+		}
+
+		private void CreateCharacterGlyph(char lineCharacter, ref float totalGlyphWidth, float lineStartX)
+		{
+			Glyph characterGlyph = GetGlyphFromDictionary(lineCharacter);
+			totalGlyphWidth += GetKerningFromDictionary(lineCharacter, lastGlyph);
+			var newDrawInfo = PlaceGlyphInLine(characterGlyph, lineStartX, totalGlyphWidth);
+			glyphs.Add(newDrawInfo);
+			lastDrawData = newDrawInfo;
+			totalGlyphWidth += (float)Math.Round(characterGlyph.AdvanceWidth);
+			lastGlyph = characterGlyph;
 		}
 
 		private void AdvanceLineVertically()
@@ -106,23 +112,22 @@ namespace DeltaEngine.Rendering.Fonts
 		{
 			char firstChar = textLine[0];
 			lastDrawData.DrawArea.Left =
-				MathExtensions.Round((wrapper.MaxTextLineWidth - wrapper.TextLineWidths[lineIndex]) * 0.5f -
-					glyphDictionary[firstChar].LeftSideBearing);
+				((wrapper.MaxTextLineWidth - wrapper.TextLineWidths[lineIndex]) * 0.5f -
+					glyphDictionary[firstChar].LeftSideBearing).Round();
 		}
 
 		private void LeftAlignTextLine(List<char> textLine)
 		{
 			char firstChar = textLine[0];
-			lastDrawData.DrawArea.Left =
-				- MathExtensions.Round(glyphDictionary[firstChar].LeftSideBearing);
+			lastDrawData.DrawArea.Left = - glyphDictionary[firstChar].LeftSideBearing.Round();
 		}
 
 		private void RightAlignTextLine(List<char> textLine, int lineIndex)
 		{
 			char lastChar = textLine[textLine.Count - 1];
 			lastDrawData.DrawArea.Left =
-				MathExtensions.Round((wrapper.MaxTextLineWidth - wrapper.TextLineWidths[lineIndex]) -
-					glyphDictionary[lastChar].RightSideBearing);
+				((wrapper.MaxTextLineWidth - wrapper.TextLineWidths[lineIndex]) -
+					glyphDictionary[lastChar].RightSideBearing).Round();
 		}
 
 		private Glyph GetGlyphFromDictionary(char textChar)
@@ -144,8 +149,7 @@ namespace DeltaEngine.Rendering.Fonts
 		{
 			var glyph = new GlyphDrawData();
 			var position =
-				new Point(
-					MathExtensions.Round(lineStartX + totalGlyphWidth + characterGlyph.LeftSideBearing),
+				new Point((lineStartX + totalGlyphWidth + characterGlyph.LeftSideBearing).Round(),
 					lastDrawData.DrawArea.Top);
 			glyph.DrawArea = new Rectangle(position, characterGlyph.UV.Size);
 			glyph.UV = characterGlyph.PrecomputedFontMapUV;

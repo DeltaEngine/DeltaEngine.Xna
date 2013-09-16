@@ -16,6 +16,12 @@ namespace DeltaEngine.Scenes.UserInterfaces.Controls
 	/// </summary>
 	public class Control : Sprite, Updateable
 	{
+		protected Control(List<object> createFromComponents)
+			: base(createFromComponents)
+		{
+			Add(new InteractiveState());
+		}
+
 		public Control(Rectangle drawArea)
 			: base(CreateTransparentMaterial(), drawArea)
 		{

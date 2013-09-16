@@ -24,7 +24,7 @@ namespace DeltaEngine.Multimedia.Tests
 		[Test]
 		public void PlayVideoOnClick()
 		{
-			new FontText(FontXml.Default, "Click to Play", Rectangle.One);
+			new FontText(Font.Default, "Click to Play", Rectangle.One);
 			var video = ContentLoader.Load<Video>("DefaultVideo");
 			new Command(() => { video.Play(); }).Add(new MouseButtonTrigger());
 		}

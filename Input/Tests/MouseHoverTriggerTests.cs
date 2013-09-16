@@ -14,10 +14,10 @@ namespace DeltaEngine.Input.Tests
 		public void CountdownOnMouseHover()
 		{
 			var trigger = new MouseHoverTrigger(3.0f);
-			new Countdown(new FontText(FontXml.Default, "", Rectangle.One), trigger);
+			new Countdown(new FontText(Font.Default, "", Rectangle.One), trigger);
 			var drawArea = Rectangle.One;
 			var counter = 0;
-			var text = new FontText(FontXml.Default, "", drawArea.Move(new Point(0.0f, 0.1f)));
+			var text = new FontText(Font.Default, "", drawArea.Move(new Point(0.0f, 0.1f)));
 			new Command(() => text.Text = "MouseHover triggered " + ++counter + " times.").Add(trigger);
 		}
 

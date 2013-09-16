@@ -11,19 +11,17 @@ namespace $safeprojectname$
 	{
 		public ParticleFountain(Point position)
 		{
-			emitter = new ParticleEmitter(EmitterData, position);
+			new Particle2DEmitter(EmitterData, position);
 			CreateCommands();
 		}
-
-		private ParticleEmitter emitter;
 
 		private static ParticleEmitterData EmitterData
 		{
 			get
 			{
 				return emitterData = new ParticleEmitterData {
-					StartVelocity = new RangeGraph<Point>(new Point(0.0f, -1.0f), new Point(0.5f, 0.1f)),
-					Force = new RangeGraph<Point>(new Point(0, 0.9f), new Point(0, 0.9f)),
+					StartVelocity = new RangeGraph<Vector>(new Point(0.0f, -1.0f), new Point(0.5f, 0.1f)),
+					Acceleration = new RangeGraph<Vector>(new Point(0, 0.9f), new Point(0, 0.9f)),
 					LifeTime = 1.0f,
 					MaximumNumberOfParticles = 512,
 					Size = new RangeGraph<Size>(new Size(0.01f), new Size(0.015f)),
@@ -40,25 +38,27 @@ namespace $safeprojectname$
 		{
 			new Command(() => 
 			{
-				emitterData.StartVelocity = new RangeGraph<Point>(emitterData.StartVelocity.Start + new 
+				emitterData.StartVelocity = new RangeGraph<Vector>(emitterData.StartVelocity.Start + new 
 					Point(0, -0.3f) * Time.Delta, emitterData.StartVelocity.End + new Point(0, -0.3f) * 
 						Time.Delta);
 			}).Add(new KeyTrigger(Key.CursorUp, State.Pressed));
 			new Command(() => 
 			{
-				emitterData.StartVelocity = new RangeGraph<Point>(emitterData.StartVelocity.Start + new 
+				emitterData.StartVelocity = new RangeGraph<Vector>(emitterData.StartVelocity.Start + new 
 					Point(0, 0.3f) * Time.Delta, emitterData.StartVelocity.End + new Point(0, 0.3f) * 
 						Time.Delta);
 			}).Add(new KeyTrigger(Key.CursorDown, State.Pressed));
 			new Command(() => 
 			{
-				emitterData.Force = new RangeGraph<Point>(emitterData.Force.Start + new Point(0, -0.3f) * 
-					Time.Delta, emitterData.Force.Start + new Point(0, -0.3f) * Time.Delta);
+				emitterData.Acceleration = new RangeGraph<Vector>(emitterData.Acceleration.Start + new 
+					Point(0, -0.3f) * Time.Delta, emitterData.Acceleration.Start + new Point(0, -0.3f) * 
+						Time.Delta);
 			}).Add(new KeyTrigger(Key.CursorLeft, State.Pressed));
 			new Command(() => 
 			{
-				emitterData.Force = new RangeGraph<Point>(emitterData.Force.Start + new Point(0, 0.3f) * 
-					Time.Delta, emitterData.Force.Start + new Point(0, 0.3f) * Time.Delta);
+				emitterData.Acceleration = new RangeGraph<Vector>(emitterData.Acceleration.Start + new 
+					Point(0, 0.3f) * Time.Delta, emitterData.Acceleration.Start + new Point(0, 0.3f) * 
+						Time.Delta);
 			}).Add(new KeyTrigger(Key.CursorRight, State.Pressed));
 		}
 	}

@@ -33,11 +33,11 @@ namespace $safeprojectname$
 				SpawnInterval = 0,
 				Size = new RangeGraph<Size>(new Size(GameLogic.DeathSkullSize), new 
 					Size(GameLogic.DeathSkullSize - 0.005f)),
-				Force = new RangeGraph<Point>(new Point(0, -0.04f), new Point(0, -0.04f)),
+				Acceleration = new RangeGraph<Vector>(new Point(0, -0.04f), new Point(0, -0.04f)),
 				LifeTime = 2f,
-				StartVelocity = new RangeGraph<Point>(Point.Zero, new Point(0.01f, 0.01f))
+				StartVelocity = new RangeGraph<Vector>(Point.Zero, new Point(0.01f, 0.01f))
 			};
-			return new ParticleEmitter(deathEffect, position);
+			return new Particle2DEmitter(deathEffect, position);
 		}
 
 		public static ParticleEmitter CreateHitEffect(Point position)
@@ -50,7 +50,7 @@ namespace $safeprojectname$
 				Size = new RangeGraph<Size>(new Size(0.06f), new Size(0.09f)),
 				LifeTime = 0.5f
 			};
-			return new ParticleEmitter(deathEffect, position);
+			return new Particle2DEmitter(deathEffect, position);
 		}
 
 		public static ParticleEmitter CreateSparkleEffect(Team team, Point position, int sparkles)

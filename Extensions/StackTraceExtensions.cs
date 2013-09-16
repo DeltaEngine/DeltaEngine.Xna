@@ -104,21 +104,21 @@ namespace DeltaEngine.Extensions
 			StackFrame[] frames = new StackTrace().GetFrames();
 			if (!String.IsNullOrEmpty(unitTestClassFullName))
 				return GetNamespaceNameFromClassName(unitTestClassFullName);
+			//ncrunch: no coverage start (these lines can only be reached from production code)
 			foreach (StackFrame frame in frames.Where(IsTestOrTestSetupMethod))
 				return frame.GetMethod().DeclaringType.Assembly.GetName().Name;
-			//ncrunch: no coverage start (these lines can only be reached from production code)
 			foreach (StackFrame frame in frames.Where(frame => frame.GetMethod().Name == "Main"))
 				return GetNamespaceName(frame);
 			if (IsRunningAsWindowsService(frames))
 				return GetNamespaceNameForWindowsService(frames.ToList());
-			throw new ExecutingAssemblyOrNamespaceNotFound();
-			//ncrunch: no coverage end
+			throw new ExecutingAssemblyOrNamespaceNotFound();		
 		}
 
 		private static bool IsTestOrTestSetupMethod(StackFrame frame)
 		{
 			return IsTestAttribute(frame) || IsInTestSetUp(frame);
 		}
+		//ncrunch: no coverage end
 
 		private static string GetNamespaceNameFromClassName(string fullClassName)
 		{
@@ -136,6 +136,7 @@ namespace DeltaEngine.Extensions
 			return classType != null ? classType.Namespace : "";
 		}
 
+		//ncrunch: no coverage start (these lines can only be reached from production code)
 		private static bool IsRunningAsWindowsService(IEnumerable<StackFrame> frames)
 		{
 			return frames.Any(frame => frame.GetMethod().Name == "ServiceQueuedMainCallback");
@@ -147,6 +148,7 @@ namespace DeltaEngine.Extensions
 				frame => frame.GetMethod().Name == "ServiceQueuedMainCallback");
 			return frames[index - 1].GetMethod().DeclaringType.Namespace;
 		}
+		//ncrunch: no coverage end
 
 		public static string GetClassName(this IEnumerable<StackFrame> frames)
 		{

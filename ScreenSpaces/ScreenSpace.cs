@@ -1,46 +1,44 @@
 ﻿using System;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
-using DeltaEngine.Extensions;
 
 namespace DeltaEngine.ScreenSpaces
 {
 	/// <summary>
 	/// Converts to and from some kind of screen space like Quadratic, Pixel, etc.
-	/// See https://deltaengine.fogbugz.com/default.asp?W101
+	/// See http://deltaengine.net/learn/screenspace
 	/// </summary>
 	public abstract class ScreenSpace : IDisposable
 	{
-		protected ScreenSpace(Window window)
-		{
-			viewportPixelSize = window.ViewportPixelSize;
-			window.ViewportSizeChanged += Update;
-			window.OrientationChanged += orientation => Update(window.ViewportPixelSize);
-			Current = this;
-		}
-
-		protected Size viewportPixelSize;
-
 		public static ScreenSpace Current
 		{
 			get
 			{
-				if (!ThreadStaticScreenSpace.HasCurrent)
-					throw new ScreenSpaceHasNotBeenInitializedCreateAWindowFirst(); //ncrunch: no coverage
-				return ThreadStaticScreenSpace.Current;
+				if (current != null)
+					return current;
+				return current = resolver.ResolveScreenSpace<QuadraticScreenSpace>();
 			}
-			private set { ThreadStaticScreenSpace.Use(value); }
 		}
 
-		private static readonly ThreadStatic<ScreenSpace> ThreadStaticScreenSpace =
-			new ThreadStatic<ScreenSpace>();
+		private static ScreenSpace current;
+		internal static ScreenSpaceResolver resolver;
 
-		public class ScreenSpaceHasNotBeenInitializedCreateAWindowFirst : Exception {}
-
-		public void Dispose()
+		public static bool IsInitialized
 		{
-			Current = null;
+			get { return current != null; }
 		}
+
+		protected ScreenSpace(Window window)
+		{
+			this.window = window;
+			viewportPixelSize = window.ViewportPixelSize;
+			window.ViewportSizeChanged += Update;
+			window.OrientationChanged += UpdateOrientationChanged;
+			current = this;
+		}
+
+		private readonly Window window;
+		protected Size viewportPixelSize;
 
 		protected virtual void Update(Size newViewportSize)
 		{
@@ -50,6 +48,18 @@ namespace DeltaEngine.ScreenSpaces
 		}
 
 		public event Action ViewportSizeChanged;
+
+		private void UpdateOrientationChanged(Orientation orientation)
+		{
+			Update(viewportPixelSize);
+		}
+
+		public void Dispose()
+		{
+			window.ViewportSizeChanged -= Update;
+			window.OrientationChanged -= UpdateOrientationChanged;
+			current = null;
+		}
 
 		/// <summary>
 		/// The rounded version of ToPixelSpace is used for lines, boxes and fonts where it matters to

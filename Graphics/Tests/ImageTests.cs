@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using DeltaEngine.Content;
+using DeltaEngine.Content.Disk;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;

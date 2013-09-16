@@ -80,7 +80,7 @@ namespace $safeprojectname$
 
 		private void AddScore()
 		{
-			Text = new FontText(ContentLoader.Load<FontXml>("Verdana12"), "", scoreWindow.DrawArea) {
+			Text = new FontText(ContentLoader.Load<Font>("Verdana12"), "", scoreWindow.DrawArea) {
 				RenderLayer = (int)RenderLayer.Foreground
 			};
 		}

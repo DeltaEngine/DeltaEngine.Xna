@@ -36,6 +36,13 @@ namespace DeltaEngine.Input.Tests
 		}
 
 		[Test]
+		public void ZoomWillChangeBackgroundColor()
+		{
+			new Command(Command.Zoom,
+				() => Resolve<Window>().BackgroundColor = Color.GetRandomColor());
+		}
+
+		[Test]
 		public void MovingARectangleWithTheArrows()
 		{
 			var rect = new FilledRect(new Rectangle(0.4f, 0.4f, 0.2f, 0.2f), Color.Green);
@@ -72,7 +79,7 @@ namespace DeltaEngine.Input.Tests
 		public void RotateRectangleWithMouse()
 		{
 			var rect = new FilledRect(new Rectangle(0.4f, 0.4f, 0.2f, 0.2f), Color.Green);
-			new Command(Command.RotateDirectly, point => { rect.Rotation += 1; });
+			new Command(Command.RotateDirectly, delegate(Point point) { rect.Rotation += 1; });
 		}
 
 		[Test]
@@ -93,7 +100,7 @@ namespace DeltaEngine.Input.Tests
 		public void FlickToChangeTheColor()
 		{
 			new Command(Command.Flick,
-				point => { Resolve<Window>().BackgroundColor = Color.GetRandomColor(); });
+				delegate(Point point) { Resolve<Window>().BackgroundColor = Color.GetRandomColor(); });
 		}
 
 		[Test]
@@ -101,8 +108,7 @@ namespace DeltaEngine.Input.Tests
 		{
 			var rect = new FilledRect(new Rectangle(0.4f, 0.4f, 0.2f, 0.2f), Color.Green);
 			new Command(Command.Pinch,
-				point =>
-				{
+				delegate(Point point) {
 					rect.DrawArea = new Rectangle(rect.DrawArea.Left, rect.DrawArea.Top,
 						rect.DrawArea.Width - 0.01f, rect.DrawArea.Height);
 				});
@@ -126,7 +132,7 @@ namespace DeltaEngine.Input.Tests
 		public void UsingRotationOnATouchPadWillRotateTheRectangle()
 		{
 			var rect = new FilledRect(new Rectangle(0.4f, 0.4f, 0.2f, 0.2f), Color.Green);
-			new Command(Command.Rotate, point => { rect.Rotation += 1; });
+			new Command(Command.Rotate, delegate(Point point) { rect.Rotation += 1; });
 		}
 	}
 }

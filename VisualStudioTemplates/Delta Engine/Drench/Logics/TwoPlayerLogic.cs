@@ -10,5 +10,12 @@ namespace $safeprojectname$.Logics
 		})
 		{
 		}
+
+		protected TwoPlayerLogic(Board.Data boardData) : base(boardData, new[] {
+			Point.Zero,
+			new Point(boardData.Width - 1, boardData.Height - 1)
+		})
+		{
+		}
 	}
 }

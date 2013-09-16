@@ -13,7 +13,6 @@ namespace DeltaEngine.Input
 		{
 			HoldArea = holdArea;
 			HoldTime = holdTime;
-			Start<Touch>();
 		}
 
 		public Rectangle HoldArea { get; private set; }
@@ -32,7 +31,9 @@ namespace DeltaEngine.Input
 		public Point StartPosition { get; set; }
 		public Point LastPosition { get; set; }
 
-		public TouchHoldTrigger(string parameter = "")
+		public TouchHoldTrigger(string parameter = "") {}
+
+		protected override void StartInputDevice()
 		{
 			Start<Touch>();
 		}

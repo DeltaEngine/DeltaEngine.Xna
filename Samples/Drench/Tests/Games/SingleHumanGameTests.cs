@@ -1,4 +1,5 @@
-﻿using DeltaEngine.Core;
+﻿using System.Collections.Generic;
+using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Input;
 using DeltaEngine.Input.Mocks;
@@ -12,7 +13,7 @@ namespace Drench.Tests.Games
 {
 	public class SingleHumanGameTests : TestWithMocksOrVisually
 	{
-		[SetUp]
+		[SetUp, CloseAfterFirstFrame]
 		public void SetUp()
 		{
 			Randomizer.Use(new FixedRandom(new[] { 0.1f, 0.6f, 0.7f, 0.2f }));
@@ -70,43 +71,49 @@ namespace Drench.Tests.Games
 			Assert.AreEqual("1 turn taken", game.upperText.Text);
 		}
 
-		[Test, Category("Slow")]
-		public void ClickSquaresUntilGameOver()
+		[Test]
+		public void ClickSquaresUntilGameOverShowsGameOver()
 		{
-			InitializeClicking();
-			bool isFinished = false;
-			game.Exited += () => isFinished = true;
-			while (!isFinished)
-				ClickNextSquare();
+			ClickSquaresUntilGameOver();
+		}
+
+		private void ClickSquaresUntilGameOver()
+		{
+			bool hasExited = false;
+			game.Exited += () => hasExited = true;
+			MakeMovesThatFinishGame();
+			Assert.IsFalse(hasExited);
 			Assert.AreEqual("Game Over! Finished in 10 turns taken", game.upperText.Text);
 		}
 
-		private void InitializeClicking()
+		private void MakeMovesThatFinishGame()
 		{
-			float width = ScreenSpace.Current.Right - ScreenSpace.Current.Left - 2 * Game.Border;
-			float height = ScreenSpace.Current.Bottom - ScreenSpace.Current.Top - 2 * Game.Border;
-			buttonWidth = width / BoardTests.Width;
-			buttonHeight = height / BoardTests.Height;
-			clickX = Game.Border + buttonWidth / 2;
-			clickY = ScreenSpace.Current.Top + Game.Border + buttonHeight / 2;
+			foreach (Point move in WinningMoves)
+				ClickMouse(move);
 		}
 
-		private float buttonWidth;
-		private float buttonHeight;
-		private float clickX;
-		private float clickY;
-
-		private void ClickNextSquare()
+		private static readonly List<Point> WinningMoves = new List<Point>
 		{
-			clickX += buttonWidth;
-			if (clickX >= ScreenSpace.Current.Right - Game.Border)
-			{
-				clickX = Game.Border + buttonWidth / 2;
-				clickY += buttonHeight;
-				if (clickY >= ScreenSpace.Current.Bottom - Game.Border)
-					clickY = ScreenSpace.Current.Top + Game.Border + buttonHeight / 2;
-			}
-			ClickMouse(new Point(clickX, clickY));
+			new Point(0.2714286f, 0.355f),
+			new Point(0.3857143f, 0.355f),
+			new Point(0.5f, 0.355f),
+			new Point(0.6142857f, 0.355f),
+			new Point(0.7285714f, 0.355f),
+			new Point(0.8428571f, 0.355f),
+			new Point(0.8428571f, 0.4275f),
+			new Point(0.8428571f, 0.5f),
+			new Point(0.8428571f, 0.5725f),
+			new Point(0.8428571f, 0.645f)
+		};
+
+		[Test]
+		public void ClickingSquareAfterGameOverExits()
+		{
+			bool hasExited = false;
+			game.Exited += () => hasExited = true;
+			MakeMovesThatFinishGame();
+			ClickMouse(Point.Half);
+			Assert.IsTrue(hasExited);
 		}
 	}
 }

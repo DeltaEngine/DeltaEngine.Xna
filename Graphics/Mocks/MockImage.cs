@@ -10,6 +10,12 @@ namespace DeltaEngine.Graphics.Mocks
 	/// </summary>
 	public class MockImage : Image
 	{
+		public MockImage(string contentName)
+			: base(contentName)
+		{
+			// Just for DiskContentLoaderTests
+		}
+
 		protected MockImage(string contentName, Device device)
 			: base(contentName)
 		{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DeltaEngine.Commands;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;
+using DeltaEngine.ScreenSpaces;
 
 namespace DeltaEngine.Input
 {
@@ -55,7 +56,7 @@ namespace DeltaEngine.Input
 		{
 			var isButton = GetState(0) == trigger.State;
 			bool hasPositionChanged = trigger.Position != GetPosition(0) &&
-				trigger.Position != Point.Unused;
+				trigger.Position != Point.Unused && ScreenSpace.Current.Viewport.Contains(trigger.Position);
 			trigger.Position = GetPosition(0);
 			return isButton && hasPositionChanged;
 		}

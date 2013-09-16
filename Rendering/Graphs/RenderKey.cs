@@ -37,7 +37,7 @@ namespace DeltaEngine.Rendering.Graphs
 
 		private void CreateKeyLabel(Graph graph, int index)
 		{
-			keyLabels.Add(new FontText(FontXml.Default, graph.Lines[index].Key,
+			keyLabels.Add(new FontText(Font.Default, graph.Lines[index].Key,
 				GetKeyLabelDrawArea(graph, index))
 			{
 				RenderLayer = graph.RenderLayer + RenderLayerOffset,

@@ -38,6 +38,9 @@
     <Reference Include="AsfMojo">
       <HintPath>..\..\packages\AsfMojo.1.2.0.0\lib\AsfMojo.dll</HintPath>
     </Reference>
+    <Reference Include="DeltaEngine.Multimedia.VlcToTexture">
+      <HintPath>..\..\packages\DeltaEngine.Multimedia.VlcToTexture.1.0.0.0\lib\NET40\DeltaEngine.Multimedia.VlcToTexture.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
@@ -58,14 +61,6 @@
     <Compile Include="VideoStreamFactory.cs" />
     <Compile Include="VlcVideoStream.cs" />
     <Compile Include="Avi\VideoStream.cs" />
-    <Compile Include="Vlc\BitmapFormat.cs" />
-    <Compile Include="Vlc\ChromaType.cs" />
-    <Compile Include="Vlc\BasicMedia.cs" />
-    <Compile Include="Vlc\Memory.cs" />
-    <Compile Include="Vlc\MemoryRenderer.cs" />
-    <Compile Include="Vlc\VideoPlayer.cs" />
-    <Compile Include="Vlc\MediaPlayerFactory.cs" />
-    <Compile Include="Vlc\MediaState.cs" />
     <Compile Include="WmvVideoStream.cs" />
     <Compile Include="Wmv\AsfImageLoader.cs" />
   </ItemGroup>

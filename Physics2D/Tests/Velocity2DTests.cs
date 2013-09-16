@@ -5,9 +5,9 @@ using NUnit.Framework;
 
 namespace DeltaEngine.Physics2D.Tests
 {
-	internal class Velocity2DTests : TestWithMocksOrVisually
+	public class Velocity2DTests : TestWithMocksOrVisually
 	{
-		[SetUp]
+		[SetUp, CloseAfterFirstFrame]
 		public void InitializeVelocity()
 		{
 			velocity = new Velocity2D.Data(Point.Zero, 5);
@@ -15,7 +15,7 @@ namespace DeltaEngine.Physics2D.Tests
 
 		private Velocity2D.Data velocity;
 
-		[Test, CloseAfterFirstFrame]
+		[Test]
 		public void ApplyUpdateWithVelocity()
 		{
 			var entity2D = new Entity2D(new Rectangle(0, 0, 1, 1));
@@ -27,14 +27,14 @@ namespace DeltaEngine.Physics2D.Tests
 			Assert.AreNotEqual(originalPosition, entity2D.Center);
 		}
 
-		[Test, CloseAfterFirstFrame]
+		[Test]
 		public void AccelerateByPoint()
 		{
 			velocity.Accelerate(Point.One);
 			Assert.AreEqual(Point.One, velocity.Velocity);
 		}
 
-		[Test, CloseAfterFirstFrame]
+		[Test]
 		public void AccelerateByPointExceedingMaximum()
 		{
 			velocity.Accelerate(new Point(6, 0));
@@ -42,7 +42,7 @@ namespace DeltaEngine.Physics2D.Tests
 			Assert.AreEqual(0, velocity.Velocity.Y);
 		}
 
-		[Test, CloseAfterFirstFrame]
+		[Test]
 		public void AccelerateByMagnitudeAngle()
 		{
 			velocity.Accelerate(4, 0);
@@ -50,7 +50,7 @@ namespace DeltaEngine.Physics2D.Tests
 			Assert.AreEqual(0, velocity.Velocity.X);
 		}
 
-		[Test, CloseAfterFirstFrame]
+		[Test]
 		public void AccelerateByMagnitudeAngleExceedingMaximum()
 		{
 			velocity.Accelerate(6, 0);
@@ -58,7 +58,7 @@ namespace DeltaEngine.Physics2D.Tests
 			Assert.AreEqual(0, velocity.Velocity.X);
 		}
 
-		[Test, CloseAfterFirstFrame]
+		[Test]
 		public void AccelerateByScalarFactor()
 		{
 			velocity.Accelerate(Point.One);
@@ -67,7 +67,7 @@ namespace DeltaEngine.Physics2D.Tests
 			Assert.AreEqual(2, velocity.Velocity.Y);
 		}
 
-		[Test, CloseAfterFirstFrame]
+		[Test]
 		public void AccelerateByScalarFactorExceedingMaximum()
 		{
 			velocity.Accelerate(Point.UnitX);

@@ -122,5 +122,28 @@ namespace DeltaEngine.Datatypes
 		{
 			return X + ", " + Y + ", " + Z + ", " + W;
 		}
+
+		// Derived from: http://stackoverflow.com/questions/1031005/is-there-an-algorithm-for-converting-quaternion-rotations-to-euler-angle-rotatio/2070899#2070899
+		// Returns Euler angles applied in ZYX order to match Matrix.CreateRotationZYX.
+		[Pure]
+		public EulerAngles ToEuler()
+		{
+			float ww = W * W;
+			float xx = X * X;
+			float yy = Y * Y;
+			float zz = Z * Z;
+			float lengthSqd = xx + yy + zz + ww;
+			float singularityTest = Y * W - X * Z;
+			float singularityValue = Singularity * lengthSqd;
+			return singularityTest > singularityValue
+				? new EulerAngles(-2 * MathExtensions.Atan2(Z, W), 90.0f, 0.0f)
+				: singularityTest < -singularityValue
+					? new EulerAngles(2 * MathExtensions.Atan2(Z, W), -90.0f, 0.0f)
+					: new EulerAngles(MathExtensions.Atan2(2.0f * (Y * Z + X * W), 1.0f - 2.0f * (xx + yy)),
+						MathExtensions.Asin(2.0f * singularityTest / lengthSqd),
+						MathExtensions.Atan2(2.0f * (X * Y + Z * W), 1.0f - 2.0f * (yy + zz)));
+		}
+
+		private const float Singularity = 0.499f;
 	}
 }

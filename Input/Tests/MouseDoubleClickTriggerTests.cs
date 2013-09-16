@@ -12,7 +12,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void PressLeftMouseButtonToCloseWindow()
 		{
-			new FontText(FontXml.Default, "Double Click Mouse Button to close window", Rectangle.One);
+			new FontText(Font.Default, "Double Click Mouse Button to close window", Rectangle.One);
 			new Command(() => Resolve<Window>().CloseAfterFrame()).Add(new MouseDoubleClickTrigger());
 		}
 	}

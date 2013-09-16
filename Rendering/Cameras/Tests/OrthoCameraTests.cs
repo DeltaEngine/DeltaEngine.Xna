@@ -1,6 +1,4 @@
-﻿using DeltaEngine.Core;
-using DeltaEngine.Datatypes;
-using DeltaEngine.Graphics;
+﻿using DeltaEngine.Datatypes;
 using DeltaEngine.Mocks;
 using DeltaEngine.Platforms;
 using NUnit.Framework;
@@ -13,7 +11,8 @@ namespace DeltaEngine.Rendering.Cameras.Tests
 		public void InitializeEntityRunner()
 		{
 			new MockEntitiesRunner(typeof(MockUpdateBehavior));
-			camera = new OrthoCamera(Resolve<Device>(), Resolve<Window>(), Size.One * 4.0f, Vector.Zero);
+			camera = Camera.Use<OrthoCamera>();
+			camera.Size = Size.One * 4.0f;
 		}
 
 		private OrthoCamera camera;

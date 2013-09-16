@@ -42,7 +42,7 @@ namespace Breakout
 			score.GameOver += () =>
 			{
 				ball.Dispose();
-				gameOverMessage = new FontText(FontXml.Default, "That's it.\nGame Over!", Rectangle.One);
+				gameOverMessage = new FontText(Font.Default, "That's it.\nGame Over!", Rectangle.One);
 				restartCommand =
 					new Command(InitGame).Add(new KeyTrigger(Key.Space)).Add(new MouseButtonTrigger()).Add(
 						new TouchTapTrigger());

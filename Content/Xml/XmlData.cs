@@ -94,7 +94,6 @@ namespace DeltaEngine.Content.Xml
 		{
 			foreach (XmlAttribute attribute in Attributes.Where(a => a.Name.Compare(attributeName)))
 				return attribute.Value;
-
 			return "";
 		}
 
@@ -103,6 +102,14 @@ namespace DeltaEngine.Content.Xml
 			foreach (XmlAttribute attribute in Attributes.Where(a => a.Name.Compare(attributeName)))
 				return attribute.Value.Convert<T>();
 			return defaultValue;
+		}
+
+		public void UpdateAttribute(string attributeName, string value)
+		{
+			if (GetAttributeValue(attributeName) == value)
+				return;
+			RemoveAttribute(attributeName);
+			AddAttribute(attributeName, value);
 		}
 
 		public T GetChildValue<T>(string childName, T defaultValue)

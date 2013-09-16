@@ -137,7 +137,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 			bottomTextBox.IsEnabled = false;
 			AdvanceTimeAndUpdateEntities();
 			Assert.AreEqual(topTextBox.Color, Color.LightGray);
-			Assert.AreEqual(bottomTextBox.Color, Color.Grey);
+			Assert.AreEqual(bottomTextBox.Color, Color.Gray);
 		}
 
 		[Test, CloseAfterFirstFrame]

@@ -20,5 +20,12 @@ namespace DeltaEngine.Tests.Datatypes
 			Assert.AreEqual(ray.Origin, Vector.Zero);
 			Assert.AreEqual(ray.Direction, Vector.UnitZ);
 		}
+
+		[Test]
+		public void RayToString()
+		{
+			Assert.AreEqual("Origin [1, 0, 0] Direction [0, 1, 0]",
+				new Ray(Vector.UnitX, Vector.UnitY).ToString());
+		}
 	}
 }

@@ -48,6 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MockClient.cs" />
     <Compile Include="MockConnection.cs" />
+    <Compile Include="MockNetworkResolver.cs" />
     <Compile Include="MockServer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

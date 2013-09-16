@@ -61,15 +61,11 @@
 		/// .DeltaParticleEmitter represent the content of a particle effect system. Use the Particle
 		/// Effect Editor to edit particle effects.
 		/// </summary>
-		ParticleEmitter = 12,
+		Particle2DEmitter = 12,
 		/// <summary>
-		/// Just a true type font
+		/// Delta Spritefont used in the eninge! TTF font when used in sending from editor to server.
 		/// </summary>
 		Font = 13,
-		/// <summary>
-		/// Font content, just a .xml file, which was generated from a true type font.
-		/// </summary>
-		FontXml = 14,
 		/// <summary>
 		/// Camera content, stores the initial camera position, rotation and values plus optionally a
 		/// camera path this camera should follow.

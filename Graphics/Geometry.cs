@@ -2,6 +2,7 @@
 using System.IO;
 using DeltaEngine.Content;
 using DeltaEngine.Core;
+using DeltaEngine.Datatypes;
 using DeltaEngine.Graphics.Vertices;
 
 namespace DeltaEngine.Graphics
@@ -81,6 +82,10 @@ namespace DeltaEngine.Graphics
 			public InvalidNumberOfIndices(int indicesPassedIn, int geometryIndices)
 				: base("indicesPassedIn=" + indicesPassedIn + ", " + geometryIndices + "geometryIndices") {}
 		}
+
+		public Matrix[] JointTranforms { get; set; }
+		public Matrix[] InverseBindPoses { get; set; }
+		public bool HasAnimationData { get { return JointTranforms != null; } }
 
 		protected abstract void SetNativeData(byte[] vertexData, short[] indices);
 	}

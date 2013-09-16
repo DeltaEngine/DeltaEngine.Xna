@@ -19,13 +19,26 @@ namespace DeltaEngine.Rendering.Models
 			Material = material;
 		}
 
-		public Geometry Geometry { get; private set; }
-		public Material Material { get; private set; }
+		public Geometry Geometry { get; set; }
+		public Material Material { get; set; }
+		public MeshAnimation Animation { get; internal set; }
+		public bool HasAnimation { get { return Animation != null; } }
 
 		protected override void LoadData(Stream fileData)
 		{
 			Geometry = ContentLoader.Load<Geometry>(MetaData.Get("GeometryName", ""));
 			Material = ContentLoader.Load<Material>(MetaData.Get("MaterialName", ""));
+			var animationName = MetaData.Get("AnimationName", "");
+			if (!string.IsNullOrEmpty(animationName))
+				Animation = ContentLoader.Load<MeshAnimation>(animationName);
+		}
+
+		public void UpdateAnimationAndComputeBoneTransforms()
+		{
+			Animation.UpdateFrameTransoforms();
+			for (int jointIndex = 0; jointIndex < Geometry.InverseBindPoses.Length; ++jointIndex)
+				Geometry.JointTranforms[jointIndex] = Geometry.InverseBindPoses[jointIndex] *
+					Animation.CurrentFrameTransforms[jointIndex];
 		}
 
 		protected override void DisposeData() {}

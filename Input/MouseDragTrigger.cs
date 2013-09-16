@@ -11,7 +11,6 @@ namespace DeltaEngine.Input
 		public MouseDragTrigger(MouseButton button = MouseButton.Left)
 		{
 			Button = button;
-			Start<Mouse>();
 		}
 
 		public MouseButton Button { get; private set; }
@@ -20,6 +19,10 @@ namespace DeltaEngine.Input
 		{
 			var parameters = button.SplitAndTrim(new[] { ' ' });
 			Button = parameters.Length > 0 ? parameters[0].Convert<MouseButton>() : MouseButton.Left;
+		}
+
+		protected override void StartInputDevice()
+		{
 			Start<Mouse>();
 		}
 	}

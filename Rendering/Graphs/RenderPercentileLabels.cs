@@ -40,7 +40,7 @@ namespace DeltaEngine.Rendering.Graphs
 
 		private void CreatePercentileLabel(Graph graph, int index)
 		{
-			PercentileLabels.Add(new FontText(FontXml.Default, GetPercentileLabelText(graph, index),
+			PercentileLabels.Add(new FontText(Font.Default, GetPercentileLabelText(graph, index),
 				GetPercentileLabelDrawArea(graph, index))
 			{
 				RenderLayer = graph.RenderLayer + RenderLayerOffset,

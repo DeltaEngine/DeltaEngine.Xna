@@ -227,7 +227,7 @@ namespace DeltaEngine.Tests.Core
 			var writer = new BinaryWriter(stream);
 			const string ContentName = "SomeXml";
 			writer.Write(ContentName);
-			ContentLoader.current = new MockContentLoader(new ContentDataResolver());
+			ContentLoader.Use<MockContentLoader>();
 			stream.Position = 0;
 			var reader = new BinaryReader(stream);
 			object returnedContentType = BinaryDataLoader.TryCreateAndLoad(typeof(MockXmlContentType),
@@ -235,6 +235,24 @@ namespace DeltaEngine.Tests.Core
 			var content = returnedContentType as MockXmlContentType;
 			Assert.IsNotNull(content);
 			Assert.AreEqual(ContentName, content.Name);
+			ContentLoader.DisposeIfInitialized();
+		}
+
+		[Test]
+		public void LoadContentWithoutNameShouldTrowUnableToLoadContentDataWithoutName()
+		{
+			var stream = new MemoryStream();
+			var writer = new BinaryWriter(stream);
+			writer.Write(string.Empty);
+			ContentLoader.Use<MockContentLoader>();
+			stream.Position = 0;
+			var reader = new BinaryReader(stream);
+			Assert.That(
+				() => BinaryDataLoader.TryCreateAndLoad(typeof(MockXmlContentType), reader,
+					Assembly.GetExecutingAssembly().GetName().Version),
+				Throws.Exception.With.InnerException.TypeOf
+					<BinaryDataLoader.UnableToLoadContentDataWithoutName>());
+			ContentLoader.DisposeIfInitialized();
 		}
 
 		[Test]
@@ -271,10 +289,11 @@ namespace DeltaEngine.Tests.Core
 		[Test]
 		public void SaveContentData()
 		{
-			new MockContentLoader(new ContentDataResolver());
+			ContentLoader.Use<MockContentLoader>();
 			var xmlContent = ContentLoader.Load<MockXmlContent>("XmlData");
 			using (var dataWriter = new BinaryWriter(new MemoryStream()))
 				BinaryDataSaver.TrySaveData(xmlContent, typeof(MockXmlContent), dataWriter);
+			ContentLoader.DisposeIfInitialized();
 		}
 
 		[Test]

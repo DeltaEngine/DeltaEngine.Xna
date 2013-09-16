@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace DeltaEngine.Networking.Tcp
 {
@@ -13,19 +13,14 @@ namespace DeltaEngine.Networking.Tcp
 		public byte[] Data { get; private set; }
 		private int readDataLength;
 		
-		public void ReadData(Queue<byte> availableBytes)
+		public int ReadData(byte[] availableBytes, int offset, int availableBytesCurrentLength)
 		{
-			int allowedBytesToRead = MissingByteCount;
-			if (availableBytes.Count < allowedBytesToRead)
-				allowedBytesToRead = availableBytes.Count;
-
-			for (int index = 0; index < allowedBytesToRead; index++, readDataLength++)
-				Data[readDataLength] = availableBytes.Dequeue();
-		}
-
-		public int MissingByteCount
-		{
-			get { return Data.Length - readDataLength; }
+			int allowedBytesToRead = Data.Length - readDataLength;
+			if (availableBytesCurrentLength < allowedBytesToRead)
+				allowedBytesToRead = availableBytesCurrentLength;
+			Array.Copy(availableBytes, offset, Data, readDataLength, allowedBytesToRead);
+			readDataLength += allowedBytesToRead;
+			return allowedBytesToRead;
 		}
 
 		public bool IsDataComplete

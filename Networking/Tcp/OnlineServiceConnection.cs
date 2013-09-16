@@ -12,18 +12,27 @@ namespace DeltaEngine.Networking.Tcp
 	public class OnlineServiceConnection : TcpSocket
 	{
 		//ncrunch: no coverage start
-		internal static OnlineServiceConnection CreateForAppRunner(string apiKey, Settings settings,
-			Action timeout, Action<string> errorHappened, Action ready)
+		internal static void RememberCreationDataForAppRunner(string apiKey, Settings settings,
+			Action timeout, Action<string> errorHappened, Action ready, Action dataReceived)
 		{
-			var connection = CreateForEditor();
-			connection.serverErrorHappened = errorHappened;
-			connection.contentReady = ready;
-			var projectName = AssemblyExtensions.GetEntryAssemblyForProjectName();
-			connection.Connected += () => connection.Send(new LoginRequest(apiKey, projectName));
-			connection.TimedOut += timeout;
-			connection.Connect(settings.OnlineServiceIp, settings.OnlineServicePort);
-			return connection;
+			rememberApiKey = apiKey;
+			rememberIp = settings.OnlineServiceIp;
+			rememberPort = settings.OnlineServicePort;
+			serverTimeout = timeout;
+			serverErrorHappened = errorHappened;
+			contentReady = ready;
+			contentReceived = dataReceived;
+			projectName = AssemblyExtensions.GetEntryAssemblyForProjectName();
 		}
+
+		private static string rememberApiKey;
+		private static string rememberIp;
+		private static int rememberPort;
+		private static Action serverTimeout;
+		private static Action<string> serverErrorHappened;
+		public static Action contentReady;
+		private static Action contentReceived;
+		private static string projectName;
 
 		internal static OnlineServiceConnection CreateForEditor()
 		{
@@ -32,17 +41,22 @@ namespace DeltaEngine.Networking.Tcp
 			return connection;
 		}
 
-		private OnlineServiceConnection() {}
-
-		private Action<string> serverErrorHappened;
-		public Action loadContentMetaData;
-		public Action contentReady;
+		internal OnlineServiceConnection()
+		{
+			if (rememberApiKey == null)
+				return;
+			Connected += () => Send(new LoginRequest(rememberApiKey, projectName));
+			TimedOut += serverTimeout;
+			DataReceived += OnDataReceived;
+			Connect(rememberIp, rememberPort);
+		}
 
 		private void OnDataReceived(object message)
 		{
 			var serverError = message as ServerError;
 			var unknownMessage = message as UnknownMessage;
 			var ready = message as ContentReady;
+			var content = message as UpdateContent;
 			if (serverError != null && serverErrorHappened != null)
 				serverErrorHappened(serverError.Error);
 			else if (unknownMessage != null && serverErrorHappened != null)
@@ -59,9 +73,17 @@ namespace DeltaEngine.Networking.Tcp
 				if (contentReady != null)
 					contentReady();
 			}
+			else if (content != null && contentReceived != null)
+				contentReceived();
 		}
 
 		public bool IsLoggedIn { get; private set; }
+		public Action loadContentMetaData;
+
+		public bool IsDemoUser
+		{
+			get { return string.IsNullOrEmpty(rememberApiKey) || rememberApiKey == Guid.Empty.ToString(); }
+		}
 
 		public Action LoggedIn;
 	}

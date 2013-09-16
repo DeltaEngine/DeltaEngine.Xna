@@ -51,12 +51,17 @@
       <Project>{138A40B5-3D80-4BA3-BD84-D82C151EE7FE}</Project>
       <Name>DeltaEngine.Content.Xml</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Platforms\TestWithXna\DeltaEngine.TestWithXna.csproj">
+      <Project>{D6D0CCE8-9850-4C28-A505-A1F5519FBE09}</Project>
+      <Name>DeltaEngine.TestWithXna</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="InputCommandsTests.cs" />
     <Compile Include="LocalizationTests.cs" />
     <Compile Include="XmlAttributeTests.cs" />
     <Compile Include="XmlContentTests.cs" />

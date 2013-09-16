@@ -10,9 +10,13 @@ namespace DeltaEngine.Input
 		public TouchPositionTrigger(State state = State.Pressing)
 		{
 			State = state;
+		}
+
+		public State State { get; private set; }
+
+		protected override void StartInputDevice()
+		{
 			Start<Touch>();
 		}
-		
-		public State State { get; private set; }
 	}
 }

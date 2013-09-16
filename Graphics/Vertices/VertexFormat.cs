@@ -126,5 +126,21 @@ namespace DeltaEngine.Graphics.Vertices
 				new VertexElement(VertexElementType.Color),
 				new VertexElement(VertexElementType.TextureUV)
 			});
+
+		public static readonly VertexFormat Position3DTexturedLightmap =
+			new VertexFormat(new[]
+			{
+				new VertexElement(VertexElementType.Position3D),
+				new VertexElement(VertexElementType.TextureUV),
+				new VertexElement(VertexElementType.LightMapUV)
+			});
+		
+		public static readonly VertexFormat Position3DNormalUv =
+			new VertexFormat(new[]
+			{
+				new VertexElement(VertexElementType.Position3D),
+				new VertexElement(VertexElementType.Normal),
+				new VertexElement(VertexElementType.TextureUV)
+			});
 	}
 }

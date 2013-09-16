@@ -43,9 +43,15 @@ namespace DeltaEngine.Tests.Extensions
 		[Test]
 		public void CheckIsDateNewer()
 		{
-			Assert.IsTrue(DateExtensions.IsDateNewer(DateTime.Now, DateTime.Today));
-			Assert.IsTrue(DateExtensions.IsDateNewer(DateTime.Today, DateTime.MinValue));
-			Assert.IsFalse(DateExtensions.IsDateNewer(DateTime.MinValue, DateTime.MaxValue));
+			Assert.IsTrue(DateExtensions.IsDateNewerByOneSecond(DateTime.Now, DateTime.Today));
+			Assert.IsTrue(DateExtensions.IsDateNewerByOneSecond(DateTime.Today, DateTime.MinValue));
+			var santaClassIsComing = new DateTime(2013, 12, 24, 23, 0, 0);
+			var santaClassIsComingTinyBitLater = new DateTime(2013, 12, 24, 23, 0, 0, 500);
+			var santaClassIsComingEvenLater = new DateTime(2013, 12, 24, 23, 0, 1, 500);
+			Assert.IsFalse(DateExtensions.IsDateNewerByOneSecond(santaClassIsComingTinyBitLater,
+				santaClassIsComing));
+			Assert.IsTrue(DateExtensions.IsDateNewerByOneSecond(santaClassIsComingEvenLater,
+				santaClassIsComing));
 		}
 
 		[Test]

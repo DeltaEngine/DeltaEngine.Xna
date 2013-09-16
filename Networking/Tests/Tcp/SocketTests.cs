@@ -8,6 +8,7 @@ namespace DeltaEngine.Networking.Tests.Tcp
 {
 	public class SocketTests
 	{
+		//ncrunch: no coverage start
 		[SetUp]
 		public void CreateLocalEchoServer()
 		{

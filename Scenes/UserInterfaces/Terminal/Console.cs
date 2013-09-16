@@ -36,7 +36,7 @@ namespace DeltaEngine.Scenes.UserInterfaces.Terminal
 
 		private void CreateText()
 		{
-			font = FontXml.Default;
+			font = Font.Default;
 			history = new FontText(font, "", Rectangle.Zero)
 			{
 				HorizontalAlignment = HorizontalAlignment.Left,
@@ -54,7 +54,7 @@ namespace DeltaEngine.Scenes.UserInterfaces.Terminal
 			};
 		}
 
-		private FontXml font;
+		private Font font;
 		internal FontText history;
 		internal FontText command;
 		internal FontText autoCompletions;

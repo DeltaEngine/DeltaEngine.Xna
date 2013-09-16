@@ -30,7 +30,7 @@ namespace DeltaEngine.Content.Xml
 				Root.XRootElement.Document.Save(writer);
 		}
 
-		public Stream ToMemoryStream()
+		public MemoryStream ToMemoryStream()
 		{
 			var stream = new MemoryStream();
 			var writer = new StreamWriter(stream, new UTF8Encoding(false));

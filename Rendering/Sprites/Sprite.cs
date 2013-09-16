@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DeltaEngine.Content;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
@@ -10,6 +11,9 @@ namespace DeltaEngine.Rendering.Sprites
 	/// </summary>
 	public class Sprite : Entity2D
 	{
+		protected Sprite(List<object> createFromComponents)
+			: base(createFromComponents) {}
+
 		public Sprite(Material material, Point position)
 			: this(material, Rectangle.FromCenter(position, material.MaterialRenderSize)) {}
 

@@ -24,7 +24,7 @@ namespace DeltaEngine.Content.Disk
 		private XDocument AddSequenceAnimations(XDocument metaData)
 		{
 			foreach (var contentElement in metaData.Root.Elements())
-				if (NameFitsSequenceElement(contentElement.Attribute("Name").Value, 1))
+				if (NameFitsSequenceElement(contentElement.Attribute("Name").Value, 1) && contentElement.Attribute("Type").Value == "Image")
 				{
 					var animation = BuildAnimationFromInitialName(contentElement.Attribute("Name").Value,
 						metaData);
@@ -36,7 +36,8 @@ namespace DeltaEngine.Content.Disk
 		private static bool NameFitsSequenceElement(string contentName, int sequenceNumber)
 		{
 			var numberString = sequenceNumber.ToString(CultureInfo.InvariantCulture);
-			return Regex.IsMatch(contentName, ".*0*" + numberString);
+			var match = Regex.IsMatch(contentName, ".*0*" + numberString + @"\z");
+			return match;
 		}
 
 		private XElement BuildAnimationFromInitialName(string firstContentName, XDocument metaData)

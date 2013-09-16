@@ -12,13 +12,13 @@ namespace Drench.Tests.Games
 {
 	public class TwoHumanLocalGameTests : TestWithMocksOrVisually
 	{
-		[SetUp]
+		[SetUp, CloseAfterFirstFrame]
 		public void SetUp()
 		{
 			Randomizer.Use(new FixedRandom(new[] { 0.1f, 0.6f, 0.7f, 0.2f }));
 			InitializeMouse();
 			AdvanceTimeAndUpdateEntities();
-			game = new TwoHumanLocalGame(BoardTests.Width, BoardTests.Height);
+			game = new TwoHumanGame(BoardTests.Width, BoardTests.Height);
 		}
 
 		private Game game;

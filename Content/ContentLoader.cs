@@ -11,23 +11,38 @@ namespace DeltaEngine.Content
 	/// </summary>
 	public abstract class ContentLoader : IDisposable
 	{
-		protected ContentLoader(string contentPath)
+		/// <summary>
+		/// Normally set in Platforms.AppRunner to DeveloperOnlineContentLoader by creating it.
+		/// Alternatively an application can create a different one (e.g. DiskContentLoader) before.
+		/// </summary>
+		public static void Use<T>() where T : ContentLoader
 		{
-			if (current != null && !current.GetType().Name.StartsWith("Mock"))
+			if (current != null)
 				throw new ContentLoaderAlreadyExistsItIsOnlyAllowedToSetBeforeTheAppStarts();
-			current = this;
-			this.contentPath = contentPath;
+			Type = typeof(T);
 		}
+
+		internal static ContentLoader current;
 
 		public class ContentLoaderAlreadyExistsItIsOnlyAllowedToSetBeforeTheAppStarts : Exception {}
 
-		/// <summary>
-		/// Normally set in Platforms.AppRunner to DeveloperOnlineContentLoader by creating it.
-		/// </summary>
-		internal static ContentLoader current;
-		internal ContentDataResolver resolver;
+		public static Type Type { get; private set; }
 
-		protected readonly string contentPath;
+		public static void DisposeIfInitialized()
+		{
+			if (current != null)
+				current.Dispose();
+			resolver = null;
+			Type = null;
+			contentPath = "Content";
+		}
+
+		protected ContentLoader()
+		{
+			current = this;
+		}
+
+		protected internal static string contentPath = "Content";
 
 		public static Content Load<Content>(string contentName) where Content : ContentData
 		{
@@ -44,25 +59,33 @@ namespace DeltaEngine.Content
 
 		public class ContentNameShouldNotHaveExtension : Exception {}
 
-		internal static ContentData Load(Type contentType, string contentName)
+		internal static ContentData Load(Type contentClassType, string contentName)
 		{
-			if (current == null)
-				throw new NoContentLoaderWasInitialized();
-			if (current.resolver == null)
-				throw new NoContentResolverWasSet();
-			current.resolver.MakeSureResolverIsInitializedAndContentIsReady();
+			MakeSureContentLoaderHasBeenCreated();
 			if (IsGeneratedContentName(contentName))
-				return current.resolver.Resolve(contentType, contentName);
+				return resolver.Resolve(contentClassType, contentName);
+			resolver.MakeSureResolverIsInitializedAndContentIsReady();
 			if (!current.resources.ContainsKey(contentName))
-				return current.LoadAndCacheContent(contentType, contentName);
+				return current.LoadAndCacheContent(contentClassType, contentName);
 			if (!current.resources[contentName].IsDisposed)
-				return current.GetCachedResource(contentType, contentName);
+				return current.GetCachedResource(contentClassType, contentName);
 			current.resources.Remove(contentName);
-			return current.LoadAndCacheContent(contentType, contentName);
+			return current.LoadAndCacheContent(contentClassType, contentName);
 		}
 
-		internal class NoContentLoaderWasInitialized : Exception {}
-		internal class NoContentResolverWasSet : Exception {}
+		private static void MakeSureContentLoaderHasBeenCreated()
+		{
+			if (Type == null)
+				throw new ContentLoaderUseWasNotCalled();
+			if (resolver == null)
+				resolver = new ContentLoaderResolver();
+			if (current == null)
+				current = resolver.ResolveContentLoader(Type);
+		}
+
+		internal class ContentLoaderUseWasNotCalled : Exception {}
+
+		internal static ContentLoaderResolver resolver;
 
 		public static bool Exists(string contentName)
 		{
@@ -71,9 +94,8 @@ namespace DeltaEngine.Content
 
 		private static ContentMetaData CurrentLoaderGetMetaData(string contentName)
 		{
-			if (current == null)
-				throw new NoContentLoaderWasInitialized();
-			current.resolver.MakeSureResolverIsInitializedAndContentIsReady();
+			MakeSureContentLoaderHasBeenCreated();
+			resolver.MakeSureResolverIsInitializedAndContentIsReady();
 			return current.GetMetaData(contentName);
 		}
 
@@ -160,9 +182,8 @@ namespace DeltaEngine.Content
 
 		public static T Create<T>(ContentCreationData creationData) where T : ContentData
 		{
-			if (current == null)
-				throw new NoContentLoaderWasInitialized();
-			return current.resolver.Resolve(typeof(T), creationData) as T;
+			MakeSureContentLoaderHasBeenCreated();
+			return resolver.Resolve(typeof(T), creationData) as T;
 		}
 
 		public static void ReloadContent(string contentName)

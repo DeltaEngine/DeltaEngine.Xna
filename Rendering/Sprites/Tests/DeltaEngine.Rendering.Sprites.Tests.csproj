@@ -56,6 +56,10 @@
       <Project>{BAE8830E-5F62-48D6-B772-C4B1E8665FB3}</Project>
       <Name>DeltaEngine.Platforms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Cameras\DeltaEngine.Rendering.Cameras.csproj">
+      <Project>{F5992CBF-8E17-4EB0-B483-F1DE7993C416}</Project>
+      <Name>DeltaEngine.Rendering.Cameras</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DeltaEngine.Rendering.csproj">
       <Project>{BDDB4AA4-5D31-43B3-9A3B-BF3030EDE927}</Project>
       <Name>DeltaEngine.Rendering</Name>
@@ -63,6 +67,14 @@
     <ProjectReference Include="..\..\Fonts\DeltaEngine.Rendering.Fonts.csproj">
       <Project>{4A00FD90-FF7B-4250-9CBC-B6855130090B}</Project>
       <Name>DeltaEngine.Rendering.Fonts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Models\DeltaEngine.Rendering.Models.csproj">
+      <Project>{701FDD1A-6B8A-4CA9-B796-AC9546233F47}</Project>
+      <Name>DeltaEngine.Rendering.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shapes3D\DeltaEngine.Rendering.Shapes3D.csproj">
+      <Project>{C9CB5DFF-6BF8-4BC8-9148-FBC85FF5A203}</Project>
+      <Name>DeltaEngine.Rendering.Shapes3D</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shapes\DeltaEngine.Rendering.Shapes.csproj">
       <Project>{BB73D940-CBD2-4F00-B246-2A25CA5ACD7E}</Project>
@@ -83,8 +95,11 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AnimationTests.cs" />
+    <Compile Include="BillboardTests.cs" />
+    <Compile Include="SpriteSaveAndLoadTests.cs" />
     <Compile Include="MaterialTests.cs" />
     <Compile Include="PerformanceTests.cs" />
+    <Compile Include="PlaneQuadTests.cs" />
     <Compile Include="SpriteSheetTests.cs" />
     <Compile Include="SpriteTests.cs" />
   </ItemGroup>

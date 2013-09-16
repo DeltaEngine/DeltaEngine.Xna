@@ -39,10 +39,17 @@ namespace DeltaEngine.Graphics.Xna
 			//set worldView for 3D: device.SetModelViewMatrix(worldViewMatrix);
 		}
 
+		public override void SetJointMatrices(Matrix[] jointMatrices)
+		{
+			// not supported yet
+		}
+
 		public override void SetDiffuseTexture(Image texture)
 		{
 			device.SetDiffuseTexture(texture);
 		}
+
+		public override void SetLightmapTexture(Image texture) {}
 
 		public override void Bind()
 		{

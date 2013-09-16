@@ -12,12 +12,12 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			verdana = FontXml.Default;
-			tahoma = ContentLoader.Load<FontXml>("Tahoma30");
+			verdana = Font.Default;
+			tahoma = ContentLoader.Load<Font>("Tahoma30");
 		}
 
-		private FontXml verdana;
-		private FontXml tahoma;
+		private Font verdana;
+		private Font tahoma;
 
 		[Test, ApproveFirstFrameScreenshot]
 		public void DrawSmallFont()
@@ -49,7 +49,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 
 		private class DerivedFontText : FontText
 		{
-			public DerivedFontText(FontXml font, string text, Rectangle drawArea)
+			public DerivedFontText(Font font, string text, Rectangle drawArea)
 				: base(font, text, drawArea) {}
 
 			public int NumberOfLastTickLerpComponents { get { return lastTickLerpComponents.Count; } }

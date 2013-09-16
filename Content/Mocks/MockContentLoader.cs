@@ -6,8 +6,11 @@ using DeltaEngine.Content.Xml;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Extensions;
+using DeltaEngine.Graphics;
+using DeltaEngine.Graphics.Vertices;
 using DeltaEngine.Rendering.Particles;
 using DeltaEngine.Scenes;
+using DeltaEngine.Scenes.UserInterfaces.Controls;
 
 namespace DeltaEngine.Content.Mocks
 {
@@ -16,12 +19,6 @@ namespace DeltaEngine.Content.Mocks
 	/// </summary>
 	public class MockContentLoader : ContentLoader
 	{
-		public MockContentLoader(ContentDataResolver resolver)
-			: base("Content")
-		{
-			base.resolver = resolver;
-		}
-
 		protected override Stream GetContentDataStream(ContentData content)
 		{
 			var stream = Stream.Null;
@@ -35,11 +32,15 @@ namespace DeltaEngine.Content.Mocks
 			else if (content.Name.Equals("Verdana12") || content.Name.Equals("Tahoma30"))
 				stream = CreateFontXml().ToMemoryStream();
 			else if (content.Name.Equals("TestParticle"))
-				return SaveTestParticle();
-			else if (content.Name.Equals("TestScene"))
-				return SaveTestScene();
+				stream = SaveTestParticle();
+			else if (content.MetaData.Type == ContentType.Shader)
+				stream = SaveShader(content.Name);
+			else if (content.Name.Equals("EmptyScene"))
+				stream = SaveEmptyScene();
+			else if (content.Name.Equals("SceneWithAButton"))
+				stream = SaveSceneWithAButton();
 			else if (content.Name.Equals("TestMenuXml"))
-				return SaveTestMenu();
+				stream = SaveTestMenu();
 			return stream;
 		}
 
@@ -113,6 +114,7 @@ namespace DeltaEngine.Content.Mocks
 				new MockCommand("MouseDoubleClickTrigger", "Left"));
 			AddToInputCommandXml(inputSettings, Command.Rotate,
 				new MockCommand("TouchRotateTrigger", ""));
+			AddToInputCommandXml(inputSettings, Command.Zoom, new MockCommand("MouseZoomTrigger", ""));
 			return new XmlFile(inputSettings);
 		}
 
@@ -191,10 +193,45 @@ namespace DeltaEngine.Content.Mocks
 			return data;
 		}
 
-		private static MemoryStream SaveTestScene()
-		{			
+		private static MemoryStream SaveShader(string contentName)
+		{
+			var shader = new ShaderCreationData(ShaderWithFormat.UvVertexCode,
+				ShaderWithFormat.UvFragmentCode, ShaderWithFormat.UvHlslCode,
+				ShaderWithFormat.Dx9Position2DTexture, GetVertexFormatFromDefaultNames(contentName));
+			var data = BinaryDataExtensions.SaveToMemoryStream(shader);
+			data.Seek(0, SeekOrigin.Begin);
+			return data;
+		}
+
+		private static VertexFormat GetVertexFormatFromDefaultNames(string contentName)
+		{
+			var format = VertexFormat.Position2DColorUv;
+			if (contentName == Shader.Position2DUv)
+				format = VertexFormat.Position2DUv;
+			if (contentName == Shader.Position2DColor)
+				format = VertexFormat.Position2DColor;
+			if (contentName == Shader.Position3DColor)
+				format = VertexFormat.Position3DColor;
+			if (contentName == Shader.Position3DUv)
+				format = VertexFormat.Position3DUv;
+			if (contentName == Shader.Position3DColorUv)
+				format = VertexFormat.Position3DColorUv;
+			return format;
+		}
+
+		private static MemoryStream SaveEmptyScene()
+		{
 			var emptyScene = new Scene();
 			var data = BinaryDataExtensions.SaveToMemoryStream(emptyScene);
+			data.Seek(0, SeekOrigin.Begin);
+			return data;
+		}
+
+		private static Stream SaveSceneWithAButton()
+		{
+			var scene = new Scene();
+			scene.Controls.Add(new Button(Theme.Default, Rectangle.One, "Hello"));
+			var data = BinaryDataExtensions.SaveToMemoryStream(scene);
 			data.Seek(0, SeekOrigin.Begin);
 			return data;
 		}
@@ -228,10 +265,9 @@ namespace DeltaEngine.Content.Mocks
 			if (contentType == ContentType.Mesh)
 				return CreateMeshMetaData(contentName);
 			if (contentType == ContentType.Shader)
-				return null;
+				return CreateShaderData(contentName);
 			return new ContentMetaData { Name = contentName, Type = contentType };
 		}
-
 
 		private static ContentType ConvertClassTypeToContentType(Type contentClassType)
 		{
@@ -265,6 +301,7 @@ namespace DeltaEngine.Content.Mocks
 					metaData.Values.Add("ImageOrAnimationName", "SpriteSheet");
 				else
 					metaData.Values.Add("ImageOrAnimationName", "DeltaEngineLogo");
+			metaData.Values.Add("LightMapName", "lightMap");
 			return metaData;
 		}
 
@@ -314,6 +351,14 @@ namespace DeltaEngine.Content.Mocks
 			var metaData = new ContentMetaData { Name = contentName, Type = ContentType.Mesh };
 			metaData.Values.Add("GeometryName", "MockGeometry");
 			metaData.Values.Add("MaterialName", "MockMaterial");
+			if (contentName.Contains("Animation"))
+				metaData.Values.Add("AnimationName", "MockAnimation");
+			return metaData;
+		}
+
+		private static ContentMetaData CreateShaderData(string contentName)
+		{
+			var metaData = new ContentMetaData { Name = contentName, Type = ContentType.Shader };
 			return metaData;
 		}
 	}

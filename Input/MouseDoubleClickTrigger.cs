@@ -19,7 +19,6 @@ namespace DeltaEngine.Input
 		{
 			Button = button;
 			State = state;
-			Start<Mouse>();
 		}
 
 		public MouseButton Button { get; internal set; }
@@ -32,9 +31,13 @@ namespace DeltaEngine.Input
 				throw new CannotCreateMouseButtonTriggerWithoutButton();
 			Button = parameters[0].Convert<MouseButton>();
 			State = parameters.Length > 1 ? parameters[1].Convert<State>() : State.Pressing;
-			Start<Mouse>();
 		}
 
 		public class CannotCreateMouseButtonTriggerWithoutButton : Exception { }
+
+		protected override void StartInputDevice()
+		{
+			Start<Mouse>();
+		}
 	}
 }

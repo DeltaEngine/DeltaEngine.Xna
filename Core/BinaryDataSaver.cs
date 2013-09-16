@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using DeltaEngine.Content;
+using DeltaEngine.Entities;
 
 namespace DeltaEngine.Core
 {
@@ -39,6 +40,12 @@ namespace DeltaEngine.Core
 				writer.Write((data as ContentData).Name);
 				if (!(data as ContentData).Name.StartsWith("<Generated"))
 					return;
+			}
+			if (data is Entity)
+			{
+				SaveArray((data as Entity).GetComponentsForSaving(), writer);
+				SaveArray((data as Entity).GetTags(), writer);
+				return;
 			}
 			if (type.Name.StartsWith("Xml"))
 				throw new DoNotSaveXmlDataAsBinaryData(data);
@@ -291,7 +298,8 @@ namespace DeltaEngine.Core
 					if (fieldData == null)
 						continue;
 					fieldType = fieldData.GetType();
-					if (fieldType.NeedToSaveTypeName())
+					if (fieldType.NeedToSaveTypeName() ||
+						(field.FieldType == typeof(object) && fieldType == typeof(string)))
 						writer.Write(fieldData.GetShortNameOrFullNameIfNotFound());
 				}
 				TrySaveData(fieldData, fieldType, writer);

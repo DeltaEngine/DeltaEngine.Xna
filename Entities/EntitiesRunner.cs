@@ -178,7 +178,8 @@ namespace DeltaEngine.Entities
 			lastMs = thisMs;
 		}
 
-		private void EnsureFirstFrameRunsUpdateAndRapidUpdateAtLeastOnceButNotTooManyTimes(long thisMs)
+		private void EnsureFirstFrameRunsUpdateAndRapidUpdateAtLeastOnceButNotTooManyTimes(
+			long thisMs)
 		{
 			if (lastMs == 0)
 				lastMs = thisMs - (long)(1000 * MathExtensions.Max(UpdateTimeStep, RapidUpdateTimeStep));
@@ -191,12 +192,12 @@ namespace DeltaEngine.Entities
 		private void RunRapidUpdateTick()
 		{
 			rapidUpdateTimeAccumulator -= RapidUpdateTimeStep;
-			float rapidDelta = RapidUpdateTimeStep * Time.SpeedFactor;
-			if (rapidDelta == 0)
+			Time.Delta = RapidUpdateTimeStep * Time.SpeedFactor;
+			if (Time.Delta == 0)
 				return;
 			foreach (var priority in prioritizedEntities)
 				foreach (var entity in priority.entities.OfType<RapidUpdateable>())
-					entity.RapidUpdate(rapidDelta);
+					entity.RapidUpdate();
 		}
 
 		private void RunUpdateTick()
@@ -356,8 +357,8 @@ namespace DeltaEngine.Entities
 		internal void ChangeEntityPriority(Entity entity, Priority priority)
 		{
 			if (!prioritizedEntities[(int)entity.UpdatePriority].entities.Remove(entity))
-				Logger.Warning("Unable to remove entity=" + entity + " from entity.UpdatePriority=" +
-					entity.UpdatePriority + " because it does not exist there. New priority=" + priority);
+				Logger.Warning("Unable to remove entity=" + entity + " from entity.UpdatePriority=" + //ncrunch: no coverage
+					entity.UpdatePriority + " because it does not exist there. New priority=" + priority); 
 			prioritizedEntities[(int)priority].entities.Add(entity);
 		}
 

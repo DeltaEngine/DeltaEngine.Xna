@@ -55,11 +55,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="BillBoardMode.cs" />
     <Compile Include="Particle.cs" />
-    <Compile Include="ParticleEmitter.cs" />
+    <Compile Include="Particle2D.cs" />
+    <Compile Include="Particle3D.cs" />
+    <Compile Include="Particle3DEmitter.cs" />
     <Compile Include="ParticleEmitterData.cs" />
-    <Compile Include="ParticleRenderer.cs" />
+    <Compile Include="Particle3DLineEmitter.cs" />
+    <Compile Include="Particle3DBoxEmitter.cs" />
+    <Compile Include="Particle3DRenderer.cs" />
+    <Compile Include="Particle3DSphericalEmitter.cs" />
+    <Compile Include="Particle2DEmitter.cs" />
+    <Compile Include="Particle2DRenderer.cs" />
+    <Compile Include="Particle3DPointEmitter.cs" />
+    <Compile Include="ParticleEmitter.cs" />
     <Compile Include="ValueRange.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

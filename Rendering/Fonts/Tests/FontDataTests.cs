@@ -1,5 +1,4 @@
 ﻿using DeltaEngine.Content;
-using DeltaEngine.Content.Xml;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Platforms;
 using NUnit.Framework;
@@ -11,14 +10,13 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, CloseAfterFirstFrame]
 		public void LoadFontData()
 		{
-			var fontData = new FontDescription(ContentLoader.Load<XmlContent>("Verdana12").Data);
+			var fontData = new FontDescription(ContentLoader.Load<Font>("Verdana12").Data);
 			Assert.AreEqual("Verdana", fontData.FontFamilyName);
 			Assert.AreEqual(12, fontData.SizeInPoints);
 			Assert.AreEqual("AddOutline", fontData.Style);
 			Assert.AreEqual(16, fontData.PixelLineHeight);
 			Assert.AreEqual("Verdana12Font", fontData.FontMapName);
 			Assert.AreEqual(new Size(128, 128), fontData.FontMapPixelSize);
-			//Assert.AreEqual(95, fontData.GlyphDictionary.Count);
 			Assert.AreEqual(new Rectangle(0, 0, 1, 16), fontData.GlyphDictionary[' '].UV);
 			Assert.AreEqual(7.34875f, fontData.GlyphDictionary[' '].AdvanceWidth);
 		}
@@ -26,7 +24,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, CloseAfterFirstFrame]
 		public void GetGlyphDrawAreaAndUVs()
 		{
-			var fontData = new FontDescription(ContentLoader.Load<XmlContent>("Verdana12").Data);
+			var fontData = new FontDescription(ContentLoader.Load<Font>("Verdana12").Data);
 			fontData.Generate("", HorizontalAlignment.Center);
 			Assert.AreEqual(0, fontData.Glyphs.Length);
 			fontData.Generate("\n", HorizontalAlignment.Center);
@@ -42,7 +40,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 		[Test, CloseAfterFirstFrame]
 		public void GetGlyphsForMultilineText()
 		{
-			var fontData = new FontDescription(ContentLoader.Load<XmlContent>("Verdana12").Data);
+			var fontData = new FontDescription(ContentLoader.Load<Font>("Verdana12").Data);
 			fontData.Generate(" \n \n ", HorizontalAlignment.Center);
 			Assert.AreEqual(3, fontData.Glyphs.Length);
 		}
@@ -53,7 +51,7 @@ namespace DeltaEngine.Rendering.Fonts.Tests
 			var fontDataType = typeof(FontDescription);
 			var expected = fontDataType.Namespace + "." + fontDataType.Name +
 				", Font Family=Verdana, Font Size=12";
-			var fontData = new FontDescription(ContentLoader.Load<XmlContent>("Verdana12").Data);
+			var fontData = new FontDescription(ContentLoader.Load<Font>("Verdana12").Data);
 			Assert.AreEqual(expected, fontData.ToString());
 		}
 	}

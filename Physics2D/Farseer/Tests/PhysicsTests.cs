@@ -7,7 +7,7 @@ namespace DeltaEngine.Physics2D.Farseer.Tests
 {
 	public class PhysicsTests : TestWithMocksOrVisually
 	{
-		[SetUp]
+		[SetUp, CloseAfterFirstFrame]
 		public void SetUp()
 		{
 			physics = new FarseerPhysics();

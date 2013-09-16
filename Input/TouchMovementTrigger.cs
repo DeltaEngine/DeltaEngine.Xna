@@ -8,18 +8,19 @@ namespace DeltaEngine.Input
 	/// </summary>
 	public class TouchMovementTrigger : DragTrigger
 	{
-		public TouchMovementTrigger()
-		{
-			Start<Touch>();
-		}
+		public TouchMovementTrigger() {}
 
 		public TouchMovementTrigger(string empty)
 		{
 			if (!String.IsNullOrEmpty(empty))
 				throw new TouchMovementTriggerHasNoParameters();
-			Start<Touch>();
 		}
 
-		public class TouchMovementTriggerHasNoParameters : Exception { }
+		public class TouchMovementTriggerHasNoParameters : Exception {}
+
+		protected override void StartInputDevice()
+		{
+			Start<Touch>();
+		}
 	}
 }

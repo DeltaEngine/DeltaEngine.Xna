@@ -131,7 +131,7 @@ namespace DeltaEngine.Rendering.Fonts
 		{
 			char nextCharacter = GetNextCharacterInLine();
 			if (nextCharacter != NoChar && IsLastCharacterInLine())
-				return glyphDictionary[nextCharacter].RightSideBearing;
+				return glyphDictionary[nextCharacter].RightSideBearing; //ncrunch: no coverage
 
 			return 0.0f;
 		}

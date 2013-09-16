@@ -211,11 +211,11 @@ namespace $safeprojectname$
 			set;
 		}
 
-		public static FontXml Font
+		public static Font Font
 		{
 			get
 			{
-				return ContentLoader.Load<FontXml>("Tahoma30");
+				return ContentLoader.Load<Font>("Tahoma30");
 			}
 		}
 	}

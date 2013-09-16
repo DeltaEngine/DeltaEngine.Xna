@@ -38,6 +38,10 @@
     <ApplicationIcon>LogoAppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Content\Disk\DeltaEngine.Content.Disk.csproj">
+      <Project>{EE9847E1-9C76-4ACE-B531-D3EA84F7D741}</Project>
+      <Name>DeltaEngine.Content.Disk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DeltaEngine.csproj">
       <Project>{20FA8D33-A964-4000-AD82-67BD6900793B}</Project>
       <Name>DeltaEngine</Name>

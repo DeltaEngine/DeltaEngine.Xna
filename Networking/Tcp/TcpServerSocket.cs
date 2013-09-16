@@ -9,6 +9,7 @@ namespace DeltaEngine.Networking.Tcp
 	/// </summary>
 	public class TcpServerSocket : IDisposable
 	{
+		//ncrunch: no coverage start
 		public TcpServerSocket(IPEndPoint endPoint)
 		{
 			this.endPoint = endPoint;

@@ -1,4 +1,5 @@
-﻿using DeltaEngine.Datatypes;
+﻿using System.Collections.Generic;
+using DeltaEngine.Datatypes;
 
 namespace DeltaEngine.Scenes.UserInterfaces.Controls
 {
@@ -7,6 +8,9 @@ namespace DeltaEngine.Scenes.UserInterfaces.Controls
 	/// </summary>
 	public class Button : Label
 	{
+		protected Button(List<object> createFromComponents)
+			: base(createFromComponents) {}
+
 		public Button(Rectangle drawArea, string text = "")
 			: this(Theme.Default, drawArea, text) {}
 

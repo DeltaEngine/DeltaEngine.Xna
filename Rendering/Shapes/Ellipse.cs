@@ -101,7 +101,6 @@ namespace DeltaEngine.Rendering.Shapes
 				ellipsePoints.Clear();
 				for (int i = 0; i < pointsCount; i++)
 					FormRotatedEllipsePoint(i);
-
 				entity.Set(ellipsePoints);
 			}
 

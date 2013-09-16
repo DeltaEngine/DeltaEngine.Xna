@@ -1,5 +1,6 @@
 using System;
 using DeltaEngine.Datatypes;
+using DeltaEngine.Entities;
 using DeltaEngine.Rendering.Fonts;
 using DeltaEngine.Scenes.UserInterfaces.Controls;
 using DeltaEngine.ScreenSpaces;
@@ -7,7 +8,7 @@ using $safeprojectname$.Logics;
 
 namespace $safeprojectname$.Games
 {
-	public abstract class Game
+	public abstract class Game : Entity
 	{
 		protected Game(Logic logic)
 		{
@@ -17,7 +18,7 @@ namespace $safeprojectname$.Games
 			ScreenSpace.Current.ViewportSizeChanged += ArrangeScene;
 		}
 
-		protected readonly Logic logic;
+		protected internal readonly Logic logic;
 		private readonly InteractiveButton[,] buttons;
 
 		protected void ArrangeScene()
@@ -34,8 +35,8 @@ namespace $safeprojectname$.Games
 		}
 
 		internal const float Border = 0.1f;
-		internal readonly FontText upperText = new FontText(FontXml.Default, "", Rectangle.Zero);
-		internal readonly FontText lowerText = new FontText(FontXml.Default, "", Rectangle.Zero);
+		internal readonly FontText upperText = new FontText(Font.Default, "", Rectangle.Zero);
+		internal readonly FontText lowerText = new FontText(Font.Default, "", Rectangle.Zero);
 		private float buttonsLeft;
 		private float buttonsTop;
 		private float buttonWidth;
@@ -69,13 +70,13 @@ namespace $safeprojectname$.Games
 				color.BlueValue * 0.85f);
 			return new Theme {
 				Button = new Theme.Appearance("DefaultLabel", darkColor),
-				ButtonDisabled = new Theme.Appearance("DefaultLabel", Color.Grey),
+				ButtonDisabled = new Theme.Appearance("DefaultLabel", Color.Gray),
 				ButtonMouseover = new Theme.Appearance("DefaultLabel", lightColor),
 				ButtonPressed = new Theme.Appearance("DefaultLabel", color)
 			};
 		}
 
-		private void ButtonClicked(int x, int y)
+		protected virtual void ButtonClicked(int x, int y)
 		{
 			if (logic.IsGameOver)
 			{

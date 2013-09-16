@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace DeltaEngine.Physics2D.Tests
 {
-	internal class AffixToPhysicsTests : TestWithMocksOrVisually
+	public class AffixToPhysicsTests : TestWithMocksOrVisually
 	{
 		[SetUp]
 		public void SetUp()

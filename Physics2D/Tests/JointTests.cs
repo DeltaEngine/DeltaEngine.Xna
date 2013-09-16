@@ -7,7 +7,7 @@ namespace DeltaEngine.Physics2D.Tests
 {
 	public class JointTests : TestWithMocksOrVisually
 	{
-		[SetUp]
+		[SetUp, CloseAfterFirstFrame]
 		public void SetUp()
 		{
 			physics = Resolve<Physics>();

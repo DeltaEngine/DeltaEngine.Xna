@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
 namespace DeltaEngine.Networking.Tcp
 {
@@ -8,6 +7,7 @@ namespace DeltaEngine.Networking.Tcp
 	/// </summary>
 	public sealed class TcpServer : Server
 	{
+		//ncrunch: no coverage start
 		public override void Start(int listenPort)
 		{
 			socket = new TcpServerSocket(new IPEndPoint(IPAddress.Any, listenPort));
@@ -20,6 +20,22 @@ namespace DeltaEngine.Networking.Tcp
 		{
 			socket.ClientConnected += OnClientConnected;
 			socket.StartListening();
+		}
+
+		private void OnClientConnected(Client client)
+		{
+			client.Disconnected += () => OnClientDisconnected(client);
+			client.DataReceived += message => OnClientDataReceived(client, message);
+			lock (connectedClients)
+				connectedClients.Add(client);
+			RaiseClientConnected(client);
+		}
+
+		private void OnClientDisconnected(Client client)
+		{
+			lock (connectedClients)
+				connectedClients.Remove(client);
+			RaiseClientDisconnected(client);
 		}
 
 		public override bool IsRunning

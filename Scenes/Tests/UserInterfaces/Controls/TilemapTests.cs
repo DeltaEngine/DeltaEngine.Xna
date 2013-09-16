@@ -19,7 +19,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		{
 			CreateBorder();
 			var tilemap = new ColoredLogoTilemap(World, Map) { DrawArea = Center };
-			tilemap.Add(new FontText(FontXml.Default, "", new Rectangle(0.3f, 0.6f, 0.2f, 0.2f))
+			tilemap.Add(new FontText(Font.Default, "", new Rectangle(0.3f, 0.6f, 0.2f, 0.2f))
 			{
 				HorizontalAlignment = HorizontalAlignment.Left,
 				RenderLayer = 2

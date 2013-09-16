@@ -63,7 +63,7 @@ namespace DeltaEngine.Multimedia.Tests
 			device.RegisterCurrentMusic(music1);
 			Assert.IsTrue(device.IsActive);
 			Assert.IsTrue(device.IsInitialized);
-			device.RapidUpdate(0.3f);
+			device.RapidUpdate();
 			device.Dispose();
 		}
 	}

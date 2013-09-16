@@ -19,9 +19,10 @@
 				<ProjectItem ReplaceParameters="true" TargetFileName="DrenchMenu.cs">DrenchMenu.cs</ProjectItem>
 			</Folder>
 			<Folder Name="Games" TargetFolderName="Games">
+				<ProjectItem ReplaceParameters="true" TargetFileName="TwoHumanNetworkGame.cs">TwoHumanNetworkGame.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="Game.cs">Game.cs</ProjectItem>
 				<ProjectItem ReplaceParameters="true" TargetFileName="HumanVsAiGame.cs">HumanVsAiGame.cs</ProjectItem>
-				<ProjectItem ReplaceParameters="true" TargetFileName="TwoHumanLocalGame.cs">TwoHumanLocalGame.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="TwoHumanGame.cs">TwoHumanGame.cs</ProjectItem>
 			</Folder>
 			<Folder Name="Logics" TargetFolderName="Logics">
 				<ProjectItem ReplaceParameters="true" TargetFileName="HumanVsSmartAiLogic.cs">HumanVsSmartAiLogic.cs</ProjectItem>
@@ -49,7 +50,7 @@
 			</Folder>
 			<Folder Name="Logics" TargetFolderName="Logics">
 				<ProjectItem ReplaceParameters="true" TargetFileName="TwoPlayerLogic.cs">TwoPlayerLogic.cs</ProjectItem>
-				<ProjectItem ReplaceParameters="true" TargetFileName="TwoHumanLocalLogic.cs">TwoHumanLocalLogic.cs</ProjectItem>
+				<ProjectItem ReplaceParameters="true" TargetFileName="TwoHumanLogic.cs">TwoHumanLogic.cs</ProjectItem>
 			</Folder>
 			<Folder Name="Properties" TargetFolderName="Properties">
 				<ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>

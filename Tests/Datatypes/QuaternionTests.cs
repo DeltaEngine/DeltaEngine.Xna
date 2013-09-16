@@ -116,5 +116,20 @@ namespace DeltaEngine.Tests.Datatypes
 		{
 			Assert.AreEqual("1, 2, 3, 4", new Quaternion(1, 2, 3, 4).ToString());
 		}
+
+		[Test]
+		public void ToEuler()
+		{
+			VerifyEuler(new EulerAngles(-5, -40, 10));
+			VerifyEuler(new EulerAngles(5, 10, 20));
+			VerifyEuler(new EulerAngles(45, -30, 50));
+		}
+
+		private static void VerifyEuler(EulerAngles eulerAngles)
+		{
+			var rotationMatrix = Matrix.CreateRotationZyx(eulerAngles);
+			var rotationQuaternion = Quaternion.FromRotationMatrix(rotationMatrix);
+			Assert.AreEqual(eulerAngles, rotationQuaternion.ToEuler());
+		}
 	}
 }

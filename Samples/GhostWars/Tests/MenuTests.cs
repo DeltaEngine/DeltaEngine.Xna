@@ -1,4 +1,5 @@
-﻿using DeltaEngine.Content.Disk;
+﻿using DeltaEngine.Content;
+using DeltaEngine.Content.Disk;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Input;
@@ -14,7 +15,7 @@ namespace GhostWars.Tests
 		public void ShowMenu()
 		{
 			Resolve<Settings>().Resolution = new Size(1200, 750);
-			new DiskContentLoader();
+			ContentLoader.Use<DiskContentLoader>();
 			new MainMenu(Resolve<Window>(), Resolve<Mouse>());
 		}
 	}

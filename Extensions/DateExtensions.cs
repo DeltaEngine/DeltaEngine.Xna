@@ -23,9 +23,9 @@ namespace DeltaEngine.Extensions
 			return time.ToString("HH:mm:ss");
 		}
 
-		public static bool IsDateNewer(DateTime newerDate, DateTime olderDate)
+		public static bool IsDateNewerByOneSecond(DateTime newerDate, DateTime olderDate)
 		{
-			return newerDate.CompareTo(olderDate) > 0;
+			return (newerDate - olderDate).TotalSeconds > 1;
 		}
 
 		public static DateTime Parse(string dateString)

@@ -10,35 +10,20 @@ namespace DeltaEngine.Rendering.Cameras
 	/// </summary>
 	public class LookAtCamera : Camera
 	{
-		public LookAtCamera(Device device, Window window, Vector position, Vector target)
-			: base(device, window, position)
-		{
-			// ReSharper disable DoNotCallOverridableMethodsInConstructor
-			Target = target;
-		}
+		public LookAtCamera(Device device, Window window)
+			: base(device, window) {}
 
-		public LookAtCamera(Device device, Window window, Vector position, Entity3D target)
-			: base(device, window, position)
-		{
-			entityTarget = target;
-		}
+		public Entity3D EntityTarget { get; set; }
 
-		private readonly Entity3D entityTarget;
-
-		public override Vector Target
+		protected override Vector GetFinalTargetPosition()
 		{
-			get
-			{
-				if (entityTarget != null)
-					return entityTarget.Position;
-				return base.Target;
-			}
+			return (EntityTarget != null) ? EntityTarget.Position : base.GetFinalTargetPosition();
 		}
 
 		private void UpdateInternalState()
 		{
-			cameraRotation = new Vector(Rotation.X, Rotation.Y.Clamp(
-				MinPitchRotation, MaxPitchRotation), cameraRotation.Z);
+			cameraRotation = new Vector(Rotation.X, Rotation.Y.Clamp(MinPitchRotation, MaxPitchRotation),
+				cameraRotation.Z);
 			var rotationY = Matrix.CreateRotationY(cameraRotation.Y);
 			var rotationX = Matrix.CreateRotationX(cameraRotation.X);
 			var rotationMatrix = rotationX * rotationY;

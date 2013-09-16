@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Threading;
 using DeltaEngine.Datatypes;
-using DeltaEngine.Extensions;
 using DeltaEngine.Networking.Messages;
-using DeltaEngine.Networking.Mocks;
 using DeltaEngine.Networking.Tcp;
 using Microsoft.Win32;
 using NUnit.Framework;
@@ -27,10 +25,7 @@ namespace DeltaEngine.Networking.Tests.Tcp
 
 		private void ConnectToServer()
 		{
-			if (StackTraceExtensions.StartedFromNCrunch)
-				connection = new MockClient(new MockOnlineServer());
-			else
-				connection = new TcpSocket(); //ncrunch: no coverage
+			connection = new TcpSocket();
 			connection.Connect(ServerAddress, ServerPort);
 		}
 
@@ -103,7 +98,7 @@ namespace DeltaEngine.Networking.Tests.Tcp
 			Login();
 			SendMessageAndWaitForServerResponse(new Point(0, 1));
 			Thread.Sleep(50);
-			Assert.IsInstanceOf<UnknownMessage>(serverResponse);
+			Assert.IsInstanceOf<SetProject>(serverResponse);
 		}
 
 		private void Login()

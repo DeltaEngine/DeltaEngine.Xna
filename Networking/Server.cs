@@ -16,27 +16,22 @@ namespace DeltaEngine.Networking
 			get { return connectedClients.Count; }
 		}
 
-		protected readonly List<Client> connectedClients = new List<Client>();
+		internal protected readonly List<Client> connectedClients = new List<Client>();
 
-		protected void OnClientConnected(Client client)
+		protected void RaiseClientDisconnected(Client client)
 		{
-			client.Disconnected += () => OnClientDisconnected(client);
-			client.DataReceived += message => OnClientDataReceived(client, message);
-			lock (connectedClients)
-				connectedClients.Add(client);
-			if (ClientConnected != null)
-				ClientConnected(client);
-		}
-
-		protected virtual void OnClientDisconnected(Client client)
-		{
-			lock (connectedClients)
-				connectedClients.Remove(client);
 			if (ClientDisconnected != null)
 				ClientDisconnected(client);
 		}
 
 		public event Action<Client> ClientDisconnected;
+
+		protected void RaiseClientConnected(Client client)
+		{
+			if (ClientConnected != null)
+				ClientConnected(client);
+		}
+
 		public event Action<Client> ClientConnected;
 
 		public void OnClientDataReceived(Client client, object message)
@@ -53,7 +48,7 @@ namespace DeltaEngine.Networking
 			{
 				var closingConnections = new List<Client>(connectedClients);
 				foreach (var connection in closingConnections)
-					connection.Dispose();
+					connection.Dispose(); //ncrunch: no coverage
 			}
 		}
 	}

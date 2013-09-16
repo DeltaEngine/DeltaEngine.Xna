@@ -24,7 +24,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void PressKeyToShowCircle()
 		{
-			new FontText(FontXml.Default, "Press A on Keyboard to show red circle", Rectangle.One);
+			new FontText(Font.Default, "Press A on Keyboard to show red circle", Rectangle.One);
 			var ellipse = new Ellipse(new Rectangle(0.1f, 0.1f, 0.1f, 0.1f), Color.Red);
 			new Command(() => ellipse.Center = Point.Half).Add(new KeyTrigger(Key.A, State.Pressed));
 			new Command(() => ellipse.Center = Point.Zero).Add(new KeyTrigger(Key.A, State.Released));
@@ -49,7 +49,7 @@ namespace DeltaEngine.Input.Tests
 		{
 			int pressed = 0;
 			int released = 0;
-			var fontText = new FontText(FontXml.Default, "'A' pressed: 0 released: 0",
+			var fontText = new FontText(Font.Default, "'A' pressed: 0 released: 0",
 				Rectangle.One);
 			new Command(() => fontText.Text = "'A' pressed: " + ++pressed + " released: " + released).
 				Add(new KeyTrigger(Key.A));
@@ -77,7 +77,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void HandleInputVisually()
 		{
-			var text = new FontText(FontXml.Default, "Type some text", Rectangle.One);
+			var text = new FontText(Font.Default, "Type some text", Rectangle.One);
 			new Command(() => text.Text = keyboard.HandleInput(text.Text)).Add(new KeyTrigger(Key.None,
 				State.Released));
 		}

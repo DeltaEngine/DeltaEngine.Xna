@@ -88,19 +88,20 @@ namespace DeltaEngine.Extensions
 				0.0f, 0.0f, -1.0f * (nearPlane + farPlane) * invDepth, 1.0f);
 		}
 
+		// Appears to create a RH LookAt
 		public static Matrix CreateLookAtMatrix(Vector cameraPosition, Vector cameraTarget, Vector cameraUp)
 		{
-			var forward = Vector.Normalize(cameraTarget - cameraPosition);
+			var forward = Vector.Normalize(cameraPosition - cameraTarget);
 			var up = Vector.Normalize(cameraUp);
-			var side = Vector.Cross(forward, up);
-			up = Vector.Cross(side, forward);
+			var side = Vector.Normalize(Vector.Cross(up, forward));
+			up = Vector.Cross(forward, side);
 			return new Matrix(
-				side.X, up.X, -forward.X, 0.0f,
-				side.Y, up.Y, -forward.Y, 0.0f,
-				side.Z, up.Z, -forward.Z, 0.0f,
+				side.X, up.X, forward.X, 0.0f,
+				side.Y, up.Y, forward.Y, 0.0f,
+				side.Z, up.Z, forward.Z, 0.0f,
 				-Vector.Dot(side, cameraPosition),
 				-Vector.Dot(up, cameraPosition),
-				Vector.Dot(forward, cameraPosition), 1.0f);
+				-Vector.Dot(forward, cameraPosition), 1.0f);
 		}
 
 		public static Matrix CreateRotationAboutZThenYThenX(float x, float y, float z)

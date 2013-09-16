@@ -47,6 +47,10 @@
       <Project>{20FA8D33-A964-4000-AD82-67BD6900793B}</Project>
       <Name>DeltaEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Networking\DeltaEngine.Networking.csproj">
+      <Project>{5231706E-2955-43BF-9C06-291E12AF5C5C}</Project>
+      <Name>DeltaEngine.Networking</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Rendering\DeltaEngine.Rendering.csproj">
       <Project>{BDDB4AA4-5D31-43B3-9A3B-BF3030EDE927}</Project>
       <Name>DeltaEngine.Rendering</Name>
@@ -73,9 +77,10 @@
     <Compile Include="AvailableColorFinder.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="DrenchMenu.cs" />
+    <Compile Include="Games\TwoHumanNetworkGame.cs" />
     <Compile Include="Games\Game.cs" />
     <Compile Include="Games\HumanVsAiGame.cs" />
-    <Compile Include="Games\TwoHumanLocalGame.cs" />
+    <Compile Include="Games\TwoHumanGame.cs" />
     <Compile Include="Logics\HumanVsSmartAiLogic.cs" />
     <Compile Include="FloodFiller.cs" />
     <Compile Include="Logics\Logic.cs" />
@@ -87,7 +92,7 @@
     <Compile Include="Logics\SinglePlayerLogic.cs" />
     <Compile Include="Games\TwoPlayerGame.cs" />
     <Compile Include="Logics\TwoPlayerLogic.cs" />
-    <Compile Include="Logics\TwoHumanLocalLogic.cs" />
+    <Compile Include="Logics\TwoHumanLogic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

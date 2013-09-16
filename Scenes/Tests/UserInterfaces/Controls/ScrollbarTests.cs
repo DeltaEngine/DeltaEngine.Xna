@@ -17,7 +17,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		public void SetUp()
 		{
 			scrollbar = new Scrollbar(Center);
-			scrollbar.Add(new FontText(FontXml.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
+			scrollbar.Add(new FontText(Font.Default, "", new Rectangle(0.5f, 0.7f, 0.2f, 0.1f)));
 			scrollbar.Start<DisplayScrollbarValue>();
 			InitializeMouse();
 		}
@@ -87,8 +87,8 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 		{
 			scrollbar.IsEnabled = false;
 			AdvanceTimeAndUpdateEntities();
-			Assert.AreEqual(Color.Grey, scrollbar.Color);
-			Assert.AreEqual(Color.Grey, scrollbar.Pointer.Color);
+			Assert.AreEqual(Color.Gray, scrollbar.Color);
+			Assert.AreEqual(Color.Gray, scrollbar.Pointer.Color);
 		}
 
 		[Test, ApproveFirstFrameScreenshot]

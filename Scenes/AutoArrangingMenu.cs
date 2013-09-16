@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DeltaEngine.Datatypes;
-using DeltaEngine.Entities;
 using DeltaEngine.Rendering;
 using DeltaEngine.Scenes.UserInterfaces.Controls;
 
@@ -105,12 +103,10 @@ namespace DeltaEngine.Scenes
 			Add(button);
 		}
 
-		public override void Add(Entity control)
+		public override void Add(Entity2D control)
 		{
 			base.Add(control);
-			var entity2D = control as Entity2D;
-			if (entity2D != null)
-				entity2D.RenderLayer = renderLayer;
+			control.RenderLayer = renderLayer;
 		}
 
 		public int RenderLayer
@@ -119,7 +115,7 @@ namespace DeltaEngine.Scenes
 			set
 			{
 				renderLayer = value;
-				foreach (var entity in Controls.OfType<Entity2D>())
+				foreach (var entity in Controls)
 					entity.RenderLayer = renderLayer;
 			}
 		}

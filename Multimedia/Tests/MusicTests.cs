@@ -41,7 +41,7 @@ namespace DeltaEngine.Multimedia.Tests
 		[Test, Ignore]
 		public void PlayMusicOnClick()
 		{
-			new FontText(FontXml.Default, "Click to Play", Rectangle.One);
+			new FontText(Font.Default, "Click to Play", Rectangle.One);
 			var music = ContentLoader.Load<Music>("DefaultMusic");
 			new Command(() => { music.Play(1); }).Add(new MouseButtonTrigger());
 		}

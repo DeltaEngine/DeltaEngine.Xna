@@ -13,15 +13,16 @@ namespace DeltaEngine.Tests.Content
 		[SetUp]
 		public void CreateContentLoaderInstanceAndTestContent()
 		{
-			new MockContentLoader(new ContentDataResolver());
+			Assert.Throws<ContentLoader.ContentLoaderUseWasNotCalled>(
+				() => ContentLoader.Load<MockXmlContent>(TestXmlContentName));
+			ContentLoader.Use<MockContentLoader>();
 			testXmlContent = ContentLoader.Load<MockXmlContent>(TestXmlContentName);
 		}
 
 		[TearDown]
 		public void DisposeContentLoader()
 		{
-			if (ContentLoader.current != null)
-				ContentLoader.current.Dispose();
+			ContentLoader.DisposeIfInitialized();
 		}
 
 		private MockXmlContent testXmlContent;
@@ -47,14 +48,6 @@ namespace DeltaEngine.Tests.Content
 			testXmlContent.InternalCreateDefault();
 			Assert.AreEqual(TestXmlContentName, testXmlContent.Name);
 			Assert.AreNotEqual(originalData, testXmlContent.Data);
-		}
-
-		[Test]
-		public void ThrowExceptionIfContentLoadIsDoneWithoutContentLoaderInstance()
-		{
-			ContentLoader.current = null;
-			Assert.Throws<ContentLoader.NoContentLoaderWasInitialized>(
-				() => ContentLoader.Load<MockXmlContent>(TestXmlContentName));
 		}
 
 		[Test]
@@ -90,14 +83,6 @@ namespace DeltaEngine.Tests.Content
 			Assert.IsTrue(ContentLoader.Exists(TestXmlContentName));
 			Assert.IsTrue(ContentLoader.Exists(TestXmlContentName, ContentType.Xml));
 			Assert.IsFalse(ContentLoader.Exists(TestXmlContentName, ContentType.Camera));
-		}
-
-		[Test]
-		public void ThrowExceptionIfExistsCheckIsDoneWithoutContentLoaderInstance()
-		{
-			ContentLoader.current = null;
-			Assert.Throws<ContentLoader.NoContentLoaderWasInitialized>(
-				() => ContentLoader.Exists(TestXmlContentName));
 		}
 
 		[Test]
@@ -188,14 +173,6 @@ namespace DeltaEngine.Tests.Content
 		}
 
 		[Test]
-		public void ThrowExceptionIfCallCreateWithoutContentLoaderInstance()
-		{
-			ContentLoader.current = null;
-			Assert.Throws<ContentLoader.NoContentLoaderWasInitialized>(
-				() => ContentLoader.Create<MockXmlContent>(null));
-		}
-
-		[Test]
 		public void LoadContentViaCreationData()
 		{
 			var image = ContentLoader.Load<MockImage>("MockImage");
@@ -211,82 +188,6 @@ namespace DeltaEngine.Tests.Content
 		{
 			Assert.Throws<ContentLoader.ContentNotFound>(
 				() => ContentLoader.Load<MockXmlContent>("UnavailableXmlContent"));
-		}
-
-		[Test]
-		public void LoadDefaultDataIfAllowed()
-		{
-			Assert.DoesNotThrow(
-				() => ContentLoader.Load<DynamicXmlMockContent>("UnavailableDynamicContent"));
-		}
-
-		private class DynamicXmlMockContent : ContentData
-		{
-			public DynamicXmlMockContent(string contentName)
-				: base(contentName) {}
-
-			protected override void DisposeData() {}
-			protected override void LoadData(Stream fileData) {}
-			protected override bool AllowCreationIfContentNotFound
-			{
-				get { return true; }
-			}
-		}
-
-		[Test]
-		public void ContentLoadWithNullStream()
-		{
-			ContentLoader.current = new FakeContentLoader();
-			Assert.DoesNotThrow(() =>ContentLoader.Load<MockXmlContent>("XmlContentWithNoPath"));
-		}
-
-		[Test]
-		public void ContentLoadWithWrongFilePath()
-		{
-			ContentLoader.current = new FakeContentLoader();
-			Assert.Throws<ContentLoader.ContentFileDoesNotExist>(
-				() => ContentLoader.Load<MockXmlContent>("ContentWithWrongPath"));
-		}
-
-		[Test]
-		public void ThrowExceptionIfSecondContentLoaderInstanceIsUsed()
-		{
-			ContentLoader.current = new FakeContentLoader();
-			Assert.Throws
-				<ContentLoader.ContentLoaderAlreadyExistsItIsOnlyAllowedToSetBeforeTheAppStarts>(
-					() => new FakeContentLoader());
-		}
-
-		[Test]
-		public void ThrowExceptionIfContentLoaderHasNoResolver()
-		{
-			ContentLoader.current.resolver = null;
-			Assert.Throws<ContentLoader.NoContentResolverWasSet>(
-				() => ContentLoader.Load<MockXmlContent>(TestXmlContentName));
-		}
-
-		private class FakeContentLoader : ContentLoader
-		{
-			public FakeContentLoader()
-				: base("NoPath")
-			{
-				resolver = new ContentDataResolver();
-			}
-
-			protected override ContentMetaData GetMetaData(string contentName,
-				Type contentClassType = null)
-			{
-				HasValidContentAndMakeSureItIsLoaded();
-				var metaData = new ContentMetaData { Type = ContentType.Xml };
-				if (contentName.Contains("WrongPath"))
-					metaData.LocalFilePath = "No.xml";
-				return metaData;
-			}
-
-			protected override bool HasValidContentAndMakeSureItIsLoaded()
-			{
-				return ContentMetaDataFilePath == null;
-			}
 		}
 	}
 }

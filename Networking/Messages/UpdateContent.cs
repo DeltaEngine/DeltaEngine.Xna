@@ -11,14 +11,14 @@ namespace DeltaEngine.Networking.Messages
 	{
 		private UpdateContent() {}
 
-		public UpdateContent(ContentMetaData metaData, FileNameAndBytes[] files)
+		public UpdateContent(ContentMetaData metaData, FileNameAndBytes[] optionalFiles = null)
 		{
 			MetaData = metaData;
-			Files = files;
+			OptionalFiles = optionalFiles;
 		}
 
 		public ContentMetaData MetaData { get; private set; }
-		public FileNameAndBytes[] Files { get; private set; }
+		public FileNameAndBytes[] OptionalFiles { get; private set; }
 
 		public struct FileNameAndBytes
 		{

@@ -8,18 +8,19 @@ namespace DeltaEngine.Input
 	/// </summary>
 	public class MouseMovementTrigger : DragTrigger
 	{
-		public MouseMovementTrigger()
-		{
-			Start<Mouse>();
-		}
+		public MouseMovementTrigger() {}
 
 		public MouseMovementTrigger(string empty)
 		{
 			if (!String.IsNullOrEmpty(empty))
 				throw new MouseMovementTriggerHasNoParameters();
-			Start<Mouse>();
 		}
 
 		public class MouseMovementTriggerHasNoParameters : Exception {}
+
+		protected override void StartInputDevice()
+		{
+			Start<Mouse>();
+		}
 	}
 }

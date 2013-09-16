@@ -12,7 +12,7 @@ namespace DeltaEngine.Input.Tests
 		[Test]
 		public void ShowRedCircleOnPinch()
 		{
-			new FontText(FontXml.Default, "Pinch screen to show red circle", Rectangle.One);
+			new FontText(Font.Default, "Pinch screen to show red circle", Rectangle.One);
 			var ellipse = new Ellipse(new Rectangle(0.1f, 0.1f, 0.1f, 0.1f), Color.Red);
 			new Command(() => ellipse.Center = Point.Half).Add(new TouchPinchTrigger());
 			new Command(() => ellipse.Center = Point.Zero).Add(new TouchPressTrigger(State.Released));

@@ -12,7 +12,6 @@ namespace DeltaEngine.Input
 		public GamePadAnalogTrigger(GamePadAnalog gamePadAnalog)
 		{
 			Analog = gamePadAnalog;
-			Start<GamePad>();
 		}
 
 		public GamePadAnalog Analog { get; private set; }
@@ -22,9 +21,13 @@ namespace DeltaEngine.Input
 			if (String.IsNullOrEmpty(gamePadAnalog))
 				throw new CannotCreateGamePadStickTriggerWithoutGamePadStick();
 			Analog = gamePadAnalog.Convert<GamePadAnalog>();
-			Start<GamePad>();
 		}
 
-		public class CannotCreateGamePadStickTriggerWithoutGamePadStick : Exception {}
+		public class CannotCreateGamePadStickTriggerWithoutGamePadStick : Exception { }
+
+		protected override void StartInputDevice()
+		{
+			Start<GamePad>();
+		}
 	}
 }

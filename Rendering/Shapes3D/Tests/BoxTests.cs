@@ -1,5 +1,4 @@
-﻿using DeltaEngine.Core;
-using DeltaEngine.Datatypes;
+﻿using DeltaEngine.Datatypes;
 using DeltaEngine.Graphics;
 using DeltaEngine.Graphics.Vertices;
 using DeltaEngine.Platforms;
@@ -14,7 +13,8 @@ namespace DeltaEngine.Rendering.Shapes3D.Tests
 		[Test]
 		public void ShowRedBox()
 		{
-			new LookAtCamera(Resolve<Device>(), Resolve<Window>(), Vector.One, Vector.Zero);
+			var camera = Camera.Use<LookAtCamera>();
+			camera.Position = Vector.One;
 			new Model(new ModelData(new Box(Vector.One, Color.Red)), Vector.Zero);
 		}
 

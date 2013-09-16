@@ -21,7 +21,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 			dialog.AddButton("Top Button");
 			dialog.AddButton("Middle Button");
 			dialog.AddButton("Bottom Button");
-			dialog.Add(new FontText(FontXml.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f)));
+			dialog.Add(new FontText(Font.Default, "", new Rectangle(0.4f, 0.7f, 0.2f, 0.1f)));
 			AdvanceTimeAndUpdateEntities();
 			dialog.Start<UpdateText>();
 			InitializeMouse();
@@ -57,7 +57,7 @@ namespace DeltaEngine.Scenes.Tests.UserInterfaces.Controls
 			buttons[1].IsEnabled = false;
 			AdvanceTimeAndUpdateEntities();
 			Assert.AreEqual(Color.White, buttons[0].Color);
-			Assert.AreEqual(Color.Grey, buttons[1].Color);
+			Assert.AreEqual(Color.Gray, buttons[1].Color);
 		}
 
 		[Test, ApproveFirstFrameScreenshot]

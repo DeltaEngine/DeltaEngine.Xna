@@ -95,10 +95,10 @@ namespace DeltaEngine.Logging.Tests
 		public static void LogToRealLogServer()
 		{
 			var ready = false;
-			var connection = OnlineServiceConnection.CreateForAppRunner(GetApiKeyFromRegistry(),
+			OnlineServiceConnection.RememberCreationDataForAppRunner(GetApiKeyFromRegistry(),
 				new MockSettings(), () => { }, error => { throw new ServerErrorReceived(error); },
-				() => ready = true);
-			using (var logClient = new NetworkLogger(connection))
+				() => ready = true, () => { });
+			using (var logClient = new NetworkLogger(new OnlineServiceConnection()))
 			{
 				for (int timeoutMs = 1000; timeoutMs > 0 && !ready; timeoutMs -= 10)
 					Thread.Sleep(10);

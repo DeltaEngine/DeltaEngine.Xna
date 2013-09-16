@@ -100,12 +100,16 @@ namespace DeltaEngine.Graphics
 
 				public void Draw()
 				{
-					foreach (var geometry in geometries)
+					foreach (var geometryTask in geometries)
 					{
-						geometry.Material.Shader.SetModelViewProjectionMatrix(geometry.Transform *
+						var material = geometryTask.Material;
+						if (material.LightMap != null)
+							material.Shader.SetLightmapTexture(material.LightMap);
+						material.Shader.SetModelViewProjectionMatrix(geometryTask.Transform *
 							device.ModelViewProjectionMatrix);
-						geometry.Material.Shader.BindVertexDeclaration();
-						geometry.Geometry.Draw();
+						if (geometryTask.Geometry.HasAnimationData)
+							material.Shader.SetJointMatrices(geometryTask.Geometry.JointTranforms);
+						geometryTask.Geometry.Draw();
 					}
 				}
 			}
@@ -116,7 +120,10 @@ namespace DeltaEngine.Graphics
 				foreach (var textureGeometries in sortedTextureGeometries)
 				{
 					if (textureGeometries.texture != null)
+					{
+						device.SetBlendMode(textureGeometries.texture.BlendMode);
 						shader.SetDiffuseTexture(textureGeometries.texture);
+					}
 					textureGeometries.Draw();
 				}
 			}
@@ -204,12 +211,12 @@ namespace DeltaEngine.Graphics
 		private void Draw3DData()
 		{
 			device.Set3DMode();
-			foreach (var sortedGeometry in sortedShaderGeometries)
-				sortedGeometry.Draw();
-			sortedShaderGeometries.Clear();
 			foreach (var lineBuffer in lineBuffers)
 				if (lineBuffer.Is3D && lineBuffer.NumberOfActiveVertices > 0)
 					DrawBufferAndIncreaseStatisticsNumbers(lineBuffer);
+			foreach (var sortedGeometry in sortedShaderGeometries)
+				sortedGeometry.Draw();
+			sortedShaderGeometries.Clear();
 			foreach (var pair in buffersPerBlendMode)
 				foreach (var buffer in pair.Value)
 					if (buffer.Is3D && buffer.NumberOfActiveVertices > 0)

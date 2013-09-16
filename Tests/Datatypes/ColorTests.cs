@@ -88,7 +88,7 @@ namespace DeltaEngine.Tests.Datatypes
 			Assert.AreEqual(new Color(255, 255, 255), Color.White);
 			Assert.AreEqual(new Color(0, 0, 255), Color.Blue);
 			Assert.AreEqual(new Color(0, 255, 255), Color.Cyan);
-			Assert.AreEqual(new Color(128, 128, 128), Color.Grey);
+			Assert.AreEqual(new Color(128, 128, 128), Color.Gray);
 			Assert.AreEqual(new Color(0, 255, 0), Color.Green);
 			Assert.AreEqual(new Color(255, 165, 0), Color.Orange);
 			Assert.AreEqual(new Color(255, 192, 203), Color.Pink);

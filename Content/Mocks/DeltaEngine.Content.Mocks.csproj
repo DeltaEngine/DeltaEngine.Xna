@@ -39,9 +39,21 @@
       <Project>{20FA8D33-A964-4000-AD82-67BD6900793B}</Project>
       <Name>DeltaEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Graphics\DeltaEngine.Graphics.csproj">
+      <Project>{8F701B0D-48B6-45CF-85E0-286BD53328BA}</Project>
+      <Name>DeltaEngine.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Rendering\DeltaEngine.Rendering.csproj">
+      <Project>{BDDB4AA4-5D31-43B3-9A3B-BF3030EDE927}</Project>
+      <Name>DeltaEngine.Rendering</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Rendering\Particles\DeltaEngine.Rendering.Particles.csproj">
       <Project>{BECE691C-BAC6-434B-B1F9-4D8653922585}</Project>
       <Name>DeltaEngine.Rendering.Particles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Rendering\Sprites\DeltaEngine.Rendering.Sprites.csproj">
+      <Project>{FCA7BAAA-3F6E-4CA3-B354-C34AF4F1BDDD}</Project>
+      <Name>DeltaEngine.Rendering.Sprites</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Scenes\DeltaEngine.Scenes.csproj">
       <Project>{75BB4C75-DE36-47B3-9910-10EA8E8973B7}</Project>

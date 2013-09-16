@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Threading;
+﻿using System.IO;
 using DeltaEngine.Content;
 using DeltaEngine.Content.Xml;
 using DeltaEngine.Core;
@@ -19,17 +17,26 @@ namespace DeltaEngine.Platforms
 			if (File.Exists(filePath))
 				data = new XmlFile(filePath).Root;
 			else
+			{
+				data = new XmlData("Settings");
 				AppRunner.ContentIsReady += LoadDefaultSettings;
+			}
 		}
 
 		private readonly string filePath;
 		private XmlData data;
 
+		//ncrunch: no coverage start
 		private void LoadDefaultSettings()
 		{
+			var dataChangedBeforeLoading = data;
 			data = ContentLoader.Load<XmlContent>("DefaultSettings").Data;
+			if (dataChangedBeforeLoading != null)
+				foreach (var child in dataChangedBeforeLoading.Children)
+					SetValue(child.Name, child.Value);
 			wasChanged = true;
 		}
+		//ncrunch: no coverage end
 
 		public override void Save()
 		{
@@ -44,7 +51,7 @@ namespace DeltaEngine.Platforms
 		protected override void SetValue(string key, object value)
 		{
 			if (data.GetChild(key) == null)
-				data.AddChild(key, StringExtensions.ToInvariantString(value));
+				data.AddChild(key, StringExtensions.ToInvariantString(value)); //ncrunch: no coverage
 			else
 				data.GetChild(key).Value = StringExtensions.ToInvariantString(value);
 			wasChanged = true;

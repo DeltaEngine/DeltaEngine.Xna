@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace DeltaEngine.Networking.Tcp
 {
 	internal class DataCollector
 	{
-		public DataCollector()
-		{
-			availableData = new Queue<byte>();
-			currentContainerToFill = null;
-		}
-
-		//that is no good!
-		private readonly Queue<byte> availableData;
-		private MessageData currentContainerToFill;
-
 		public void ReadBytes(byte[] data, int startOffset, int numberOfBytesToRead)
 		{
-			for (int index = startOffset; index < numberOfBytesToRead; index++)
-				availableData.Enqueue(data[index]);
+			availableData = data;
+			offset = startOffset;
+			numberOfBytesAvailable = numberOfBytesToRead;
 			ReadBytes();
 		}
 
-		public void ReadBytes()
+		private byte[] availableData;
+		private int offset;
+		private int numberOfBytesAvailable;
+
+		private void ReadBytes()
 		{
 			if (currentContainerToFill == null)
 			{
@@ -31,49 +25,92 @@ namespace DeltaEngine.Networking.Tcp
 					return;
 				currentContainerToFill = new MessageData(messageLength);
 			}
-			currentContainerToFill.ReadData(availableData);
-			if (currentContainerToFill.IsDataComplete)
-				TriggerObjectFinishedAndResetCurrentContainer();
-			if (availableData.Count > 0)
-				ReadBytes();
+			if (numberOfBytesAvailable > 0)
+				ReadDataToEnd();
 		}
 
-		private const int NotEnoughBytesForMessageLength = -1;
+		private MessageData currentContainerToFill;
 
 		private int GetMessageLength()
 		{
-			if (availableData.Count < 1)
+			if (rememberMessageBytesFromLastTime != null)
+				return ReadLength();
+			if (numberOfBytesAvailable < 1)
 				return NotEnoughBytesForMessageLength;
-			int messageLength = availableData.Dequeue();
+			int messageLength = availableData[offset];
+			offset++;
+			numberOfBytesAvailable--;
 			if (messageLength < 255)
 				return messageLength;
-			if (availableData.Count < NumberOfReservedBytesForMessageLength)
-				return NotEnoughBytesForMessageLength;
+			if (numberOfBytesAvailable < NumberOfReservedBytesForMessageLength)
+				return RememberIncompleteMessageLengthData();
 			return ReadLength();
 		}
 
-		private const int NumberOfReservedBytesForMessageLength = sizeof(int);
-
 		private int ReadLength()
 		{
-			var lengthBuffer = new byte[NumberOfReservedBytesForMessageLength];
-			for (int index = 0; index < NumberOfReservedBytesForMessageLength; index++)
-				lengthBuffer[index] = availableData.Dequeue();
+			var lengthBuffer = BuildLengthBufferFromPreviousAndCurrentData();
 			int messageLength = BitConverter.ToInt32(lengthBuffer, 0);
 			if (messageLength > MaxMessageLength)
-				throw new MessageLengthIsTooBig(messageLength);
+				throw new MessageLengthIsTooBig(messageLength); //ncrunch: no coverage
 			return messageLength;
 		}
+
+		private byte[] BuildLengthBufferFromPreviousAndCurrentData()
+		{
+			var lengthBuffer = new byte[NumberOfReservedBytesForMessageLength];
+			int index = 0;
+			if (rememberMessageBytesFromLastTime != null)
+				for (; index < rememberLengthFromLastTime; index++)
+					lengthBuffer[index] = rememberMessageBytesFromLastTime[rememberOffsetFromLastTime + index];
+			for (; index < NumberOfReservedBytesForMessageLength; index++)
+			{
+				lengthBuffer[index] = availableData[offset];
+				offset++;
+				numberOfBytesAvailable--;
+			}
+			rememberMessageBytesFromLastTime = null;
+			return lengthBuffer;
+		}
+
+		private const int NumberOfReservedBytesForMessageLength = sizeof(int);
 
 		/// <summary>
 		/// Maximum size for one packet is 128 MB! Usually something is wrong if messages get this big.
 		/// </summary>
 		private const int MaxMessageLength = 1024 * 1024 * 128;
 
+		//ncrunch: no coverage start
 		private class MessageLengthIsTooBig : Exception
 		{
 			public MessageLengthIsTooBig(int messageLength)
 				: base(messageLength + "") {}
+		}
+		//ncrunch: no coverage end
+
+		private int RememberIncompleteMessageLengthData()
+		{
+			rememberMessageBytesFromLastTime = availableData;
+			rememberOffsetFromLastTime = offset;
+			rememberLengthFromLastTime = numberOfBytesAvailable;
+			return NotEnoughBytesForMessageLength;
+		}
+
+		private byte[] rememberMessageBytesFromLastTime;
+		private int rememberOffsetFromLastTime;
+		private int rememberLengthFromLastTime;
+		private const int NotEnoughBytesForMessageLength = -1;
+
+		private void ReadDataToEnd()
+		{
+			var bytesRead = currentContainerToFill.ReadData(availableData, offset,
+				numberOfBytesAvailable);
+			offset += bytesRead;
+			numberOfBytesAvailable -= bytesRead;
+			if (currentContainerToFill.IsDataComplete)
+				TriggerObjectFinishedAndResetCurrentContainer();
+			if (numberOfBytesAvailable > 0)
+				ReadBytes();
 		}
 
 		private void TriggerObjectFinishedAndResetCurrentContainer()

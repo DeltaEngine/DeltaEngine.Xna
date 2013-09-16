@@ -30,7 +30,7 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 
 		private void CreateGraphWithFourLines()
 		{
-			new FilledRect(Rectangle.One, Color.Grey) { RenderLayer = int.MinValue };
+			new FilledRect(Rectangle.One, Color.Gray) { RenderLayer = int.MinValue };
 			GraphLine line = graph.CreateLine("", LineColor);
 			line.AddPoint(new Point(-1.0f, -1.0f));
 			line.AddPoint(new Point(0.1f, 0.5f));
@@ -69,7 +69,7 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 			graph.NumberOfPercentiles = 5;
 			graph.PercentileSuffix = "%";
 			GraphLine line = graph.CreateLine("", LineColor);
-			var fps = new FontText(FontXml.Default, "",
+			var fps = new FontText(Font.Default, "",
 				new Rectangle(0.5f, 0.7f, 1.0f, 0.1f));
 			graph.Add(line);
 			graph.Add(fps);
@@ -182,7 +182,7 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 		[Test, CloseAfterFirstFrame]
 		public void ChangePercentileColor()
 		{
-			Assert.AreEqual(Color.Grey, graph.PercentileColor);
+			Assert.AreEqual(Color.Gray, graph.PercentileColor);
 			graph.PercentileColor = Color.White;
 			graph.PercentileColor = Color.White;
 			Assert.AreEqual(Color.White, graph.PercentileColor);
@@ -210,9 +210,9 @@ namespace DeltaEngine.Rendering.Graphs.Tests
 		public void ChangePercentileLabelColor()
 		{
 			Assert.AreEqual(Color.White, graph.PercentileLabelColor);
-			graph.PercentileLabelColor = Color.Grey;
-			graph.PercentileLabelColor = Color.Grey;
-			Assert.AreEqual(Color.Grey, graph.PercentileLabelColor);
+			graph.PercentileLabelColor = Color.Gray;
+			graph.PercentileLabelColor = Color.Gray;
+			Assert.AreEqual(Color.Gray, graph.PercentileLabelColor);
 		}
 
 		[Test, CloseAfterFirstFrame]

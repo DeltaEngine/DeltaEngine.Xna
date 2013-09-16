@@ -4,29 +4,31 @@ using NUnit.Framework;
 
 namespace DeltaEngine.Networking.Tests.Tcp
 {
-	[Ignore]
 	public class NetworkExtensionsTests
 	{
-		//ncrunch: no coverage start
 		[Test]
 		public void TestToEndPointWithExternalAddress()
 		{
-			IPEndPoint endpointFromDomain = "deltaengine.net".ToEndPoint(777);
-			IPEndPoint endpointFromIp = "217.91.31.182".ToEndPoint(777);
-			// Allow local IP for log server
-			var validEndpoints = new[] { "217.91.31.182:777", "192.168.0.9:777" };
+			const string DeltaEngineExternalIp = "217.91.31.182";
+			IPEndPoint endpointFromDomain = NetworkExtensions.ToEndPoint("deltaengine.net", ServicesPort);
+			IPEndPoint endpointFromIp = NetworkExtensions.ToEndPoint(DeltaEngineExternalIp, ServicesPort);
+			const string DeltaEngineInternalIp = "192.168.0.5";
+			var validEndpoints = new[]
+			{ DeltaEngineExternalIp + ":" + ServicesPort, DeltaEngineInternalIp + ":" + ServicesPort };
 			Assert.Contains(endpointFromDomain.ToString(), validEndpoints);
 			Assert.Contains(endpointFromIp.ToString(), validEndpoints);
 		}
 
+		private const int ServicesPort = 800;
+
 		[Test]
 		public void TestToEndPointWithLoopbackAddress()
 		{
-			IPEndPoint endpointFromHostname = "localhost".ToEndPoint(777);
-			IPEndPoint endpointFromIp = "127.0.0.1".ToEndPoint(777);
-			const string ExpectedEndpoint = "127.0.0.1:777";
-			Assert.AreEqual(ExpectedEndpoint, endpointFromHostname.ToString());
-			Assert.AreEqual(ExpectedEndpoint, endpointFromIp.ToString());
+			IPEndPoint endpointFromHostname = NetworkExtensions.ToEndPoint("localhost", ServicesPort);
+			IPEndPoint endpointFromIp = NetworkExtensions.ToEndPoint("127.0.0.1", ServicesPort);
+			string expectedEndpoint = "127.0.0.1:" + ServicesPort;
+			Assert.AreEqual(expectedEndpoint, endpointFromHostname.ToString());
+			Assert.AreEqual(expectedEndpoint, endpointFromIp.ToString());
 		}
 	}
 }

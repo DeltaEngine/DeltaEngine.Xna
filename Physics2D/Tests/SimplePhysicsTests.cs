@@ -49,11 +49,6 @@ namespace DeltaEngine.Physics2D.Tests
 		[Test]
 		public void RenderSlowlyFallingLogo()
 		{
-			CreateFallingSprite();
-		}
-
-		private void CreateFallingSprite()
-		{
 			var sprite = new Sprite(new Material(Shader.Position2DUv, "DeltaEngineLogo"), screenCenter);
 			sprite.Add(new SimplePhysics.Data
 			{

@@ -5,6 +5,14 @@ namespace DeltaEngine.Networking.Tests
 {
 	public class ServerTests
 	{
+		[SetUp]
+		public void SetUp()
+		{
+			server = new MockServer();
+		}
+
+		private MockServer server;
+
 		[Test]
 		public void ListenForClients()
 		{
@@ -12,17 +20,46 @@ namespace DeltaEngine.Networking.Tests
 			Assert.IsTrue(server.IsRunning);
 		}
 
-		private readonly Server server = new MockServer();
-
 		[Test]
-		public void AcceptClients()
+		public void InitiallyNoClients()
 		{
 			Assert.AreEqual(0, server.ListenPort);
 			Assert.AreEqual(0, server.NumberOfConnectedClients);
-			var client = new MockClient(server as MockServer);
-			Assert.IsNotNull(client);
-			client.Connect("Target", 0);
+		}
+
+		[Test]
+		public void ConnectClient()
+		{
+			bool didClientConnect = false;
+			server.ClientConnected += client => didClientConnect = true;
+			CreateConnectedClient();
 			Assert.AreEqual(1, server.NumberOfConnectedClients);
+			Assert.IsTrue(didClientConnect);
+		}
+
+		private Client CreateConnectedClient()
+		{
+			var client = new MockClient(server);
+			client.Connect("Target", 0);
+			return client;
+		}
+
+		[Test]
+		public void DisconnectClient()
+		{
+			bool didClientDisconnect = false;
+			server.ClientDisconnected += c => didClientDisconnect = true;
+			var client = CreateConnectedClient();
+			client.Dispose();
+			Assert.IsTrue(didClientDisconnect);
+		}
+
+		[Test]
+		public void DisconnectServer()
+		{
+			var client = CreateConnectedClient();
+			server.Dispose();
+			Assert.IsFalse(client.IsConnected);
 		}
 	}
 }

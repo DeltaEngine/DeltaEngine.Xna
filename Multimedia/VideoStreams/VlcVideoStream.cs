@@ -2,7 +2,7 @@
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-using DeltaEngine.Multimedia.VideoStreams.Vlc;
+using DeltaEngine.Multimedia.VlcToTexture;
 
 namespace DeltaEngine.Multimedia.VideoStreams
 {
@@ -13,7 +13,7 @@ namespace DeltaEngine.Multimedia.VideoStreams
 			this.filepath = filepath;
 			if (player == null)
 			{
-				factory = new MediaPlayerFactory();
+				factory = new Factory();
 				player = factory.CreatePlayer();
 				renderer = player.Renderer;
 			}
@@ -21,10 +21,10 @@ namespace DeltaEngine.Multimedia.VideoStreams
 		}
 
 		private readonly string filepath;
-		private static MediaPlayerFactory factory;
+		private static Factory factory;
 		private static VideoPlayer player;
-		private static MemoryRenderer renderer;
-		private BasicMedia media;
+		private static Renderer renderer;
+		private Media media;
 
 		public int Width
 		{

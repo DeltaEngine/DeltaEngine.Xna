@@ -28,7 +28,7 @@ namespace DeltaEngine.Core
 
 		protected abstract T GetValue<T>(string key, T defaultValue);
 
-		protected static Size DefaultResolution
+		public static Size DefaultResolution
 		{
 			get { return ExceptionExtensions.IsDebugMode ? new Size(640, 360) : new Size(1280, 720); }
 		}
