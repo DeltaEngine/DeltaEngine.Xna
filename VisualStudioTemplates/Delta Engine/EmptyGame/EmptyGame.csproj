@@ -40,13 +40,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="DeltaEngine">
-	  <HintPath>$(DeltaEnginePath)\DeltaEngine.dll</HintPath>
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.dll</HintPath>
     </Reference>
     <Reference Include="DeltaEngine.Platforms">
-	  <HintPath>$(DeltaEnginePath)\DeltaEngine.Platforms.dll</HintPath>
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Platforms.dll</HintPath>
     </Reference>
     <Reference Include="DeltaEngine.WindowsXna">
-	  <HintPath>$(DeltaEnginePath)\DeltaEngine.WindowsXna.dll</HintPath>
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

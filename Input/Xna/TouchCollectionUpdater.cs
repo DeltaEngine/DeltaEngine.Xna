@@ -13,14 +13,14 @@ namespace DeltaEngine.Input.Xna
 		public TouchCollectionUpdater()
 		{
 			states = new State[MaxNumberOfTouches];
-			locations = new Point[MaxNumberOfTouches];
+			locations = new Vector2D[MaxNumberOfTouches];
 			ids = new int[MaxNumberOfTouches];
 			for (int index = 0; index < MaxNumberOfTouches; index++)
 				ids[index] = -1;
 		}
 
 		internal readonly State[] states;
-		internal readonly Point[] locations;
+		internal readonly Vector2D[] locations;
 		private readonly int[] ids;
 		private const int MaxNumberOfTouches = 10;
 
@@ -59,9 +59,10 @@ namespace DeltaEngine.Input.Xna
 			}
 		}
 
-		private static Point GetQuadraticPosition(TouchLocation location)
+		private static Vector2D GetQuadraticPosition(TouchLocation location)
 		{
-			return ScreenSpace.Current.FromPixelSpace(new Point(location.Position.X, location.Position.Y));
+			return
+				ScreenSpace.Current.FromPixelSpace(new Vector2D(location.Position.X, location.Position.Y));
 		}
 
 		internal void UpdateTouchStateWithoutNewData(int index)

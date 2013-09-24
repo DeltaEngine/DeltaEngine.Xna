@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;
 using DeltaEngine.Extensions;
 using Microsoft.Xna.Framework;
-using Point = DeltaEngine.Datatypes.Point;
 using XnaInput = Microsoft.Xna.Framework.Input;
 
 namespace DeltaEngine.Input.Xna
@@ -57,8 +57,8 @@ namespace DeltaEngine.Input.Xna
 			UpdateAllButtons(state);
 		}
 
-		private Point leftThumbStick;
-		private Point rightThumbStick;
+		private Vector2D leftThumbStick;
+		private Vector2D rightThumbStick;
 		private float leftTrigger;
 		private float rightTrigger;
 
@@ -108,12 +108,12 @@ namespace DeltaEngine.Input.Xna
 			IsAvailable = false;
 		}
 
-		public override Point GetLeftThumbStick()
+		public override Vector2D GetLeftThumbStick()
 		{
 			return leftThumbStick;
 		}
 
-		public override Point GetRightThumbStick()
+		public override Vector2D GetRightThumbStick()
 		{
 			return rightThumbStick;
 		}

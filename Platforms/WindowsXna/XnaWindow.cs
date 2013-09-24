@@ -7,7 +7,6 @@ using DeltaEngine.Extensions;
 using Microsoft.Xna.Framework;
 using Color = DeltaEngine.Datatypes.Color;
 using Orientation = DeltaEngine.Core.Orientation;
-using Point = DeltaEngine.Datatypes.Point;
 
 namespace DeltaEngine.Platforms
 {
@@ -97,9 +96,9 @@ namespace DeltaEngine.Platforms
 			}
 		}
 
-		public Point PixelPosition
+		public Vector2D PixelPosition
 		{
-			get { return new Point(game.Window.ClientBounds.X, game.Window.ClientBounds.Y); }
+			get { return new Vector2D(game.Window.ClientBounds.X, game.Window.ClientBounds.Y); }
 			set
 			{
 				Control window = Control.FromHandle((IntPtr)Handle);

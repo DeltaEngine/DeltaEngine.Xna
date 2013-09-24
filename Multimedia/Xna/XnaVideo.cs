@@ -4,7 +4,7 @@ using System.IO;
 using DeltaEngine.Content;
 using DeltaEngine.Core;
 using DeltaEngine.Graphics.Xna;
-using DeltaEngine.Rendering.Sprites;
+using DeltaEngine.Rendering2D.Sprites;
 using DeltaEngine.ScreenSpaces;
 using XnaMedia = Microsoft.Xna.Framework.Media;
 

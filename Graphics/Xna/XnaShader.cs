@@ -49,6 +49,17 @@ namespace DeltaEngine.Graphics.Xna
 			device.SetDiffuseTexture(texture);
 		}
 
+		public override void SetLightPosition(Vector3D vector)
+		{
+			// not supported yet
+		}
+
+		public override void SetViewPosition(Vector3D vector)
+		{
+			// not supported yet
+		}
+
+
 		public override void SetLightmapTexture(Image texture) {}
 
 		public override void Bind()

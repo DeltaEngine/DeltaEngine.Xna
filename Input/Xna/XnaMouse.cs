@@ -28,15 +28,15 @@ namespace DeltaEngine.Input.Xna
 			NativeMouse.WindowHandle = IntPtr.Zero;
 		}
 
-		public override void SetPosition(Point newPosition)
+		public override void SetPosition(Vector2D position)
 		{
-			newPosition = ScreenSpace.Current.ToPixelSpace(newPosition);
-			NativeMouse.SetPosition((int)newPosition.X, (int)newPosition.Y);
+			position = ScreenSpace.Current.ToPixelSpace(position);
+			NativeMouse.SetPosition((int)position.X, (int)position.Y);
 		}
 
 		private void UpdateValuesFromState(ref MouseState newState)
 		{
-			Position = ScreenSpace.Current.FromPixelSpace(new Point(newState.X, newState.Y));
+			Position = ScreenSpace.Current.FromPixelSpace(new Vector2D(newState.X, newState.Y));
 			ScrollWheelValue = newState.ScrollWheelValue;
 			UpdateButtonStates(ref newState);
 		}

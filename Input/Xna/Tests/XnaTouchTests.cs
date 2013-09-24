@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using DeltaEngine.Datatypes;
 using DeltaEngine.Entities;
 using DeltaEngine.Platforms.Mocks;
 using DeltaEngine.ScreenSpaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 using NUnit.Framework;
-using Point = DeltaEngine.Datatypes.Point;
 
 namespace DeltaEngine.Input.Xna.Tests
 {
@@ -19,7 +19,7 @@ namespace DeltaEngine.Input.Xna.Tests
 				var window = resolver.Window;
 				new PixelScreenSpace(window);
 				var touch = new XnaMockTouch(window) { TouchCollection = GetFirstTouchCollection() };
-				Assert.AreEqual(new Point(0, 0), touch.GetPosition(0));
+				Assert.AreEqual(new Vector2D(0, 0), touch.GetPosition(0));
 				Assert.AreEqual(State.Released, touch.GetState(0));
 				touch.Run();
 				touch.TouchCollection = GetSecondTouchCollection();
@@ -30,7 +30,7 @@ namespace DeltaEngine.Input.Xna.Tests
 				if (!touch.IsAvailable)
 					return;
 				//ncrunch: no coverage start
-				Assert.AreEqual(Point.Zero, touch.GetPosition(0)); 
+				Assert.AreEqual(Vector2D.Zero, touch.GetPosition(0)); 
 				Assert.AreEqual(State.Released, touch.GetState(0));
 			} //ncrunch: no coverage end
 		}

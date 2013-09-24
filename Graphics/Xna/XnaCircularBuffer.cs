@@ -1,4 +1,5 @@
-﻿using DeltaEngine.Core;
+﻿using System.Collections.Generic;
+using DeltaEngine.Core;
 using DeltaEngine.Graphics.Vertices;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -27,6 +28,15 @@ namespace DeltaEngine.Graphics.Xna
 		private DynamicVertexBuffer nativeVertexBuffer;
 		private DynamicIndexBuffer nativeIndexBuffer;
 		private SetDataOptions currentDataHint;
+
+		protected override void DisposeNextFrame()
+		{
+			buffersToDisposeNextFrame.Add(nativeVertexBuffer);
+			if (UsesIndexBuffer)
+				buffersToDisposeNextFrame.Add(nativeIndexBuffer);
+		}
+
+		private readonly List<GraphicsResource> buffersToDisposeNextFrame = new List<GraphicsResource>();
 
 		/// <summary>
 		/// As long as we did not put anything new into the buffer we can discard the old content.
@@ -59,6 +69,15 @@ namespace DeltaEngine.Graphics.Xna
 			currentDataHint = SetDataOptions.NoOverwrite;
 		}
 
+		public override void DisposeUnusedBuffersFromPreviousFrame()
+		{
+			if (buffersToDisposeNextFrame.Count <= 0)
+				return;
+			foreach (var buffer in buffersToDisposeNextFrame)
+				buffer.Dispose();
+			buffersToDisposeNextFrame.Clear();
+		}
+
 		public override void DrawAllTextureChunks()
 		{
 			nativeDevice.SetVertexBuffer(nativeVertexBuffer);
@@ -84,53 +103,7 @@ namespace DeltaEngine.Graphics.Xna
 				nativeDevice.DrawPrimitives(PrimitiveType.LineList,
 					chunk.FirstVertexOffsetInBytes / vertexSize, chunk.NumberOfVertices / 2);
 		}
-
-		/*needed
-		public override void DrawVertices(VertexPosition3DColorUV[] vertices, short[] indices)
-		{
-			EntitiesRunner.Current.CheckIfInDrawState();
-			ApplyEffect();
-			spritesBuffer.AddData(vertices, indices);
-			spritesBuffer.SetDrawMode(VerticesMode.Triangles);
-			spritesBuffer.Draw(currentTexture);
-			NumberOfVerticesDrawnThisFrame += vertices.Length;
-			NumberOfTimesDrawnThisFrame++;
-		}
-
-		private void ApplyEffect()
-		{
-			basicEffect.VertexColorEnabled = true;
-			basicEffect.TextureEnabled = nativeDevice.Textures[0] != null;
-			if (basicEffect.TextureEnabled)
-				basicEffect.Texture = nativeDevice.Textures[0] as Texture2D;
-			basicEffect.CurrentTechnique.Passes[0].Apply();
-		}
-
-		public override void DrawVertices(VerticesMode mode, VertexPosition3DColor[] vertices,
-			short[] indices = null)
-		{
-			EntitiesRunner.Current.CheckIfInDrawState();
-			ApplyEffect();
-			shapesBuffer.AddData(vertices, indices);
-			shapesBuffer.SetDrawMode(mode);
-			shapesBuffer.Draw(currentTexture);
-			NumberOfVerticesDrawnThisFrame += vertices.Length;
-			NumberOfTimesDrawnThisFrame++;
-		}
-		protected override void DrawNative()
-		{
-			var primitiveType = drawMode == VerticesMode.Triangles
-				? PrimitiveType.TriangleList : PrimitiveType.LineList;
-			nativeDevice.DrawIndexedPrimitives(primitiveType, 0, 0, totalIndicesCount, 0,
-				GetPrimitiveCount(totalIndicesCount, primitiveType));
-		}
-
-		private static int GetPrimitiveCount(int numIndices, PrimitiveType primitiveType)
-		{
-			return primitiveType == PrimitiveType.LineList ? numIndices / 2 : numIndices / 3;
-		}
-		 */
-
+		
 		protected override void DisposeNative()
 		{
 			nativeVertexBuffer.Dispose();
