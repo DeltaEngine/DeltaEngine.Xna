@@ -100,7 +100,6 @@
     <Compile Include="FreeCameraTests.cs" />
     <Compile Include="IsometricCameraTests.cs" />
     <Compile Include="LookAtCameraTests.cs" />
-    <Compile Include="LookCenterCameraTests.cs" />
     <Compile Include="OrthoCameraTests.cs" />
     <Compile Include="PathCameraTests.cs" />
   </ItemGroup>
