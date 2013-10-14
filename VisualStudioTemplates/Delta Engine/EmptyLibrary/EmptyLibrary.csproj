@@ -36,6 +36,9 @@
     <Reference Include="DeltaEngine">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.dll</HintPath>
     </Reference>
+    <Reference Include="DeltaEngine.WindowsXna">
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

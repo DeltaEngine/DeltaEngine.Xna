@@ -41,6 +41,12 @@ namespace DeltaEngine.Graphics.Xna
 			NativeTexture = nativeTexture;
 		}
 
+		protected override void SetSamplerStateAndTryToLoadImage(Stream fileData)
+		{
+			TryLoadImage(fileData);
+			SetSamplerState();
+		}
+
 		protected override void LoadImage(Stream fileData)
 		{
 			NativeTexture = Texture2D.FromStream(nativeDevice, fileData);
@@ -85,8 +91,14 @@ namespace DeltaEngine.Graphics.Xna
 		protected override void SetSamplerState()
 		{
 			nativeDevice.Textures[0] = NativeTexture;
-			nativeDevice.SamplerStates[0] = DisableLinearFiltering
-				? SamplerState.PointClamp : SamplerState.LinearClamp;
+			nativeDevice.SamplerStates[0] = GetSamplerState(!DisableLinearFiltering, AllowTiling);
+		}
+
+		private static SamplerState GetSamplerState(bool linearFiltering, bool tiling)
+		{
+			return linearFiltering
+				? (tiling ? SamplerState.LinearWrap : SamplerState.LinearClamp)
+				: (tiling ? SamplerState.PointWrap : SamplerState.PointClamp);
 		}
 
 		private static XnaColor[] ConvertToXnaColors(Color[] deltaColors)

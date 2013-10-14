@@ -63,7 +63,7 @@ namespace DeltaEngine.Platforms
 			set { game.Window.Title = value; }
 		}
 
-		public bool Visibility
+		public bool IsVisible
 		{
 			get { return game.IsActive; }
 		}

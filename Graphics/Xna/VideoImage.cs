@@ -30,6 +30,11 @@ namespace DeltaEngine.Graphics.Xna
 
 		public Texture2D NativeTexture { get; protected set; }
 
+		protected override void SetSamplerStateAndTryToLoadImage(Stream fileData)
+		{
+			SetSamplerState();
+		}
+
 		protected override void LoadImage(Stream fileData) {}
 		public override void Fill(Color[] colors) {}
 		public override void Fill(byte[] rgbaColors) {}

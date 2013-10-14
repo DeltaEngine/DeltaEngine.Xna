@@ -56,10 +56,6 @@
       <Project>{BECE691C-BAC6-434B-B1F9-4D8653922585}</Project>
       <Name>DeltaEngine.Rendering3D.Particles</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Rendering2D\Sprites\DeltaEngine.Rendering2D.Sprites.csproj">
-      <Project>{FCA7BAAA-3F6E-4CA3-B354-C34AF4F1BDDD}</Project>
-      <Name>DeltaEngine.Rendering2D.Sprites</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Platforms\WindowsXna\DeltaEngine.WindowsXna.csproj">
       <Project>{07E9D341-4B22-48FE-B921-5D18D3AB2C49}</Project>
       <Name>DeltaEngine.WindowsXna</Name>

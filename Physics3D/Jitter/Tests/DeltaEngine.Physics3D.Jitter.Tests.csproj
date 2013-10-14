@@ -36,6 +36,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Platforms\TestWithXna\DeltaEngine.TestWithXna.csproj">
+      <Project>{D6D0CCE8-9850-4C28-A505-A1F5519FBE09}</Project>
+      <Name>DeltaEngine.TestWithXna</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

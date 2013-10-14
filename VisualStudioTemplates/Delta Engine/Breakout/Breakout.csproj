@@ -61,9 +61,6 @@
     <Reference Include="DeltaEngine.Rendering3D.Particles">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering3D.Particles.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.Rendering2D.Sprites">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Sprites.dll</HintPath>
-    </Reference>
     <Reference Include="DeltaEngine.Scenes">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Scenes.dll</HintPath>
     </Reference>

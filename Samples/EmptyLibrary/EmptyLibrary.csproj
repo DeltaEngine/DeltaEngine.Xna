@@ -39,6 +39,10 @@
       <Project>{20FA8D33-A964-4000-AD82-67BD6900793B}</Project>
       <Name>DeltaEngine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Platforms\WindowsXna\DeltaEngine.WindowsXna.csproj">
+      <Project>{07E9D341-4B22-48FE-B921-5D18D3AB2C49}</Project>
+      <Name>DeltaEngine.WindowsXna</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

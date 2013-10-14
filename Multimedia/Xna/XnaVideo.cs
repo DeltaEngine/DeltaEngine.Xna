@@ -4,7 +4,7 @@ using System.IO;
 using DeltaEngine.Content;
 using DeltaEngine.Core;
 using DeltaEngine.Graphics.Xna;
-using DeltaEngine.Rendering2D.Sprites;
+using DeltaEngine.Rendering2D;
 using DeltaEngine.ScreenSpaces;
 using XnaMedia = Microsoft.Xna.Framework.Media;
 
@@ -34,7 +34,7 @@ namespace DeltaEngine.Multimedia.Xna
 			positionInSeconds = 0f;
 			player.Volume = volume;
 			player.Play(video);
-			surface = new Sprite(new Material(ContentLoader.Load<Shader>(Shader.Position2DUv), image),
+			surface = new Sprite(new Material(ContentLoader.Load<Shader>(Shader.Position2DUV), image),
 				ScreenSpace.Current.Viewport);
 		}
 

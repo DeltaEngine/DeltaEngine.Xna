@@ -59,9 +59,6 @@
     <Reference Include="DeltaEngine.Rendering2D.Shapes">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Shapes.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.Rendering2D.Sprites">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Sprites.dll</HintPath>
-    </Reference>
     <Reference Include="DeltaEngine.WindowsXna">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
     </Reference>

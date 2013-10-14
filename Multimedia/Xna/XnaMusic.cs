@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using DeltaEngine.Content;
 using DeltaEngine.Core;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
@@ -50,6 +49,8 @@ namespace DeltaEngine.Multimedia.Xna
 		public override void Run()
 		{
 			positionInSeconds = (float)MediaPlayer.PlayPosition.TotalSeconds;
+			if (!IsPlaying())
+				HandleStreamFinished();
 		}
 
 		protected override void LoadData(Stream fileData)

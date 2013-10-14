@@ -46,15 +46,24 @@ namespace DeltaEngine.Input.Xna
 			return PlayerIndex.One;
 		}
 
-		private void UpdateValuesFromState(XnaInput.GamePadState state)
+		public override void Update(IEnumerable<Entity> entities)
 		{
-			leftThumbStick.X = state.ThumbSticks.Left.X;
-			leftThumbStick.Y = state.ThumbSticks.Left.Y;
-			rightThumbStick.X = state.ThumbSticks.Right.X;
-			rightThumbStick.Y = state.ThumbSticks.Right.Y;
-			leftTrigger = state.Triggers.Left;
-			rightTrigger = state.Triggers.Right;
-			UpdateAllButtons(state);
+			xnaState = XnaInput.GamePad.GetState(GetPlayerIndexFromNumber());
+			IsAvailable = xnaState.IsConnected;
+			base.Update(entities);
+		}
+
+		private XnaInput.GamePadState xnaState;
+
+		protected override void UpdateGamePadStates()
+		{
+			leftThumbStick.X = xnaState.ThumbSticks.Left.X;
+			leftThumbStick.Y = xnaState.ThumbSticks.Left.Y;
+			rightThumbStick.X = xnaState.ThumbSticks.Right.X;
+			rightThumbStick.Y = xnaState.ThumbSticks.Right.Y;
+			leftTrigger = xnaState.Triggers.Left;
+			rightTrigger = xnaState.Triggers.Right;
+			UpdateAllButtons(xnaState);
 		}
 
 		private Vector2D leftThumbStick;
@@ -136,15 +145,6 @@ namespace DeltaEngine.Input.Xna
 		public override void Vibrate(float strength)
 		{
 			XnaInput.GamePad.SetVibration(GetPlayerIndexFromNumber(), strength, strength);
-		}
-
-		public override void Update(IEnumerable<Entity> entities)
-		{
-			XnaInput.GamePadState state = XnaInput.GamePad.GetState(GetPlayerIndexFromNumber());
-			IsAvailable = state.IsConnected;
-			if (IsAvailable)
-				UpdateValuesFromState(state);
-			base.Update(entities);
 		}
 	}
 }

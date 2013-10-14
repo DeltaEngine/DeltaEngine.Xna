@@ -62,6 +62,10 @@
       <Project>{EE9847E1-9C76-4ACE-B531-D3EA84F7D741}</Project>
       <Name>DeltaEngine.Content.Disk</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Platforms\TestWithXna\DeltaEngine.TestWithXna.csproj">
+      <Project>{D6D0CCE8-9850-4C28-A505-A1F5519FBE09}</Project>
+      <Name>DeltaEngine.TestWithXna</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -55,6 +55,10 @@
       <Project>{68AA6280-09EF-4325-B5F8-B8A967004144}</Project>
       <Name>DeltaEngine.Content.Online</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Platforms\TestWithXna\DeltaEngine.TestWithXna.csproj">
+      <Project>{D6D0CCE8-9850-4C28-A505-A1F5519FBE09}</Project>
+      <Name>DeltaEngine.TestWithXna</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
