@@ -64,7 +64,6 @@
     <Compile Include="XnaMusic.cs" />
     <Compile Include="XnaSoundDevice.cs" />
     <Compile Include="XnaSound.cs" />
-    <Compile Include="XnaVideo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -52,9 +52,6 @@
     <Reference Include="DeltaEngine.Input">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Input.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.Physics2D">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Physics2D.dll</HintPath>
-    </Reference>
     <Reference Include="DeltaEngine.Platforms">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Platforms.dll</HintPath>
     </Reference>
@@ -64,8 +61,8 @@
     <Reference Include="DeltaEngine.Rendering2D.Fonts">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Fonts.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.Rendering3D.Particles">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering3D.Particles.dll</HintPath>
+    <Reference Include="DeltaEngine.Rendering2D.Particles">
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Particles.dll</HintPath>
     </Reference>
     <Reference Include="DeltaEngine.Scenes">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Scenes.dll</HintPath>

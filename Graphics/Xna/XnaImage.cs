@@ -44,7 +44,6 @@ namespace DeltaEngine.Graphics.Xna
 		protected override void SetSamplerStateAndTryToLoadImage(Stream fileData)
 		{
 			TryLoadImage(fileData);
-			SetSamplerState();
 		}
 
 		protected override void LoadImage(Stream fileData)
@@ -88,18 +87,7 @@ namespace DeltaEngine.Graphics.Xna
 
 		public class NonAlphaByteDataTextureFillingIsNotSupportedInXna : Exception {}
 
-		protected override void SetSamplerState()
-		{
-			nativeDevice.Textures[0] = NativeTexture;
-			nativeDevice.SamplerStates[0] = GetSamplerState(!DisableLinearFiltering, AllowTiling);
-		}
-
-		private static SamplerState GetSamplerState(bool linearFiltering, bool tiling)
-		{
-			return linearFiltering
-				? (tiling ? SamplerState.LinearWrap : SamplerState.LinearClamp)
-				: (tiling ? SamplerState.PointWrap : SamplerState.PointClamp);
-		}
+		protected override void SetSamplerState() {}
 
 		private static XnaColor[] ConvertToXnaColors(Color[] deltaColors)
 		{

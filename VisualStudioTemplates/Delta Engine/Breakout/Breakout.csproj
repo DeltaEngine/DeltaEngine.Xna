@@ -58,8 +58,8 @@
     <Reference Include="DeltaEngine.Rendering2D.Fonts">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Fonts.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.Rendering3D.Particles">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering3D.Particles.dll</HintPath>
+    <Reference Include="DeltaEngine.Rendering2D.Particles">
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Particles.dll</HintPath>
     </Reference>
     <Reference Include="DeltaEngine.Scenes">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Scenes.dll</HintPath>

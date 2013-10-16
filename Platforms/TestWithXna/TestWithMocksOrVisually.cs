@@ -59,7 +59,7 @@ namespace DeltaEngine.Platforms
 		{
 			var drawing = resolver.Resolve<Drawing>();
 			if (CheckIfWeNeedToRunTickToAvoidInitializationDelay())
-				RunTickOnce(drawing);
+				RunTickOnce(drawing); //ncrunch: no coverage
 			var startTimeMs = GlobalTime.Current.Milliseconds;
 			do
 				RunTickOnce(drawing);

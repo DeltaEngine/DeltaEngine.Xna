@@ -43,7 +43,6 @@ namespace DeltaEngine.Platforms
 			Register<XnaGeometry>();
 			Register<XnaSound>();
 			Register<XnaMusic>();
-			Register<XnaVideo>();
 		}
 
 		/// <summary>
