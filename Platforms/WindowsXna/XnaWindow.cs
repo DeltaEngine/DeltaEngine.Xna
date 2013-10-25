@@ -11,7 +11,7 @@ using Orientation = DeltaEngine.Core.Orientation;
 namespace DeltaEngine.Platforms
 {
 	/// <summary>
-	/// Window support via the buildin XNA Game.Window functionality; supports fullscreen mode.
+	/// Window support via the build-in XNA Game.Window functionality; supports fullscreen mode.
 	/// </summary>
 	public class XnaWindow : Window
 	{
@@ -47,10 +47,10 @@ namespace DeltaEngine.Platforms
 
 		public event Action<Orientation> OrientationChanged;
 
-		private Orientation GetOrientation(DisplayOrientation xnaOrientaion)
+		private Orientation GetOrientation(DisplayOrientation xnaOrientation)
 		{
-			Orientation = xnaOrientaion == DisplayOrientation.LandscapeLeft ||
-										xnaOrientaion == DisplayOrientation.LandscapeRight
+			Orientation = xnaOrientation == DisplayOrientation.LandscapeLeft ||
+				xnaOrientation == DisplayOrientation.LandscapeRight
 				? Orientation.Landscape : Orientation.Portrait;
 			return Orientation;
 		}
@@ -133,7 +133,6 @@ namespace DeltaEngine.Platforms
 			game.Window.BeginScreenDeviceChange(IsFullscreen);
 			if (FullscreenChanged != null)
 				FullscreenChanged(displaySize, IsFullscreen);
-
 			game.Window.EndScreenDeviceChange(game.Window.ScreenDeviceName);
 		}
 

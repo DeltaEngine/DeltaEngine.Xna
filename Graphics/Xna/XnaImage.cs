@@ -78,7 +78,7 @@ namespace DeltaEngine.Graphics.Xna
 
 		public override void Fill(byte[] rgbaColors)
 		{
-			if (PixelSize.Width * PixelSize.Height * 4 != rgbaColors.Length)
+			if (PixelSize.Width * PixelSize.Height * Color.SizeInBytes != rgbaColors.Length)
 				throw new InvalidNumberOfBytes(PixelSize);
 			if (NativeTexture == null)
 				NativeTexture = new Texture2D(nativeDevice, (int)PixelSize.Width, (int)PixelSize.Height);

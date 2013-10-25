@@ -83,8 +83,6 @@ namespace DeltaEngine.Graphics.Xna
 			nativeDevice.SetVertexBuffer(nativeVertexBuffer);
 			if (UsesIndexBuffer)
 				nativeDevice.Indices = nativeIndexBuffer;
-			if (!UsesTexturing)
-				(device as XnaDevice).DisableTexturing();
 			base.DrawAllTextureChunks();
 			currentDataHint = SetDataOptions.Discard;
 		}
@@ -95,7 +93,7 @@ namespace DeltaEngine.Graphics.Xna
 			{
 				if (chunk.Texture != null)
 					(device as XnaDevice).SetDiffuseTexture(chunk.Texture);
-				nativeDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, //baseVertex
+				nativeDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0,
 					chunk.FirstVertexOffsetInBytes / vertexSize, chunk.NumberOfVertices,
 					chunk.FirstIndexOffsetInBytes / 2, chunk.NumberOfIndices / 3);
 			}

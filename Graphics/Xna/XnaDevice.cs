@@ -44,7 +44,7 @@ namespace DeltaEngine.Graphics.Xna
 				SupportedOrientations =
 					DisplayOrientation.Portrait | DisplayOrientation.LandscapeLeft |
 						DisplayOrientation.LandscapeRight,
-				SynchronizeWithVerticalRetrace = false,
+				SynchronizeWithVerticalRetrace = settings.UseVSync,
 				PreferredBackBufferFormat = SurfaceFormat.Color,
 				PreferredBackBufferWidth = (int)settings.Resolution.Width,
 				PreferredBackBufferHeight = (int)settings.Resolution.Height,
@@ -158,25 +158,22 @@ namespace DeltaEngine.Graphics.Xna
 
 		public void SetDiffuseTexture(Image image)
 		{
-			if (currentTexture == image)
-				return;
 			Texture2D nativeTexture;
 			if (image is VideoImage)
 				nativeTexture = ((VideoImage)image).NativeTexture;
 			else
 				nativeTexture = ((XnaImage)image).NativeTexture;
+			if (NativeDevice.Textures[0] == nativeTexture)
+				return;
 #if DEBUG
-			// Check whether the intialization order was correct in AutofacStarter when the Run()
+			// Check whether the initialization order was correct in AutofacStarter when the Run()
 			// method is called. If it was not, the internal pointer in the native texture (pComPtr)
 			// would have a null value (0x00) and the next assignment would crash.
 			CheckIfTheInitializationOrderInResolverWasCorrect(nativeTexture);
 #endif
 			NativeDevice.Textures[0] = nativeTexture;
 			NativeDevice.SamplerStates[0] = GetXnaSamplerState(image);
-			currentTexture = image;
 		}
-
-		private Image currentTexture;
 
 #if DEBUG
 		private void CheckIfTheInitializationOrderInResolverWasCorrect(Texture2D nativeTexture)
@@ -212,12 +209,6 @@ namespace DeltaEngine.Graphics.Xna
 			return texture.DisableLinearFiltering
 				? (texture.AllowTiling ? SamplerState.PointWrap : SamplerState.PointClamp)
 				: (texture.AllowTiling ? SamplerState.LinearWrap : SamplerState.LinearClamp);
-		}
-
-		public void DisableTexturing()
-		{
-			ShaderEffect.TextureEnabled = false;
-			currentTexture = null;
 		}
 
 		public override void SetBlendMode(BlendMode blendMode)

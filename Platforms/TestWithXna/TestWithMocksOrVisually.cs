@@ -37,11 +37,16 @@ namespace DeltaEngine.Platforms
 		[TearDown]
 		public void RunTestAndDisposeResolverWhenDone()
 		{
-			if (StackTraceExtensions.StartedFromProgramMain ||
-				TestContext.CurrentContext.Result.Status == TestStatus.Passed)
-				resolver.Run();
-			else
+			try
+			{
+				if (StackTraceExtensions.StartedFromProgramMain ||
+					TestContext.CurrentContext.Result.Status == TestStatus.Passed)
+					resolver.Run();
+			}
+			finally
+			{
 				resolver.Dispose();
+			}
 		}
 
 		protected T Resolve<T>() where T : class
@@ -57,14 +62,16 @@ namespace DeltaEngine.Platforms
 		protected void AdvanceTimeAndUpdateEntities(
 			float timeToAddInSeconds = 1.0f / Settings.DefaultUpdatesPerSecond)
 		{
+			//ncrunch: no coverage start
 			var drawing = resolver.Resolve<Drawing>();
 			if (CheckIfWeNeedToRunTickToAvoidInitializationDelay())
-				RunTickOnce(drawing); //ncrunch: no coverage
+				RunTickOnce(drawing);
 			var startTimeMs = GlobalTime.Current.Milliseconds;
 			do
 				RunTickOnce(drawing);
 			while (GlobalTime.Current.Milliseconds - startTimeMs +
 				MathExtensions.Epsilon < timeToAddInSeconds * 1000);
+			//ncrunch: no coverage end
 		}
 
 		private bool CheckIfWeNeedToRunTickToAvoidInitializationDelay()

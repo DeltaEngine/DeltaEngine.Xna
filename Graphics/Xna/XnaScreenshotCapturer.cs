@@ -29,7 +29,6 @@ namespace DeltaEngine.Graphics.Xna
 				var pixelColors = new Color[width * height];
 				device.NativeDevice.GetBackBufferData(pixelColors);
 				dstTexture.SetData(pixelColors);
-
 				using (var stream = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write,
 					FileShare.ReadWrite))
 					dstTexture.SaveAsPng(stream, width, height);
