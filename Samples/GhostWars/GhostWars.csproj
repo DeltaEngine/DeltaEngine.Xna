@@ -70,6 +70,10 @@
       <Project>{07E9D341-4B22-48FE-B921-5D18D3AB2C49}</Project>
       <Name>DeltaEngine.WindowsXna</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Scenes\DeltaEngine.Scenes.csproj">
+      <Project>{75BB4C75-DE36-47B3-9910-10EA8E8973B7}</Project>
+      <Name>DeltaEngine.Scenes</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GhostWars.ico" />

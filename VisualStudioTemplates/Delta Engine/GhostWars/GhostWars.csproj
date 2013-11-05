@@ -60,6 +60,9 @@
     <Reference Include="DeltaEngine.WindowsXna">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
     </Reference>
+    <Reference Include="DeltaEngine.Scenes">
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Scenes.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GhostWars.ico" />

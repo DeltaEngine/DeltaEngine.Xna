@@ -1,8 +1,5 @@
 ﻿using System.IO;
-using DeltaEngine.Content;
-using DeltaEngine.Core;
 using DeltaEngine.Extensions;
-using DeltaEngine.Platforms;
 using Microsoft.Xna.Framework.Audio;
 
 namespace DeltaEngine.Multimedia.Xna
@@ -12,8 +9,8 @@ namespace DeltaEngine.Multimedia.Xna
 	/// </summary>
 	public class XnaSound : Sound
 	{
-		public XnaSound(string contentName, Settings settings)
-			: base(contentName, settings) {}
+		public XnaSound(string contentName)
+			: base(contentName) {}
 
 		protected override void LoadData(Stream fileData)
 		{

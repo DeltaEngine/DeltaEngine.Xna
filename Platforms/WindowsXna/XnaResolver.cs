@@ -4,6 +4,7 @@ using DeltaEngine.Graphics.Xna;
 using DeltaEngine.Input.Xna;
 using DeltaEngine.Multimedia.Xna;
 using DeltaEngine.Platforms.Windows;
+using DeltaEngine.Rendering2D;
 using Microsoft.Xna.Framework.Media;
 
 namespace DeltaEngine.Platforms
@@ -21,6 +22,7 @@ namespace DeltaEngine.Platforms
 			var device = new XnaDevice(game, window, settings);
 			RegisterInstance(device);
 			RegisterSingleton<Drawing>();
+			RegisterSingleton<BatchRenderer>();
 			game.StartXnaGameToInitializeGraphics();
 			RegisterInstance(game);
 			RegisterInstance(game.Content);

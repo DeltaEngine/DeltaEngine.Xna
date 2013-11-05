@@ -132,6 +132,23 @@ namespace DeltaEngine.Graphics.Xna
 
 		public override void Present() {}
 
+		public override bool CullBackFaces
+		{
+			get { return cullBackFaces; }
+			set
+			{
+				if (cullBackFaces == value)
+					return;
+				cullBackFaces = value;
+				NativeDevice.RasterizerState = new RasterizerState
+				{
+					CullMode = cullBackFaces ? CullMode.CullCounterClockwiseFace : CullMode.None
+				};
+			}
+		}
+
+		private bool cullBackFaces;
+
 		public override void DisableDepthTest()
 		{
 			if (disableDepthTestState == null)
@@ -227,7 +244,8 @@ namespace DeltaEngine.Graphics.Xna
 				return BlendState.Additive;
 			if (blendMode == BlendMode.Opaque)
 				return BlendState.Opaque;
-			return BlendState.AlphaBlend;
+			//for premultiplied alpha: AlphaBlend;
+			return BlendState.NonPremultiplied;
 		}
 
 		public override CircularBuffer CreateCircularBuffer(ShaderWithFormat shader,

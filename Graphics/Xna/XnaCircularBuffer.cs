@@ -89,6 +89,8 @@ namespace DeltaEngine.Graphics.Xna
 
 		protected override void DrawChunk(Chunk chunk)
 		{
+			//Logger.Info("DrawChunk: " + blendMode + ", " + chunk.Texture.Name + ", OffsetInBytes=" +
+			//	chunk.FirstIndexOffsetInBytes + ", NumberOfIndices=" + chunk.NumberOfIndices);
 			if (UsesIndexBuffer)
 			{
 				if (chunk.Texture != null)

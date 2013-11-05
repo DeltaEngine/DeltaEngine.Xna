@@ -12,9 +12,8 @@ namespace DeltaEngine.Multimedia.Xna
 	/// </summary>
 	public class XnaMusic : Music
 	{
-		public XnaMusic(string filename, XnaSoundDevice device, ContentManager contentManager,
-			Settings settings)
-			: base(filename, device, settings)
+		public XnaMusic(string filename, XnaSoundDevice device, ContentManager contentManager)
+			: base(filename, device)
 		{
 			this.contentManager = contentManager;
 		}
@@ -23,9 +22,19 @@ namespace DeltaEngine.Multimedia.Xna
 
 		protected override void PlayNativeMusic(float volume)
 		{
-			positionInSeconds = 0f;
-			MediaPlayer.Volume = volume;
-			MediaPlayer.Play(music);
+			try
+			{
+				positionInSeconds = 0f;
+				MediaPlayer.Volume = volume;
+				MediaPlayer.Play(music);
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex);
+				//music will not play since nbx file van not be found
+				//if (Debugger.IsAttached)
+				//	throw new XnaMusicContentNotFound(Name, ex);
+			}		
 		}
 
 		private Song music;
@@ -62,8 +71,9 @@ namespace DeltaEngine.Multimedia.Xna
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
-				if (Debugger.IsAttached)
-					throw new XnaMusicContentNotFound(Name, ex);
+				//Xna music currently does not work. not able to convert mp3 to a xnb file.
+				//if (Debugger.IsAttached)
+				//	throw new XnaMusicContentNotFound(Name, ex);
 			}
 		}
 

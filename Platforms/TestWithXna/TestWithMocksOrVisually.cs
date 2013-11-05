@@ -4,6 +4,7 @@ using DeltaEngine.Entities;
 using DeltaEngine.Extensions;
 using DeltaEngine.Graphics;
 using DeltaEngine.Platforms.Mocks;
+using DeltaEngine.Rendering2D;
 using NUnit.Framework;
 
 namespace DeltaEngine.Platforms
@@ -63,12 +64,13 @@ namespace DeltaEngine.Platforms
 			float timeToAddInSeconds = 1.0f / Settings.DefaultUpdatesPerSecond)
 		{
 			//ncrunch: no coverage start
+			var renderer = resolver.Resolve<BatchRenderer>();
 			var drawing = resolver.Resolve<Drawing>();
 			if (CheckIfWeNeedToRunTickToAvoidInitializationDelay())
-				RunTickOnce(drawing);
+				RunTickOnce(renderer, drawing);
 			var startTimeMs = GlobalTime.Current.Milliseconds;
 			do
-				RunTickOnce(drawing);
+				RunTickOnce(renderer, drawing);
 			while (GlobalTime.Current.Milliseconds - startTimeMs +
 				MathExtensions.Epsilon < timeToAddInSeconds * 1000);
 			//ncrunch: no coverage end
@@ -79,10 +81,14 @@ namespace DeltaEngine.Platforms
 			return !(resolver is MockResolver) && GlobalTime.Current.Milliseconds == 0;
 		}
 
-		private static void RunTickOnce(Drawing drawing)
+		private static void RunTickOnce(BatchRenderer batchRenderer, Drawing drawing)
 		{
 			GlobalTime.Current.Update();
-			EntitiesRunner.Current.UpdateAndDrawAllEntities(drawing.DrawEverythingInCurrentLayer);
+			EntitiesRunner.Current.UpdateAndDrawAllEntities(() =>
+			{
+				batchRenderer.DrawAndResetBatches();
+				drawing.DrawEverythingInCurrentLayer();
+			});
 		}
 	}
 }

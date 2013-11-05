@@ -42,9 +42,6 @@
     <Reference Include="DeltaEngine">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.Platforms">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Platforms.dll</HintPath>
-    </Reference>
     <Reference Include="DeltaEngine.WindowsXna">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
     </Reference>
