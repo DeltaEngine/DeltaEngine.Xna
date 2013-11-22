@@ -6,12 +6,65 @@ using DeltaEngine.Multimedia.Xna;
 using DeltaEngine.Platforms.Windows;
 using DeltaEngine.Rendering2D;
 using Microsoft.Xna.Framework.Media;
+#if !DEBUG 
+using System;
+using DeltaEngine.Core;
+using DeltaEngine.Extensions;
+using System.Windows.Forms;
+#endif
 
 namespace DeltaEngine.Platforms
 {
 	internal class XnaResolver : AppRunner
 	{
 		public XnaResolver()
+		{
+#if DEBUG
+			InitializeXna();
+#else
+			// Some machines with missing frameworks initialization will crash, we need useful errors
+			try
+			{
+				InitializeXna();
+			}
+			catch (Exception exception)
+			{
+				Logger.Error(exception);
+				if (StackTraceExtensions.IsStartedFromNunitConsole())
+					throw;
+				MessageBox.Show(GetHintTextForKnownIssues(exception), "Fatal XNA Initialization Error",
+					MessageBoxButtons.OK);
+        Application.Exit();
+			}
+#endif
+		}
+#if !DEBUG
+		private static string GetHintTextForKnownIssues(Exception ex)
+		{
+			if (ex.ToString().Contains("NoSuitableGraphicsDeviceException"))
+			{
+				string hintText = "Please verify that your video card supports DirectX 9.0c or higher," +
+					" your driver is up to date and you have installed the latest DirectX runtime.\n\n";
+				hintText += "Exception details:\n" + ex.Message;
+				return hintText;
+			}
+			if (ex.ToString().Contains("Could not load file or assembly 'Microsoft.Xna.Framework.Game"))
+			{
+				string hintText = "Please install the Microsoft XNA Framework Redistributable 4.0.\n\n";
+				hintText += "Exception details:\n" + ex.Message;
+				return hintText;
+			}
+			if (ex.ToString().Contains("Could not load file or assembly 'MonoGame.Framework"))
+			{
+				string hintText = "Please install MonoGame 3.0.\n\n";
+				hintText += "Exception details:\n" + ex.Message;
+				return hintText;
+			}
+			return ex.Message;
+		}
+#endif
+
+		private void InitializeXna()
 		{
 			RegisterCommonEngineSingletons();
 			game = new XnaGame(this);
@@ -37,9 +90,9 @@ namespace DeltaEngine.Platforms
 			if (IsAlreadyInitialized)
 				throw new UnableToRegisterMoreTypesAppAlreadyStarted();
 		}
-		
-		private readonly XnaGame game;
-		private readonly XnaWindow window;
+
+		private XnaGame game;
+		private XnaWindow window;
 
 		protected override void RegisterMediaTypes()
 		{

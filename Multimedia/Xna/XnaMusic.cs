@@ -24,30 +24,51 @@ namespace DeltaEngine.Multimedia.Xna
 		{
 			try
 			{
-				positionInSeconds = 0f;
-				MediaPlayer.Volume = volume;
-				MediaPlayer.Play(music);
+				if (IsXnaContentValid())
+				{
+					positionInSeconds = 0f;
+					MediaPlayer.Volume = volume;
+					MediaPlayer.Play(music);
+				}
+				else
+					bufferedMusic.Play(volume);
 			}
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
-				//music will not play since nbx file van not be found
-				//if (Debugger.IsAttached)
-				//	throw new XnaMusicContentNotFound(Name, ex);
-			}		
+				if (Debugger.IsAttached)
+					throw new XnaMusicContentNotFound(Name, ex);
+			}
 		}
 
 		private Song music;
 		private float positionInSeconds;
 
+		private bool IsXnaContentValid()
+		{
+			if (checkedBefore)
+				return cachedXnaContentAvailable;
+			checkedBefore = true;
+			cachedXnaContentAvailable = contentManager != null &&
+				File.Exists(Path.Combine(contentManager.RootDirectory, Name + ".xnb"));
+			return cachedXnaContentAvailable;
+		}
+
+		private bool checkedBefore;
+		private bool cachedXnaContentAvailable;
+
 		protected override void StopNativeMusic()
 		{
-			MediaPlayer.Stop();
+			if (IsXnaContentValid())
+				MediaPlayer.Stop();
+			else
+				bufferedMusic.Stop();
 		}
-		
+
 		public override bool IsPlaying()
 		{
-			return MediaPlayer.State != MediaState.Stopped && IsActiveMusic();
+			return IsXnaContentValid()
+				? (MediaPlayer.State != MediaState.Stopped && IsActiveMusic()) : bufferedMusic.IsPlaying;
 		}
 
 		private bool IsActiveMusic()
@@ -57,25 +78,50 @@ namespace DeltaEngine.Multimedia.Xna
 
 		public override void Run()
 		{
-			positionInSeconds = (float)MediaPlayer.PlayPosition.TotalSeconds;
-			if (!IsPlaying())
-				HandleStreamFinished();
+			if (IsXnaContentValid())
+			{
+				positionInSeconds = (float)MediaPlayer.PlayPosition.TotalSeconds;
+				if (!IsPlaying())
+					HandleStreamFinished();
+			}
+			else
+			{
+				if (bufferedMusic.Run())
+					HandleStreamFinished();
+			}
 		}
 
 		protected override void LoadData(Stream fileData)
 		{
 			try
 			{
-				music = contentManager.Load<Song>(Name);
+				if (IsXnaContentValid())
+					LoadXnaContent();
+				else
+					LoadNormalContent(fileData);
 			}
 			catch (Exception ex)
 			{
 				Logger.Error(ex);
-				//Xna music currently does not work. not able to convert mp3 to a xnb file.
-				//if (Debugger.IsAttached)
-				//	throw new XnaMusicContentNotFound(Name, ex);
+				if (Debugger.IsAttached)
+					throw new XnaMusicContentNotFound(Name, ex);
 			}
 		}
+
+		private void LoadXnaContent()
+		{
+			music = contentManager.Load<Song>(Name);
+		}
+
+		private void LoadNormalContent(Stream fileData)
+		{
+			var stream = new MemoryStream();
+			fileData.CopyTo(stream);
+			stream.Seek(0, SeekOrigin.Begin);
+			bufferedMusic = new XnaBufferedMusic(stream);
+		}
+
+		private XnaBufferedMusic bufferedMusic;
 
 		public class XnaMusicContentNotFound : Exception
 		{
@@ -85,22 +131,33 @@ namespace DeltaEngine.Multimedia.Xna
 
 		protected override void DisposeData()
 		{
-			if (music == null)
-				return;
-
-			base.DisposeData();
-			music.Dispose();
-			music = null;
+			if (IsXnaContentValid())
+			{
+				if (music == null)
+					return;
+				base.DisposeData();
+				music.Dispose();
+				music = null;
+			}
+			else
+			{
+				base.DisposeData();
+				bufferedMusic.Dispose();
+			}
 		}
 
 		public override float DurationInSeconds
 		{
-			get { return (float)music.Duration.TotalSeconds; }
+			get
+			{
+				return IsXnaContentValid()
+					? (float)music.Duration.TotalSeconds : bufferedMusic.DurationInSeconds;
+			}
 		}
 
 		public override float PositionInSeconds
 		{
-			get { return positionInSeconds; }
+			get { return IsXnaContentValid() ? positionInSeconds : bufferedMusic.PositionInSeconds; }
 		}
 	}
 }

@@ -66,17 +66,18 @@
       <Project>{BB73D940-CBD2-4F00-B246-2A25CA5ACD7E}</Project>
       <Name>DeltaEngine.Rendering2D.Shapes</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Platforms\WindowsXna\DeltaEngine.WindowsXna.csproj">
-      <Project>{07E9D341-4B22-48FE-B921-5D18D3AB2C49}</Project>
-      <Name>DeltaEngine.WindowsXna</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Scenes\DeltaEngine.Scenes.csproj">
       <Project>{75BB4C75-DE36-47B3-9910-10EA8E8973B7}</Project>
       <Name>DeltaEngine.Scenes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Platforms\WindowsXna\DeltaEngine.WindowsXna.csproj">
+      <Project>{07E9D341-4B22-48FE-B921-5D18D3AB2C49}</Project>
+      <Name>DeltaEngine.WindowsXna</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GhostWars.ico" />
+    <Content Include="GhostWarsIcon72x72.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,7 +85,7 @@
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="MainMenu.cs" />
-    <Compile Include="Game.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TreeManager.cs" />

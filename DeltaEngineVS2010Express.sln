@@ -76,6 +76,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltaEngine.Multimedia.Mock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltaEngine.Networking.Messages", "Networking\Messages\DeltaEngine.Networking.Messages.csproj", "{74863E62-A568-4C0A-A37F-F04BFA8EB9DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltaEngine.Multimedia.MusicStreams", "Multimedia\MusicStreams\DeltaEngine.Multimedia.MusicStreams.csproj", "{769F9D01-D4A1-4C85-9F11-F721CDFC94DC}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltaEngine.Rendering2D.Fonts", "Rendering2D\Fonts\DeltaEngine.Rendering2D.Fonts.csproj", "{4A00FD90-FF7B-4250-9CBC-B6855130090B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeltaEngine.Rendering2D.Shapes", "Rendering2D\Shapes\DeltaEngine.Rendering2D.Shapes.csproj", "{BB73D940-CBD2-4F00-B246-2A25CA5ACD7E}"
@@ -250,6 +252,10 @@ Global
 		{74863E62-A568-4C0A-A37F-F04BFA8EB9DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74863E62-A568-4C0A-A37F-F04BFA8EB9DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74863E62-A568-4C0A-A37F-F04BFA8EB9DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{769F9D01-D4A1-4C85-9F11-F721CDFC94DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{769F9D01-D4A1-4C85-9F11-F721CDFC94DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{769F9D01-D4A1-4C85-9F11-F721CDFC94DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{769F9D01-D4A1-4C85-9F11-F721CDFC94DC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A00FD90-FF7B-4250-9CBC-B6855130090B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4A00FD90-FF7B-4250-9CBC-B6855130090B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A00FD90-FF7B-4250-9CBC-B6855130090B}.Release|Any CPU.ActiveCfg = Release|Any CPU

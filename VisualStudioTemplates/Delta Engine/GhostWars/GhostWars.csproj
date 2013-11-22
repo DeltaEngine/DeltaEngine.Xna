@@ -32,7 +32,7 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>GhostWarsIcon.ico</ApplicationIcon>
+    <ApplicationIcon>GhostWars.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -57,15 +57,16 @@
     <Reference Include="DeltaEngine.Rendering2D.Shapes">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Shapes.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.WindowsXna">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
-    </Reference>
     <Reference Include="DeltaEngine.Scenes">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Scenes.dll</HintPath>
+    </Reference>
+    <Reference Include="DeltaEngine.WindowsXna">
+	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GhostWars.ico" />
+    <Content Include="GhostWarsIcon72x72.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,7 +74,7 @@
     <Compile Include="GameLogic.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="MainMenu.cs" />
-    <Compile Include="Game.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Team.cs" />
     <Compile Include="Tree.cs" />
     <Compile Include="TreeManager.cs" />

@@ -49,12 +49,13 @@ namespace DeltaEngine.Graphics.Xna
 		protected override void LoadImage(Stream fileData)
 		{
 			NativeTexture = Texture2D.FromStream(nativeDevice, fileData);
-			if (HasAlpha && NativeTexture.Format != SurfaceFormat.Color)
-				Logger.Warning("Image '" + Name +
-					"' is supposed to have alpha pixels, but the image pixel format is not using alpha.");
-			else if (!HasAlpha && NativeTexture.Format == SurfaceFormat.Color)
-				Logger.Warning("Image '" + Name +
-					"' is supposed to have no alpha pixels, but the image pixel format is using alpha.");
+			//Disabled for M5 release due image server conversion not being enabled right now
+			//if (HasAlpha && NativeTexture.Format != SurfaceFormat.Color)
+			//	Logger.Warning("Image '" + Name +
+			//		"' is supposed to have alpha pixels, but the image pixel format is not using alpha.");
+			//else if (!HasAlpha && NativeTexture.Format == SurfaceFormat.Color)
+			//	Logger.Warning("Image '" + Name +
+			//		"' is supposed to have no alpha pixels, but the image pixel format is using alpha.");
 			var textureSize = new Size(NativeTexture.Width, NativeTexture.Height);
 			CompareActualSizeMetadataSize(textureSize);
 		}

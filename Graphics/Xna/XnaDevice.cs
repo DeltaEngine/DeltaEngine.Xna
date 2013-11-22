@@ -17,7 +17,7 @@ namespace DeltaEngine.Graphics.Xna
 	/// <summary>
 	/// XNA graphics device.
 	/// </summary>
-	public class XnaDevice : Device
+	public sealed class XnaDevice : Device
 	{
 		public XnaDevice(Game game, Window window, Settings settings)
 			: base(window)

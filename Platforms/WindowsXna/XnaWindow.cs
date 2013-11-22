@@ -72,11 +72,6 @@ namespace DeltaEngine.Platforms
 		{
 			get { return game.Window.Handle; }
 		}
-		Size Window.ViewportPixelSize
-		{
-			get { return ViewportPixelSize; }
-			set { ViewportPixelSize = value; }
-		}
 
 		public Size ViewportPixelSize
 		{
@@ -89,6 +84,8 @@ namespace DeltaEngine.Platforms
 			get { return new Size(game.Window.ClientBounds.Width, game.Window.ClientBounds.Height); }
 			set
 			{
+				if (TotalPixelSize == value)
+					return;
 				game.Window.BeginScreenDeviceChange(false);
 				game.Window.EndScreenDeviceChange(game.Window.ScreenDeviceName, (int)value.Width,
 					(int)value.Height);
@@ -192,7 +189,6 @@ namespace DeltaEngine.Platforms
 		public void Dispose()
 		{
 			CloseAfterFrame();
-			game.Exit();
 		}
 	}
 }

@@ -35,33 +35,22 @@
     <StartupObject>$safeprojectname$.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>LogoAppIcon.ico</ApplicationIcon>
+    <ApplicationIcon>LogoApp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DeltaEngine.Content.Disk">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Content.Disk.dll</HintPath>
-    </Reference>
     <Reference Include="DeltaEngine">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.dll</HintPath>
     </Reference>
-    <Reference Include="DeltaEngine.Graphics">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Graphics.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Input">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Input.dll</HintPath>
-    </Reference>
     <Reference Include="DeltaEngine.Rendering2D">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Rendering2D.Shapes">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Shapes.dll</HintPath>
     </Reference>
     <Reference Include="DeltaEngine.WindowsXna">
 	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LogoAppIcon.ico" />
+    <Content Include="LogoApp.ico" />
+    <Content Include="LogoAppIcon72x72.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

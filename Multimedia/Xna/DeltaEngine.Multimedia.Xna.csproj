@@ -58,9 +58,14 @@
       <Project>{BDDB4AA4-5D31-43B3-9A3B-BF3030EDE927}</Project>
       <Name>DeltaEngine.Rendering2D</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MusicStreams\DeltaEngine.Multimedia.MusicStreams.csproj">
+      <Project>{769F9D01-D4A1-4C85-9F11-F721CDFC94DC}</Project>
+      <Name>DeltaEngine.Multimedia.MusicStreams</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XnaBufferedMusic.cs" />
     <Compile Include="XnaMusic.cs" />
     <Compile Include="XnaSoundDevice.cs" />
     <Compile Include="XnaSound.cs" />
