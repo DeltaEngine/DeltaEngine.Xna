@@ -18,14 +18,18 @@ namespace DeltaEngine.Multimedia.Xna
 		private BaseMusicStream musicStream;
 		private DynamicSoundEffectInstance source;
 
-		public void Play(float volume)
+		public void SetVolume(float value)
+		{
+			source.Volume = value;
+		}
+
+		public void Play()
 		{
 			musicStream.Rewind();
 			for (int index = 0; index < NumberOfBuffers; index++)
 				if (!Stream())
 					break;
 			source.Play();
-			source.Volume = volume;
 			playStartTime = DateTime.Now;
 		}
 

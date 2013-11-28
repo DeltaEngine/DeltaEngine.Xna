@@ -30,7 +30,7 @@ namespace DeltaEngine.Platforms
 			catch (Exception exception)
 			{
 				Logger.Error(exception);
-				if (StackTraceExtensions.IsStartedFromNunitConsole())
+				if (StackTraceExtensions.StartedFromNCrunchOrNunitConsole)
 					throw;
 				MessageBox.Show(GetHintTextForKnownIssues(exception), "Fatal XNA Initialization Error",
 					MessageBoxButtons.OK);

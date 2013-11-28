@@ -20,18 +20,25 @@ namespace DeltaEngine.Multimedia.Xna
 
 		private readonly ContentManager contentManager;
 
-		protected override void PlayNativeMusic(float volume)
+		protected override void SetPlayingVolume(float value)
+		{
+			if (IsXnaContentValid())
+				MediaPlayer.Volume = value;
+			else
+				bufferedMusic.SetVolume(value);
+		}
+
+		protected override void PlayNativeMusic()
 		{
 			try
 			{
 				if (IsXnaContentValid())
 				{
 					positionInSeconds = 0f;
-					MediaPlayer.Volume = volume;
 					MediaPlayer.Play(music);
 				}
 				else
-					bufferedMusic.Play(volume);
+					bufferedMusic.Play();
 			}
 			catch (Exception ex)
 			{
