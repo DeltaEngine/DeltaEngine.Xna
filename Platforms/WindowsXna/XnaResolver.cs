@@ -1,10 +1,16 @@
-﻿using DeltaEngine.Content.Xml;
+﻿using DeltaEngine.Content.Json;
+using DeltaEngine.Content.Xml;
 using DeltaEngine.Graphics;
 using DeltaEngine.Graphics.Xna;
 using DeltaEngine.Input.Xna;
 using DeltaEngine.Multimedia.Xna;
+using DeltaEngine.Physics2D;
+using DeltaEngine.Physics2D.Farseer;
+using DeltaEngine.Physics3D;
+using DeltaEngine.Physics3D.Jitter;
 using DeltaEngine.Platforms.Windows;
 using DeltaEngine.Rendering2D;
+using DeltaEngine.Rendering3D;
 using Microsoft.Xna.Framework.Media;
 #if !DEBUG 
 using System;
@@ -15,17 +21,17 @@ using System.Windows.Forms;
 
 namespace DeltaEngine.Platforms
 {
-	internal class XnaResolver : AppRunner
+	public class XnaResolver : AppRunner
 	{
 		public XnaResolver()
 		{
 #if DEBUG
-			InitializeXna();
+			TryInitializeXna();
 #else
 			// Some machines with missing frameworks initialization will crash, we need useful errors
 			try
 			{
-				InitializeXna();
+				TryInitializeXna();
 			}
 			catch (Exception exception)
 			{
@@ -34,7 +40,7 @@ namespace DeltaEngine.Platforms
 					throw;
 				MessageBox.Show(GetHintTextForKnownIssues(exception), "Fatal XNA Initialization Error",
 					MessageBoxButtons.OK);
-        Application.Exit();
+				Application.Exit();
 			}
 #endif
 		}
@@ -64,7 +70,7 @@ namespace DeltaEngine.Platforms
 		}
 #endif
 
-		private void InitializeXna()
+		private void TryInitializeXna()
 		{
 			RegisterCommonEngineSingletons();
 			game = new XnaGame(this);
@@ -75,7 +81,8 @@ namespace DeltaEngine.Platforms
 			var device = new XnaDevice(game, window, settings);
 			RegisterInstance(device);
 			RegisterSingleton<Drawing>();
-			RegisterSingleton<BatchRenderer>();
+			RegisterSingleton<BatchRenderer2D>();
+			RegisterSingleton<BatchRenderer3D>();
 			game.StartXnaGameToInitializeGraphics();
 			RegisterInstance(game);
 			RegisterInstance(game.Content);
@@ -102,7 +109,17 @@ namespace DeltaEngine.Platforms
 			Register<XnaGeometry>();
 			Register<XnaSound>();
 			Register<XnaMusic>();
+			Register<XnaVideo>();
 			Register<XmlContent>();
+			Register<JsonContent>();
+		}
+
+		protected override void RegisterPhysics()
+		{
+			RegisterSingleton<FarseerPhysics>();
+			RegisterSingleton<JitterPhysics>();
+			Register<AffixToPhysics2D>();
+			Register<AffixToPhysics3D>();
 		}
 
 		/// <summary>

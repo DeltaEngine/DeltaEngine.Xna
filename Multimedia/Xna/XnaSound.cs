@@ -14,6 +14,8 @@ namespace DeltaEngine.Multimedia.Xna
 
 		protected override void LoadData(Stream fileData)
 		{
+			if (StackTraceExtensions.StartedFromNUnitConsoleButNotFromNCrunch)
+				return;
 			effect = SoundEffect.FromStream(fileData);
 		}
 
@@ -29,7 +31,7 @@ namespace DeltaEngine.Multimedia.Xna
 
 		public override float LengthInSeconds
 		{
-			get { return (float)effect.Duration.TotalSeconds; }
+			get { return effect != null ? (float)effect.Duration.TotalSeconds : 0.0f; }
 		}
 
 		public override void PlayInstance(SoundInstance instanceToPlay)
@@ -37,7 +39,6 @@ namespace DeltaEngine.Multimedia.Xna
 			var effectInstance = instanceToPlay.Handle as SoundEffectInstance;
 			if (effectInstance == null)
 				return;
-
 			effectInstance.Volume = instanceToPlay.Volume.Clamp(0.0f, 1.0f);
 			effectInstance.Pan = instanceToPlay.Panning.Clamp(-1.0f, +1.0f);
 			effectInstance.Pitch = (instanceToPlay.Pitch - 1).Clamp(-1.0f, +1.0f);
@@ -53,7 +54,8 @@ namespace DeltaEngine.Multimedia.Xna
 
 		protected override void CreateChannel(SoundInstance instanceToFill)
 		{
-			instanceToFill.Handle = effect.CreateInstance();
+			if (effect != null)
+				instanceToFill.Handle = effect.CreateInstance();
 		}
 
 		protected override void RemoveChannel(SoundInstance instanceToRemove)

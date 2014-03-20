@@ -40,6 +40,10 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Content\Json\DeltaEngine.Content.Json.csproj">
+      <Project>{F8411B87-8F40-4D86-A17D-939FEE017C56}</Project>
+      <Name>DeltaEngine.Content.Json</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Content\Xml\DeltaEngine.Content.Xml.csproj">
       <Project>{138A40B5-3D80-4BA3-BD84-D82C151EE7FE}</Project>
       <Name>DeltaEngine.Content.Xml</Name>
@@ -68,15 +72,35 @@
       <Project>{70773E53-5D8E-4218-8AFA-0A07E48FD4A2}</Project>
       <Name>DeltaEngine.Multimedia.Xna</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Physics2D\DeltaEngine.Physics2D.csproj">
+      <Project>{DC3AA434-09B9-43AD-8F43-431811FA054D}</Project>
+      <Name>DeltaEngine.Physics2D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Physics2D\Farseer\DeltaEngine.Physics2D.Farseer.csproj">
+      <Project>{C983D137-8B7F-47BE-996E-894A3596DD06}</Project>
+      <Name>DeltaEngine.Physics2D.Farseer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Physics3D\DeltaEngine.Physics3D.csproj">
+      <Project>{EA4135BF-0FFF-4714-ACC1-DEBB8381739F}</Project>
+      <Name>DeltaEngine.Physics3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Physics3D\Jitter\DeltaEngine.Physics3D.Jitter.csproj">
+      <Project>{560B70DE-F4D0-41A7-A684-406F08336543}</Project>
+      <Name>DeltaEngine.Physics3D.Jitter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Rendering2D\DeltaEngine.Rendering2D.csproj">
       <Project>{BDDB4AA4-5D31-43B3-9A3B-BF3030EDE927}</Project>
       <Name>DeltaEngine.Rendering2D</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DeltaEngine.Platforms.csproj">
+    <ProjectReference Include="..\..\Rendering3D\DeltaEngine.Rendering3D.csproj">
+      <Project>{3266F559-74EE-4A1C-B37B-2C591F73611B}</Project>
+      <Name>DeltaEngine.Rendering3D</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Platforms\DeltaEngine.Platforms.csproj">
       <Project>{BAE8830E-5F62-48D6-B772-C4B1E8665FB3}</Project>
       <Name>DeltaEngine.Platforms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Windows\DeltaEngine.Platforms.Windows.csproj">
+    <ProjectReference Include="..\..\Platforms\Windows\DeltaEngine.Platforms.Windows.csproj">
       <Project>{BD8A80E2-A313-437E-B0EF-FC0B066280A7}</Project>
       <Name>DeltaEngine.Platforms.Windows</Name>
     </ProjectReference>

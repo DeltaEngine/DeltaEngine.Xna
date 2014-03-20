@@ -40,16 +40,21 @@ namespace DeltaEngine.Multimedia.Xna
 		{
 			try
 			{
-				var buffer = new byte[BufferSize];
-				int bytesRead = musicStream.Read(buffer, BufferSize);
-				if (bytesRead == 0)
-					return false;
-				source.SubmitBuffer(buffer, 0, bytesRead);
+				return TryStream();
 			}
 			catch (Exception)
 			{
 				return false;
 			}
+		}
+
+		private bool TryStream()
+		{
+			var buffer = new byte[BufferSize];
+			int bytesRead = musicStream.Read(buffer, BufferSize);
+			if (bytesRead == 0)
+				return false;
+			source.SubmitBuffer(buffer, 0, bytesRead);
 			return true;
 		}
 

@@ -32,13 +32,7 @@ namespace DeltaEngine.Multimedia.Xna
 		{
 			try
 			{
-				if (IsXnaContentValid())
-				{
-					positionInSeconds = 0f;
-					MediaPlayer.Play(music);
-				}
-				else
-					bufferedMusic.Play();
+				TryPlayNativeMusic();
 			}
 			catch (Exception ex)
 			{
@@ -46,6 +40,17 @@ namespace DeltaEngine.Multimedia.Xna
 				if (Debugger.IsAttached)
 					throw new XnaMusicContentNotFound(Name, ex);
 			}
+		}
+
+		private void TryPlayNativeMusic()
+		{
+			if (IsXnaContentValid())
+			{
+				positionInSeconds = 0f;
+				MediaPlayer.Play(music);
+			}
+			else
+				bufferedMusic.Play();
 		}
 
 		private Song music;
@@ -102,10 +107,7 @@ namespace DeltaEngine.Multimedia.Xna
 		{
 			try
 			{
-				if (IsXnaContentValid())
-					LoadXnaContent();
-				else
-					LoadNormalContent(fileData);
+				TryLoadData(fileData);
 			}
 			catch (Exception ex)
 			{
@@ -113,6 +115,14 @@ namespace DeltaEngine.Multimedia.Xna
 				if (Debugger.IsAttached)
 					throw new XnaMusicContentNotFound(Name, ex);
 			}
+		}
+
+		private void TryLoadData(Stream fileData)
+		{
+			if (IsXnaContentValid())
+				LoadXnaContent();
+			else
+				LoadNormalContent(fileData);
 		}
 
 		private void LoadXnaContent()

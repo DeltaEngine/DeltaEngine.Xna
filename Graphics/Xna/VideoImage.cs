@@ -35,9 +35,8 @@ namespace DeltaEngine.Graphics.Xna
 			SetSamplerState();
 		}
 
-		protected override void LoadImage(Stream fileData) {}
-		public override void Fill(Color[] colors) {}
-		public override void Fill(byte[] rgbaColors) {}
+		protected override void TryLoadImage(Stream fileData) {}
+		public override void FillRgbaData(byte[] rgbaColors) {}
 
 		protected override void SetSamplerState()
 		{

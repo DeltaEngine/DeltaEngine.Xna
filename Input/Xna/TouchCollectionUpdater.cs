@@ -8,22 +8,8 @@ namespace DeltaEngine.Input.Xna
 	/// <summary>
 	/// Helper class to keep track of all touches according to their ids.
 	/// </summary>
-	internal class TouchCollectionUpdater
+	public class TouchCollectionUpdater : TouchBase
 	{
-		public TouchCollectionUpdater()
-		{
-			states = new State[MaxNumberOfTouches];
-			locations = new Vector2D[MaxNumberOfTouches];
-			ids = new int[MaxNumberOfTouches];
-			for (int index = 0; index < MaxNumberOfTouches; index++)
-				ids[index] = -1;
-		}
-
-		internal readonly State[] states;
-		internal readonly Vector2D[] locations;
-		private readonly int[] ids;
-		private const int MaxNumberOfTouches = 10;
-
 		public void UpdateAllTouches(List<TouchLocation> newTouches)
 		{
 			UpdatePreviouslyActiveTouches(newTouches);
@@ -82,17 +68,6 @@ namespace DeltaEngine.Input.Xna
 				locations[freeIndex] = GetQuadraticPosition(newTouches[index]);
 				states[freeIndex] = State.Pressing;
 			}
-		}
-
-		internal int FindIndexByIdOrGetFreeIndex(int id)
-		{
-			for (int index = 0; index < MaxNumberOfTouches; index++)
-				if (ids[index] == id)
-					return index;
-			for (int index = 0; index < MaxNumberOfTouches; index++)
-				if (ids[index] == -1)
-					return index;
-			return -1;
 		}
 
 		internal void UpdateTouchState(int touchIndex, TouchLocationState state)

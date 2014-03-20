@@ -15,7 +15,7 @@ namespace DeltaEngine.Input.Xna
 	{
 		public XnaTouch(Window window)
 		{
-			TouchPanel.WindowHandle = (IntPtr)window.Handle;
+			TouchPanel.WindowHandle = window.Handle;
 			IsAvailable = TouchPanel.GetCapabilities().IsConnected;
 			touches = new TouchCollectionUpdater();
 		}

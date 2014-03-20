@@ -36,33 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="DeltaEngine.Content.Xml">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Content.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Input">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Input.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Rendering2D">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Rendering2D.Fonts">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Fonts.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Rendering2D.Particles">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Particles.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Rendering2D.Shapes">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Rendering2D.Shapes.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.Scenes">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.Scenes.dll</HintPath>
-    </Reference>
-    <Reference Include="DeltaEngine.WindowsXna">
-	  <HintPath>$(DeltaEnginePath)\Xna\DeltaEngine.WindowsXna.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="GhostWars.ico" />

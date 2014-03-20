@@ -59,7 +59,7 @@
       <Project>{D6D0CCE8-9850-4C28-A505-A1F5519FBE09}</Project>
       <Name>DeltaEngine.TestWithXna</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LogoApp.csproj">
+    <ProjectReference Include="..\..\..\Samples\LogoApp\LogoApp.csproj">
       <Project>{B94B117E-1A32-40C6-A93D-FD7012ED8D12}</Project>
       <Name>LogoApp</Name>
     </ProjectReference>

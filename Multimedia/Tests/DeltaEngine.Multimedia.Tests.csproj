@@ -59,7 +59,7 @@
       <Project>{4A00FD90-FF7B-4250-9CBC-B6855130090B}</Project>
       <Name>DeltaEngine.Rendering2D.Fonts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mocks\DeltaEngine.Multimedia.Mocks.csproj">
+    <ProjectReference Include="..\..\Multimedia\Mocks\DeltaEngine.Multimedia.Mocks.csproj">
       <Project>{BC9EE416-ABEC-4B61-801D-EBB5C699CB5D}</Project>
       <Name>DeltaEngine.Multimedia.Mocks</Name>
     </ProjectReference>
@@ -69,7 +69,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +76,7 @@
     <Compile Include="MusicTests.cs" />
     <Compile Include="SoundDeviceTests.cs" />
     <Compile Include="SoundTests.cs" />
+    <Compile Include="VideoTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

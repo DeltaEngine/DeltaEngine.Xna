@@ -18,28 +18,32 @@ namespace DeltaEngine.Input.Xna
 		{
 			IsAvailable = true;
 			if (window != null)
-				NativeMouse.WindowHandle = (IntPtr)window.Handle;
+				NativeMouse.WindowHandle = window.Handle;
 		}
 
 		public override bool IsAvailable { get; protected set; }
 
-		public override void Dispose()
-		{
-			NativeMouse.WindowHandle = IntPtr.Zero;
-		}
-
-		public override void SetPosition(Vector2D position)
+		public override void SetNativePosition(Vector2D position)
 		{
 			position = ScreenSpace.Current.ToPixelSpace(position);
 			NativeMouse.SetPosition((int)position.X, (int)position.Y);
 		}
 
+		public override void Update(IEnumerable<Entity> entities)
+		{
+			MouseState newState = NativeMouse.GetState();
+			UpdateValuesFromState(ref newState);
+			base.Update(entities);
+		}
+
 		private void UpdateValuesFromState(ref MouseState newState)
 		{
 			Position = ScreenSpace.Current.FromPixelSpace(new Vector2D(newState.X, newState.Y));
-			ScrollWheelValue = newState.ScrollWheelValue;
+			ScrollWheelValue = newState.ScrollWheelValue / MouseWheelDivider;
 			UpdateButtonStates(ref newState);
 		}
+
+		private const int MouseWheelDivider = 120;
 
 		private void UpdateButtonStates(ref MouseState newState)
 		{
@@ -51,11 +55,9 @@ namespace DeltaEngine.Input.Xna
 			X2Button = X2Button.UpdateOnNativePressing(newState.XButton2 == ButtonState.Pressed);
 		}
 
-		public override void Update(IEnumerable<Entity> entities)
+		public override void Dispose()
 		{
-			MouseState newState = NativeMouse.GetState();
-			UpdateValuesFromState(ref newState);
-			base.Update(entities);
+			NativeMouse.WindowHandle = IntPtr.Zero;
 		}
 	}
 }

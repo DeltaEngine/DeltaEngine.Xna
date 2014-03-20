@@ -1,4 +1,5 @@
 ﻿using System;
+using DeltaEngine.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DeltaEngine.Graphics.Xna
@@ -8,16 +9,19 @@ namespace DeltaEngine.Graphics.Xna
 		public XnaGeometry(string contentName, Device device)
 			: base (contentName)
 		{
+			this.device = device as XnaDevice;
 			nativeDevice = (device as XnaDevice).NativeDevice;
 			nativeVertexFormat = new XnaVertexFormat();
 		}
 
+		private readonly XnaDevice device;
 		private readonly GraphicsDevice nativeDevice;
 		private readonly XnaVertexFormat nativeVertexFormat;
 
 		public XnaGeometry(GeometryCreationData creationData, Device device)
 			: base (creationData)
 		{
+			this.device = device as XnaDevice;
 			nativeDevice = (device as XnaDevice).NativeDevice;
 			nativeVertexFormat = new XnaVertexFormat();
 		}
@@ -26,7 +30,7 @@ namespace DeltaEngine.Graphics.Xna
 		{
 			if (vertexBuffer == null)
 				CreateBuffers();
-			vertexBuffer.SetData(0, vertexData, 0, vertexData.Length, Format.Stride);
+			vertexBuffer.SetData(vertexData);
 			indexBuffer.SetData(0, indices, 0, indices.Length);
 		}
 
@@ -50,6 +54,7 @@ namespace DeltaEngine.Graphics.Xna
 				throw new UnableToDrawDynamicGeometrySetDataNeedsToBeCalledFirst();
 			nativeDevice.SetVertexBuffer(vertexBuffer);
 			nativeDevice.Indices = indexBuffer;
+			device.ShaderEffect.CurrentTechnique.Passes[0].Apply();//needed in Xna to set new World matrix
 			nativeDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0,
 				NumberOfVertices, 0, NumberOfIndices / 3);
 		}

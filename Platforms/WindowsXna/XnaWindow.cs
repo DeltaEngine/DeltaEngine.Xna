@@ -1,4 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using DeltaEngine.Core;
@@ -68,7 +72,12 @@ namespace DeltaEngine.Platforms
 			get { return game.IsActive; }
 		}
 
-		public object Handle
+		public bool IsWindowsFormAndNotJustAPanel
+		{
+			get { return true; }
+		}
+
+		public IntPtr Handle
 		{
 			get { return game.Window.Handle; }
 		}
@@ -77,6 +86,11 @@ namespace DeltaEngine.Platforms
 		{
 			get { return new Size(game.Window.ClientBounds.Width, game.Window.ClientBounds.Height); }
 			set { TotalPixelSize = value; }
+		}
+
+		public Vector2D ViewportPixelPosition
+		{
+			get { return new Vector2D(game.Window.ClientBounds.X, game.Window.ClientBounds.Y); }
 		}
 
 		public Size TotalPixelSize
@@ -98,7 +112,7 @@ namespace DeltaEngine.Platforms
 			get { return new Vector2D(game.Window.ClientBounds.X, game.Window.ClientBounds.Y); }
 			set
 			{
-				Control window = Control.FromHandle((IntPtr)Handle);
+				Control window = Control.FromHandle(Handle);
 				int leftBorder = game.Window.ClientBounds.X - window.Location.X;
 				int topBorder = game.Window.ClientBounds.Y - window.Location.Y;
 				window.Location = new System.Drawing.Point((int)value.X - leftBorder,
@@ -143,6 +157,43 @@ namespace DeltaEngine.Platforms
 			set { game.IsMouseVisible = value; }
 		}
 
+		public void SetCursorIcon(string iconFilePath)
+		{
+			ShowCursor = true;
+			Cursor myCursor = LoadCustomCursor(iconFilePath);
+			var winForm = (Form)Control.FromHandle(Handle);
+			if (winForm != null)
+				winForm.Cursor = myCursor;
+		}
+
+		/// <summary>
+		/// http://stackoverflow.com/questions/4305800/using-custom-colored-cursors-in-a-c-windows-application
+		/// </summary>
+		public static Cursor LoadCustomCursor(string path)
+		{
+			IntPtr handle = LoadCursorFromFile(path);
+			if (handle == IntPtr.Zero)
+				throw new CouldNotLoadCursorFromFile(path);
+			var cursor = new Cursor(handle);
+			ForceCursorToOwnHandleSoItGetsReleasedProperly(cursor);
+			return cursor;
+		}
+
+		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		private static extern IntPtr LoadCursorFromFile(string path);
+
+		public class CouldNotLoadCursorFromFile : Exception
+		{
+			public CouldNotLoadCursorFromFile(string path)
+				: base(path) {}
+		}
+
+		private static void ForceCursorToOwnHandleSoItGetsReleasedProperly(Cursor curs)
+		{
+			var fi = typeof(Cursor).GetField("ownHandle", BindingFlags.NonPublic | BindingFlags.Instance);
+			fi.SetValue(curs, true);
+		}
+
 		public string ShowMessageBox(string caption, string message, string[] buttons)
 		{
 			var buttonCombination = MessageBoxButtons.OK;
@@ -164,7 +215,7 @@ namespace DeltaEngine.Platforms
 			{
 				try
 				{
-					Clipboard.SetText(text, TextDataFormat.Text);
+					TryCopyTextToClipboard(text);
 				}
 				catch (Exception)
 				{
@@ -173,6 +224,11 @@ namespace DeltaEngine.Platforms
 			}));
 			staThread.SetApartmentState(ApartmentState.STA);
 			staThread.Start();
+		}
+
+		private static void TryCopyTextToClipboard(string text)
+		{
+			Clipboard.SetText(text, TextDataFormat.Text);
 		}
 
 		public void Present()

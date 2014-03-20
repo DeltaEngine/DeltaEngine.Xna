@@ -1,29 +1,28 @@
 ﻿using DeltaEngine.Content;
-using DeltaEngine.Datatypes;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Matrix = DeltaEngine.Datatypes.Matrix;
 
 namespace DeltaEngine.Graphics.Xna
 {
 	/// <summary>
-	/// All OpenGL shaders share this basic functionality.
+	/// All Xna shaders share this basic functionality, we use
 	/// </summary>
 	public class XnaShader : ShaderWithFormat
 	{
-		public XnaShader(string contentName, XnaDevice device)
-			: base(contentName)
-		{
-			this.device = device;
-		}
-
-		private readonly XnaDevice device;
+		private XnaShader(ShaderWithFormatCreationData creationData, XnaDevice device)
+			: this((ShaderCreationData)creationData, device) {}
 
 		private XnaShader(ShaderCreationData creationData, XnaDevice device)
 			: base(creationData)
 		{
 			this.device = device;
+			TryCreateShader();
 		}
 
-		protected override sealed void Create()
+		private readonly XnaDevice device;
+
+		protected override sealed void CreateShader()
 		{
 			nativeFormat = new XnaVertexFormat();
 		}
@@ -34,14 +33,21 @@ namespace DeltaEngine.Graphics.Xna
 			get { return new VertexDeclaration(Format.Stride, nativeFormat.ConvertFrom(Format)); }
 		}
 
-		public override void SetModelViewProjectionMatrix(Matrix matrix)
+		public override void SetModelViewProjection(Matrix matrix)
 		{
-			//set worldView for 3D: device.SetModelViewMatrix(worldViewMatrix);
+			device.SetViewMatrix(matrix);
+		}
+
+		public override void SetModelViewProjection(Matrix model, Matrix view, Matrix projection)
+		{
+			device.SetModelMatrix(model);
+			device.SetViewMatrix(view);
+			device.SetProjectionMatrix(projection);
 		}
 
 		public override void SetJointMatrices(Matrix[] jointMatrices)
 		{
-			// not supported yet
+			Core.Logger.Info("Skinning is not supported yet in XNA");
 		}
 
 		public override void SetDiffuseTexture(Image texture)
@@ -49,25 +55,44 @@ namespace DeltaEngine.Graphics.Xna
 			device.SetDiffuseTexture(texture);
 		}
 
-		public override void SetLightPosition(Vector3D vector)
+		public override void SetLightmapTexture(Image texture)
 		{
-			// not supported yet
+			Core.Logger.Info("Lightmaps are not supported yet in XNA");
 		}
 
-		public override void SetViewPosition(Vector3D vector)
+		public override void SetSunLight(SunLight light)
 		{
-			// not supported yet
+			if (!isLightingAlreadySet)
+			{
+				device.ShaderEffect.AmbientLightColor = Vector3.One * AmbientLightIntensity;
+				isLightingAlreadySet = true;
+			}
+			device.ShaderEffect.DirectionalLight0.DiffuseColor =
+				new Vector3(light.Color.RedValue, light.Color.GreenValue, light.Color.BlueValue);
+			device.ShaderEffect.DirectionalLight0.Direction =
+				new Vector3(-light.Direction.X, -light.Direction.Y, -light.Direction.Z);
 		}
 
+		private bool isLightingAlreadySet;
 
-		public override void SetLightmapTexture(Image texture) {}
+		private const float AmbientLightIntensity = 0.2f;
 
 		public override void Bind()
 		{
-			device.SetShaderStates(Format.HasColor, Format.HasUV);
+			device.SetShaderStates(Format.HasColor, Format.HasUV, Format.HasNormal,
+				Flags.HasFlag(ShaderFlags.Fog));
 		}
 
 		public override void BindVertexDeclaration() {}
+
+		public override void ApplyFogSettings(FogSettings fogSettings)
+		{
+			device.ShaderEffect.FogEnabled = Flags.HasFlag(ShaderFlags.Fog);
+			device.ShaderEffect.FogColor = new Vector3(fogSettings.FogColor.RedValue,
+				fogSettings.FogColor.GreenValue, fogSettings.FogColor.BlueValue);
+			device.ShaderEffect.FogStart = fogSettings.FogStart;
+			device.ShaderEffect.FogEnd = fogSettings.FogEnd;
+		}
 
 		protected override void DisposeData() {}
 	}

@@ -56,7 +56,7 @@ namespace DeltaEngine.Graphics.Xna
 				vertexSize, currentDataHint);
 			if (!UsesIndexBuffer)
 			{
-				currentDataHint = SetDataOptions.NoOverwrite;
+				currentDataHint = SetDataOptions.Discard;
 				return;
 			}
 			nativeDevice.Indices = null;
@@ -66,7 +66,7 @@ namespace DeltaEngine.Graphics.Xna
 				indices = RemapIndices(indices, numberOfIndices);
 			nativeIndexBuffer.SetData(totalIndexOffsetInBytes, indices, 0, numberOfIndices,
 				currentDataHint);
-			currentDataHint = SetDataOptions.NoOverwrite;
+			currentDataHint = SetDataOptions.Discard;
 		}
 
 		public override void DisposeUnusedBuffersFromPreviousFrame()
@@ -89,8 +89,6 @@ namespace DeltaEngine.Graphics.Xna
 
 		protected override void DrawChunk(Chunk chunk)
 		{
-			//Logger.Info("DrawChunk: " + blendMode + ", " + chunk.Texture.Name + ", OffsetInBytes=" +
-			//	chunk.FirstIndexOffsetInBytes + ", NumberOfIndices=" + chunk.NumberOfIndices);
 			if (UsesIndexBuffer)
 			{
 				if (chunk.Texture != null)

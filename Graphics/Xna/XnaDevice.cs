@@ -5,6 +5,7 @@ using DeltaEngine.Content;
 using DeltaEngine.Core;
 using DeltaEngine.Datatypes;
 using DeltaEngine.Graphics.Vertices;
+using DeltaEngine.ScreenSpaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,6 +26,8 @@ namespace DeltaEngine.Graphics.Xna
 			this.settings = settings;
 			CreateAndSetupNativeDeviceManager(game);
 			NativeDevice.BlendState = BlendState.NonPremultiplied;
+			OnSet3DMode += () => ShaderEffect.Projection = GetXnaMatrix(CameraProjectionMatrix);
+			OnSet3DMode += () => ShaderEffect.View = GetXnaMatrix(CameraViewMatrix);
 		}
 
 		private readonly Settings settings;
@@ -87,40 +90,82 @@ namespace DeltaEngine.Graphics.Xna
 				if (effect != null)
 					return effect;
 				effect = new BasicEffect(NativeDevice);
-				Set2DMode();
 				return effect;
 			}
 		}
 		private BasicEffect effect;
 
+		/// <summary>
+		/// The -0.5 pixel offset is needed in DirectX 9 to correctly match the texture coordinates:
+		/// http://msdn.microsoft.com/en-us/library/windows/desktop/bb219690(v=vs.85).aspx
+		/// </summary>
 		public override void SetModelViewProjectionMatrixFor2D()
 		{
-			if (effect == null)
+			const float Offset = -0.5f;
+			SetModelMatrix(Matrix.Identity);
+			SetProjectionMatrix(Matrix.Identity);
+			var pixelSpaceViewport = ScreenSpace.Current.ToPixelSpace(ScreenSpace.Current.Viewport);
+			ShaderEffect.View = XnaMatrix.CreateOrthographicOffCenter(
+				pixelSpaceViewport.Left + Offset, pixelSpaceViewport.Right + Offset,
+				pixelSpaceViewport.Bottom + Offset, pixelSpaceViewport.Top + Offset, 0, 1);
+		}
+
+		protected override void EnableClockwiseBackfaceCulling()
+		{
+			if (isCullingEnabled)
 				return;
-			//ModelViewProjectionMatrix = Matrix.CreateOrthographicOffCenter(0,
-			//	window.ViewportPixelSize.Width, window.ViewportPixelSize.Height, 0, 0, 1);
-			SetProjectionMatrix(ModelViewProjectionMatrix);
-			SetModelViewMatrix(Matrix.Identity);
+			isCullingEnabled = true;
+			NativeDevice.RasterizerState = RasterizerState.CullClockwise;
 		}
 
-		public override void SetProjectionMatrix(Matrix matrix)
+		/// <summary>
+		/// CullClockwise needs to be set once in XNA (like for all DirectX frameworks)
+		/// </summary>
+		private bool isCullingEnabled;
+
+		protected override void DisableCulling()
 		{
-			//convert from matrix to xna projection!
-			ShaderEffect.Projection = XnaMatrix.CreateOrthographicOffCenter(0,
-				window.ViewportPixelSize.Width, window.ViewportPixelSize.Height, 0, 0, 1);
+			if (!isCullingEnabled)
+				return;
+			isCullingEnabled = false;
+			NativeDevice.RasterizerState = RasterizerState.CullNone;
 		}
 
-		public override void SetModelViewMatrix(Matrix matrix)
+		public void SetModelMatrix(Matrix matrix)
 		{
-			Matrix modelView = matrix * Matrix.CreateTranslation(-0.5f, -0.5f, 0.0f);
+			ShaderEffect.World = GetXnaMatrix(matrix);
+		}
+
+		public void SetViewMatrix(Matrix matrix)
+		{
+			ShaderEffect.View = GetXnaMatrix(matrix);
+		}
+
+		public void SetProjectionMatrix(Matrix matrix)
+		{
+			ShaderEffect.Projection = GetXnaMatrix(matrix);
+		}
+
+		private static XnaMatrix GetXnaMatrix(Matrix matrix)
+		{
 			var m = new XnaMatrix();
-			m.Forward = new Vector3(modelView.Forward.X, modelView.Forward.Y, modelView.Forward.Z);
-			m.Right = new Vector3(modelView.Right.X, modelView.Right.Y, modelView.Right.Z);
-			m.Up = new Vector3(modelView.Up.X, modelView.Up.Y, modelView.Up.Z);
-			m.Translation = new Vector3(modelView.Translation.X, modelView.Translation.Y,
-				modelView.Translation.Z);
-			m.M44 = 1.0f;
-			effect.View = m;
+			m.M11 = matrix[0];
+			m.M12 = matrix[1];
+			m.M13 = matrix[2];
+			m.M14 = matrix[3];
+			m.M21 = matrix[4];
+			m.M22 = matrix[5];
+			m.M23 = matrix[6];
+			m.M24 = matrix[7];
+			m.M31 = matrix[8];
+			m.M32 = matrix[9];
+			m.M33 = matrix[10];
+			m.M34 = matrix[11];
+			m.M41 = matrix[12];
+			m.M42 = matrix[13];
+			m.M43 = matrix[14];
+			m.M44 = matrix[15];
+			return m;
 		}
 
 		public override void Clear()
@@ -131,23 +176,6 @@ namespace DeltaEngine.Graphics.Xna
 		}
 
 		public override void Present() {}
-
-		public override bool CullBackFaces
-		{
-			get { return cullBackFaces; }
-			set
-			{
-				if (cullBackFaces == value)
-					return;
-				cullBackFaces = value;
-				NativeDevice.RasterizerState = new RasterizerState
-				{
-					CullMode = cullBackFaces ? CullMode.CullCounterClockwiseFace : CullMode.None
-				};
-			}
-		}
-
-		private bool cullBackFaces;
 
 		public override void DisableDepthTest()
 		{
@@ -180,7 +208,7 @@ namespace DeltaEngine.Graphics.Xna
 				nativeTexture = ((VideoImage)image).NativeTexture;
 			else
 				nativeTexture = ((XnaImage)image).NativeTexture;
-			if (NativeDevice.Textures[0] == nativeTexture)
+			if (NativeDevice.Textures[0] == nativeTexture && ShaderEffect.Texture == nativeTexture)
 				return;
 #if DEBUG
 			// Check whether the initialization order was correct in AutofacStarter when the Run()
@@ -190,8 +218,9 @@ namespace DeltaEngine.Graphics.Xna
 #endif
 			NativeDevice.Textures[0] = nativeTexture;
 			NativeDevice.SamplerStates[0] = GetXnaSamplerState(image);
+			ShaderEffect.Texture = nativeTexture;
 		}
-
+		
 #if DEBUG
 		private void CheckIfTheInitializationOrderInResolverWasCorrect(Texture2D nativeTexture)
 		{
@@ -254,10 +283,12 @@ namespace DeltaEngine.Graphics.Xna
 			return new XnaCircularBuffer(this, shader, blendMode, drawMode);
 		}
 
-		public void SetShaderStates(bool hasColor, bool hasUV)
+		public void SetShaderStates(bool hasColor, bool hasUV, bool hasLighting, bool hasFog)
 		{
 			ShaderEffect.VertexColorEnabled = hasColor;
 			ShaderEffect.TextureEnabled = hasUV;
+			ShaderEffect.LightingEnabled = hasLighting;
+			ShaderEffect.FogEnabled = hasFog;
 			ShaderEffect.CurrentTechnique.Passes[0].Apply();
 		}
 	}
